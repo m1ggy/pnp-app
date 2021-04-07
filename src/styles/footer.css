@@ -1,0 +1,11 @@
+.footer {
+    display:flex;
+    border: 1px solid black;
+
+}
+.wrapper {
+    height: 40px;
+    margin:auto;
+    margin-top: auto;
+   top:0;
+}

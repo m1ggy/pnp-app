@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+}
+.loginTab {
+    width:19%;
+    height: 300px;
+    border: 1px solid black;
+    margin:auto;
+    margin-top:10vh;
+    margin-bottom: 5vh;
+    
+}
+.content {
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    margin-top: 25%;
+}
+.button {
+   margin: auto;
+   margin-top: 10px;
+}
+.inputs{
+    margin: auto;
+}
+.logintitle {
+    margin: auto;
+}

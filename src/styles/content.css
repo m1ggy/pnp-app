@@ -1,0 +1,16 @@
+.container {
+    width: 50%;
+    margin: auto;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+.title {
+    margin-left:10%;
+    margin-right:70%;
+    width: max-content;
+    
+}
+.content {
+    flex-direction: column;
+    width:100%;
+}

@@ -1,0 +1,36 @@
+#listNavBar {
+    list-style: none;
+    display: inline;
+    
+  }
+  .navBar {
+    display: flex;
+    border: 1px solid gray;
+    height: 50px;
+  }
+  #wrapperNavBar {
+    display: flex;
+    margin: auto;
+    
+    
+  }
+  .listNavBarItem {
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-decoration: none;
+  }
+  .listNavBarItem:hover{
+    background-color:#135DD8;
+    color: white;
+  }
+  
+  
+  .listNavBarActive{
+    background-color:#135DD8;
+    color: white;
+  }
+  .navPage {
+    display: flex;
+  }
