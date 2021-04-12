@@ -1,24 +1,59 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from './components/Header'
+import NavBar from './components/NavBar'
+import Footer from './components/Footer'
+import {AuthProvider} from './contexts/AuthContext'
+import {Switch, 
+        BrowserRouter as Router, 
+        Route, Redirect
+       } from 'react-router-dom'
+import Home from './views/Home'
+import Maps from './views/Maps'
+import NewsAndEvents from './views/NewsAndEvents'
+import Downloads from './views/Downloads'
+import Gallery from './views/Gallery'
+import Contact from './views/Contact'
+import Login from './views/Login'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  return ( 
+    
+     <Router>
+      <AuthProvider className="App">
+      {window.location.pathname!=='/login'?<div><Header/><NavBar/></div>:null}
+      
+        <Switch>
+                <Route exact path='/'>
+                    <Redirect to="/home"/>
+                </Route>
+                <Route exact path='/home'>
+                    <Home/>
+                </Route>
+                <Route path='/maps'>
+                    <Maps/>
+                </Route>
+                <Route path='/news-and-events'>
+                    <NewsAndEvents/>
+                </Route>
+                <Route path='/downloads'>
+                    <Downloads/>
+                </Route>
+                <Route path='/gallery'>
+                    <Gallery/>
+                </Route>
+                <Route path='/contact'>
+                    <Contact/>
+                </Route>
+                <Route path='/login'>
+                    <Login/>
+                </Route>
+            </Switch> 
+            {window.location.pathname !== '/login'?<Footer/>:null}
+            
+            </AuthProvider>      
+        </Router>  
+
+    
   );
 }
 

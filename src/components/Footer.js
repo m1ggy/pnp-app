@@ -5,7 +5,7 @@ function Footer (){
         <div className="footer">
             <div className="wrapper">
                 <p>
-                    Copyright 2021 Miguel Buising / <a href="/login">Login</a>
+                    Copyright 2021 Miguel Buising
                 </p>
             </div>     
         </div>

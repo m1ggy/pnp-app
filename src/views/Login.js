@@ -1,22 +1,28 @@
-import React, {useState} from 'react'
+import React, {useState,useRef} from 'react'
 import '../styles/login.css'
+import {useAuth} from '../contexts/AuthContext'
+import {Alert} from 'react-bootstrap'
 
 function Login () {
+  const emailRef = useRef()
+  const passwordRef = useRef()
+  const {login} = useAuth()
+  const [error, setError] = useState()
+  const [loading, setLoading] = useState(false)
 
-    const [credentials, setCredentials] = useState({})
-    
-function handleChange (event){
-   if(event.target.name === 'username'){
-     setCredentials({...credentials, username:event.target.value})  
-   }
-   else if(event.target.name === 'password'){
-    setCredentials({...credentials, password:event.target.value})   
-   }
-}
-function submitData(){
-    return console.log(credentials)
-}
+  async function handleSubmit(e){
+    e.preventDefault()
 
+    try{
+      setError('')
+      setLoading(true)
+      await login(emailRef.current.value, passwordRef.current.value)
+    }catch{   
+        setError("Failed to Login. email or password is incorrect.")
+    } 
+    setLoading(false)
+  }
+  
     return(
         <div className="container">
            <div className="loginTab">
@@ -26,23 +32,25 @@ function submitData(){
               <form>
                 <div className="inputs">
                 <label className="username">
-                      username
-                      <input type="text" value={credentials.username} onChange={handleChange} name="username"/>
+                      email
+                      <br/>
+                      <input type="text" ref={emailRef} required/>
                   </label>
                 </div>
                 <div className="inputs">
-                <label className="password">
+                <label  className="password">
                     password
-                    <input type="password" value={credentials.password} onChange={handleChange} name="password"/>
+                    <br/>
+                    <input type="password" ref={passwordRef} required/>
                     </label>
                 </div>
                 
-                <div className="button">
-                <input type="submit" value="Submit" onClick={submitData()}/>
+                <div className="btn">
+                <input type="submit" value="Submit" onClick={handleSubmit} className="button" disabled={loading}/>
                 </div>
                 
               </form>
-                
+                {error&&<Alert variant="danger">{error}</Alert>}
             </div>
             
            </div>
