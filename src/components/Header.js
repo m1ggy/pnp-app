@@ -1,5 +1,6 @@
 import React from 'react'
 import {Container, Image, Row} from 'react-bootstrap'
+import '../styles/header.css'
 function Header(){
     return(
         <Container fluid className="justify-content-md-center">

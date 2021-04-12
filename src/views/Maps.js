@@ -1,9 +1,14 @@
 import React from 'react'
 import '../styles/map.css'
+import Header from '../components/Header'
+import NavBarMain from '../components/NavBarMain'
+import FooterMain from '../components/FooterMain'
+
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet';
 delete L.Icon.Default.prototype._getIconUrl;
+
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -13,7 +18,9 @@ L.Icon.Default.mergeOptions({
 
 function Maps (){
     return(
-    <div className="container">
+    <>
+            <Header/>
+            <NavBarMain/>
         <div>
             <h1 className="title">Maps</h1>
         </div>
@@ -31,7 +38,8 @@ function Maps (){
                 </Marker>
         </MapContainer>
         </div>
-    </div>
+        <FooterMain/>
+    </>
     )
 }
 export default Maps

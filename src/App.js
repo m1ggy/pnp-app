@@ -1,7 +1,4 @@
 import './App.css';
-import Header from './components/Header'
-import NavBar from './components/NavBar'
-import Footer from './components/Footer'
 import {AuthProvider} from './contexts/AuthContext'
 import {Switch, 
         BrowserRouter as Router, 
@@ -19,10 +16,9 @@ import PrivateRoute from './routes/PrivateRoute'
 
 function App() {
   return ( 
-    
+    <div className="App">
      <Router>
-      <AuthProvider className="App">
-      {window.location.pathname!=='/login'&& window.location.pathname!=='/dashboard'?<div><Header/><NavBar/></div>:null}
+      <AuthProvider>
       
         <Switch>
         <PrivateRoute path="/dashboard" component={Dashboard}/>
@@ -52,12 +48,11 @@ function App() {
                     <Login/>
                 </Route>
             </Switch> 
-            {window.location.pathname !== '/login'&& window.location.pathname!=='/dashboard'?<Footer/>:null}
+    
             
             </AuthProvider>      
         </Router>  
-
-    
+</div>   
   );
 }
 

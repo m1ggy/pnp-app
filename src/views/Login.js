@@ -1,13 +1,14 @@
-import React, {useState,useRef} from 'react'
+import React, {useState,useRef, useEffect} from 'react'
 import '../styles/login.css'
 import {useAuth} from '../contexts/AuthContext'
-import {Alert} from 'react-bootstrap'
-import {useHistory} from 'react-router-dom'
+import {Alert, Card, Form, Container} from 'react-bootstrap'
+import {useHistory, NavLink} from 'react-router-dom'
+
 
 function Login () {
   const emailRef = useRef()
   const passwordRef = useRef()
-  const {login} = useAuth()
+  const {login,currentUser} = useAuth()
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
   const history = useHistory()
@@ -24,39 +25,42 @@ function Login () {
     } 
     setLoading(false)
   }
+///prevent the user from visiting the login page when currently logged in
+  useEffect(() => {
+    if(currentUser){
+      return history.push('/dashboard')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   
     return(
-        <div className="container">
-           <div className="loginTab">
-           
-            <div className="content">
-            <div className="logintitle"><h3>Admin Login</h3></div>
-              <form>
-                <div className="inputs">
-                <label className="username">
-                      email
-                      <br/>
-                      <input type="text" ref={emailRef} required/>
-                  </label>
-                </div>
-                <div className="inputs">
-                <label  className="password">
-                    password
-                    <br/>
-                    <input type="password" ref={passwordRef} required/>
-                    </label>
-                </div>
-                
-                <div className="btn">
-                <input type="submit" value="Submit" onClick={handleSubmit} className="button" disabled={loading}/>
-                </div>
-                
-              </form>
-                {error&&<Alert variant="danger">{error}</Alert>}
-            </div>
-            
-           </div>
-        </div>
+      <Container className="d-flex justify-items-center align-middle" style={{marginTop:150}}>
+      
+        <Card style={{width:'400px'}} className="mx-auto">
+        
+        <Card.Body>
+        <h2>Login</h2>
+        {error&&<Alert variant="danger">{error}</Alert>}
+          <Form onSubmit={handleSubmit}>
+
+            <Form.Group id="Email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control type ="email"ref={emailRef}required/>
+            </Form.Group>
+
+            <Form.Group id="Password">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type ="password"ref={passwordRef}required/>
+            </Form.Group>
+                    
+              <input type="submit" value="Submit" onClick={handleSubmit} className="w-100 button mt-5" disabled={loading}/>   
+          </Form>
+        </Card.Body>
+        </Card>
+        <div className="w-100 text-center mt-2">
+        <NavLink to="/home">Go back</NavLink>
+      </div>
+    </Container>
     )
 }
 export default Login

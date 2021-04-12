@@ -1,11 +1,11 @@
 .footer {
-    display:flex;
-    border: 1px solid black;
-
-}
-.wrapper {
-    height: 40px;
+    position:absolute;
+    left:0;
+    bottom:0;
+    right:0;
     margin:auto;
-    margin-top: auto;
-   top:0;
+    display:flex;
+}
+.footerContent {
+    margin: auto;
 }
