@@ -14,6 +14,9 @@ const [loading, setLoading] = useState(true)
 function login (email, password) {
     return firebaseAuth.signInWithEmailAndPassword(email, password)
 }
+function logout () {
+    return firebaseAuth.signOut()
+}
 ///listen to changes in auth
 useEffect(()=>{
     const unsubscribe = firebaseAuth.onAuthStateChanged(user =>{
@@ -26,7 +29,8 @@ useEffect(()=>{
 
     const value = {
         currentUser,
-        login
+        login,
+        logout
     }
     return(
         <AuthContext.Provider value={value}>

@@ -14,15 +14,19 @@ import Downloads from './views/Downloads'
 import Gallery from './views/Gallery'
 import Contact from './views/Contact'
 import Login from './views/Login'
+import Dashboard from './views/Dashboard'
+import PrivateRoute from './routes/PrivateRoute'
 
 function App() {
   return ( 
     
      <Router>
       <AuthProvider className="App">
-      {window.location.pathname!=='/login'?<div><Header/><NavBar/></div>:null}
+      {window.location.pathname!=='/login'&& window.location.pathname!=='/dashboard'?<div><Header/><NavBar/></div>:null}
       
         <Switch>
+        <PrivateRoute path="/dashboard" component={Dashboard}/>
+       
                 <Route exact path='/'>
                     <Redirect to="/home"/>
                 </Route>
@@ -48,7 +52,7 @@ function App() {
                     <Login/>
                 </Route>
             </Switch> 
-            {window.location.pathname !== '/login'?<Footer/>:null}
+            {window.location.pathname !== '/login'&& window.location.pathname!=='/dashboard'?<Footer/>:null}
             
             </AuthProvider>      
         </Router>  

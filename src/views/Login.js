@@ -2,6 +2,7 @@ import React, {useState,useRef} from 'react'
 import '../styles/login.css'
 import {useAuth} from '../contexts/AuthContext'
 import {Alert} from 'react-bootstrap'
+import {useHistory} from 'react-router-dom'
 
 function Login () {
   const emailRef = useRef()
@@ -9,14 +10,15 @@ function Login () {
   const {login} = useAuth()
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
+  const history = useHistory()
 
   async function handleSubmit(e){
     e.preventDefault()
-
     try{
       setError('')
       setLoading(true)
       await login(emailRef.current.value, passwordRef.current.value)
+      history.push('/dashboard')
     }catch{   
         setError("Failed to Login. email or password is incorrect.")
     } 
