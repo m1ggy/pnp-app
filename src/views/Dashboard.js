@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
 import {useAuth} from '../contexts/AuthContext'
 import {useHistory} from 'react-router-dom'
-import {Button, Alert, Container, Navbar, Form, Row, Col} from 'react-bootstrap'
+import {Button, Alert, Navbar, Form, Row, Col} from 'react-bootstrap'
 import Sidebar from '../components/Sidebar'
 
 export default function Dashboard() {
 
-    const {logout} = useAuth()
+    const {logout, currentUser} = useAuth()
     const [error, setError] = useState()
     const history = useHistory()
 
@@ -20,19 +20,21 @@ export default function Dashboard() {
         }
     }
     return (
-        <Container>
-            <Navbar>
-               <Form inline>
-                   <Button onClick={handleLogout} variant="danger">Logout</Button>
-               </Form>
-            </Navbar>
+        <>     
+                <Navbar>
+                    <Form inline className="ml-3">
+                        <Button onClick={handleLogout} variant="danger">Logout</Button>
+                    </Form>   
+                    {currentUser&&<text className="align-middle ml-2">{currentUser.email}</text>} 
+                </Navbar>
+           
            <Row>
-               <Col><Sidebar/></Col>
-               <Col>Content</Col>      
+               <Col sm={2}><Sidebar/></Col>
+               <Col sm={10}>Content</Col>      
             </Row>
           
             {error&&<Alert variant="danger">{error}</Alert>}
             
-        </Container>
+        </>
     )
 }
