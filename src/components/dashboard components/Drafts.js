@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function DashboardMain() {
+export default function Drafts() {
     return (
         <div>
-            Dashboard Main
+            drafts
         </div>
     )
 }

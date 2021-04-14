@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function DashboardMain() {
+export default function AddNewPost() {
     return (
         <div>
-            Dashboard Main
+            add new post
         </div>
     )
 }

@@ -15,6 +15,7 @@ import Dashboard from './views/Dashboard'
 import PrivateRoute from './routes/PrivateRoute'
 import {useEffect} from 'react'
 import GA4React, {useGA4React} from 'ga-4-react'
+import AddNewPost from './components/dashboard components/AddNewPost'
 // import {Button} from 'react-bootstrap'
 
 const ga4react = new GA4React("G-2MRNV52H3Q")
@@ -33,7 +34,7 @@ function App() {
      <Router>
       <AuthProvider>
         <Switch>
-        <PrivateRoute path="/dashboard" component={Dashboard}/>
+                <PrivateRoute path="/dashboard" component={Dashboard}/>
        
                 <Route exact path='/'>
                     <Redirect to="/home"/>
@@ -59,6 +60,7 @@ function App() {
                 <Route path='/login'>
                     <Login/>
                 </Route>
+                
             </Switch> 
     
             

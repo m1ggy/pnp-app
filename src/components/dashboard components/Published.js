@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function DashboardMain() {
+export default function Published() {
     return (
         <div>
-            Dashboard Main
+            published
         </div>
     )
 }

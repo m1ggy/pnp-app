@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function DashboardMain() {
+export default function ManagePost() {
     return (
         <div>
-            Dashboard Main
+            manage posts
         </div>
     )
 }

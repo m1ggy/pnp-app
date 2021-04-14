@@ -1,42 +1,46 @@
 import React from 'react'
 import {Col, Row, NavDropdown} from 'react-bootstrap'
-import {Link, BrowserRouter as Router} from 'react-router-dom'
+import {Link, NavLink, useRouteMatch} from 'react-router-dom'
 import '../styles/sidebar.css'
 export default function Sidebar() {
+    const {path, url} = useRouteMatch()
+   
     return (
         <div className="sidebarContainer border h-100 d-inline-block bg-light pl-5">
             <Col>
-            <Router basename="/dashboard">
+           
                 <Row className="mt-3">
-                    <Link to="/">Dashboard</Link>
+                    <Link to={`/dashboard`}>Dashboard</Link>
                 </Row>
                 
                 <Row className="mt-3">
                 <NavDropdown title="Posts" id="basic-nav-dropdown" drop="right">
-                    <NavDropdown.Item><Link to="/add-new-post">Add New Post</Link></NavDropdown.Item>
-                    <NavDropdown.Item><Link to="/drafts">Drafts</Link></NavDropdown.Item>
-                    <NavDropdown.Item><Link to="/published">Published</Link></NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item><Link to="/manage-posts">Manage Posts</Link></NavDropdown.Item>
+                <NavDropdown.Item><NavLink to={`/dashboard/posts/manage-posts`}>Manage Posts</NavLink></NavDropdown.Item>
+                <NavDropdown.Divider />
+               <NavDropdown.Item> <NavLink to={`/dashboard/posts/add-new-post`}>Add New Post</NavLink></NavDropdown.Item>
+                    <NavDropdown.Item><NavLink to={`/dashboard/posts/drafts`}>Drafts</NavLink></NavDropdown.Item>
+                    <NavDropdown.Item><NavLink to={`/dashboard/posts/published`}>Published</NavLink></NavDropdown.Item>
+                    
+                   
                 </NavDropdown>
                 </Row>
                 <Row className="mt-3">
                 <NavDropdown title="Downloads" id="basic-nav-dropdown" drop="right">
-                    <NavDropdown.Item><Link to="/view-downloads">View Downloads</Link></NavDropdown.Item>
+                    <NavDropdown.Item><Link to="/dashboard/downloads/view-downloads">View Downloads</Link></NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item><Link to="/manage-downloads">Manage Downloads</Link></NavDropdown.Item>
+                    <NavDropdown.Item><Link to="/dashboard/downloads/manage-downloads">Manage Downloads</Link></NavDropdown.Item>
                 </NavDropdown>
                 </Row>
                 <Row className="mt-3">
-                <Link to="/map">Map</Link>
+                <Link to="/dashboard/map">Map</Link>
                 </Row>
                 <Row className="mt-3">
-                <Link to="/charts">Charts</Link>
+                <Link to="/dashboard/charts">Charts</Link>
                 </Row>
                 <Row className="mt-3">
-                <Link to="/accounts">Accounts</Link>
+                <Link to="/dashboard/account">Account</Link>
                 </Row>
-                </Router>
+                
             </Col>
         </div>
     )
