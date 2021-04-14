@@ -105,14 +105,12 @@ export default function Dashboard() {
             </Navbar>
                 
            <Row>
+
                <Col md="auto">
                 <Sidebar/>
                </Col>
+
                <Col>
-               
-               <Row>
-                    <Jumbotron className="w-100"><h1></h1></Jumbotron>
-                    </Row>
                 <Row> 
                     <Switch>               
                         {routes()}
