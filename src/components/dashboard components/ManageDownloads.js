@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function ChartsMain() {
+export default function ManageDownloads() {
     return (
         <div>
-            charts
+            manage Downloads
         </div>
     )
 }
