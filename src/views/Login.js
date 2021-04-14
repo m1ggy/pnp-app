@@ -2,7 +2,7 @@ import React, {useState,useRef, useEffect} from 'react'
 import '../styles/login.css'
 import {useAuth} from '../contexts/AuthContext'
 import {Alert, Card, Form, Container} from 'react-bootstrap'
-import {useHistory, NavLink} from 'react-router-dom'
+import {useHistory, NavLink, useLocation} from 'react-router-dom'
 
 
 function Login () {
@@ -12,10 +12,13 @@ function Login () {
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
   const history = useHistory()
+  const location = useLocation()
+  const [msg, setMsg] = useState()
 
   async function handleSubmit(e){
     e.preventDefault()
     try{
+      setMsg('')
       setError('')
       setLoading(true)
       await login(emailRef.current.value, passwordRef.current.value)
@@ -25,8 +28,12 @@ function Login () {
     } 
     setLoading(false)
   }
+
 ///prevent the user from visiting the login page when currently logged in
-  useEffect(() => {
+  useEffect(() => {   
+    if(location){
+      setMsg(location.message)
+    } 
     if(currentUser){
       return history.push('/dashboard')
     }
@@ -41,6 +48,7 @@ function Login () {
         <Card.Body>
         <h2>Login</h2>
         {error&&<Alert variant="danger">{error}</Alert>}
+        {msg&&<Alert variant="danger">{msg}</Alert>}
           <Form onSubmit={handleSubmit}>
 
             <Form.Group id="Email">

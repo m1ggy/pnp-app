@@ -20,8 +20,8 @@ import GA4React from 'ga-4-react'
 
 
 function App() {
-    const ga4react = new GA4React('G-2MRNV52H3Q')
-    
+    const ga4react = new GA4React()
+
     useEffect(()=>{
 
         ga4react.initialize().then(ga4=>{
