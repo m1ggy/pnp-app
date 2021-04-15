@@ -1,7 +1,8 @@
 import React, {useRef, useState} from 'react'
-import {Jumbotron, Col, Row, InputGroup, Form, Alert, Container, Button} from 'react-bootstrap'
+import {Jumbotron, Col, Row, Form, Alert, Container, Button, Modal} from 'react-bootstrap'
 import {firestore} from '../../firebase/firebase'
-
+import {useAuth} from '../../contexts/AuthContext'
+import uniqid from 'uniqid'
 
 export default function AddNewPost() {
   
@@ -13,11 +14,73 @@ export default function AddNewPost() {
     const typeEventRef = useRef()
     const typeNewsRef = useRef()
     const typeOthersRef = useRef()
+    const [status, setStatus] = useState()
+    const {currentUser} = useAuth()
 
     const [showNote, setShowNote] = useState(true)
+    const [showStatus, setShowStatus] = useState(false)
 
     const special = ["<",">"]
     
+    const db = firestore.collection('posts')
+
+    function pushData(e){
+        setStatus()
+
+        e.preventDefault()
+        ///create unique id for matching the image in storage
+        const tempID = uniqid()
+
+        if(typeEventRef.current.checked === true){
+            db.doc('events').set({
+                [titleRef.current.value]:{
+                    title:titleRef.current.value,
+                    subtitle:subtitleRef.current.value,
+                    content:contentRef.current.value,
+                    id:tempID,
+                    published:publishRef.current.checked,
+                    author:currentUser.email
+                }
+            },{merge:true}).then(()=>{
+                setStatus(true)
+            }).catch(()=>{
+                setStatus(false)
+            })
+        }
+        else if(typeNewsRef.current.checked === true){
+            db.doc('news').set({
+                [titleRef.current.value]:{
+                    title:titleRef.current.value,
+                    subtitle:subtitleRef.current.value,
+                    content:contentRef.current.value,
+                    id:tempID,
+                    published:publishRef.current.checked,
+                    author:currentUser.email
+                }
+            },{merge:true}).then(()=>{
+                setStatus(true)
+            }).catch(()=>{
+                setStatus(false)
+            })
+        }
+        else if(typeOthersRef.current.checked === true){
+            db.doc('others').set({
+                [titleRef.current.value]:{
+                    title:titleRef.current.value,
+                    subtitle:subtitleRef.current.value,
+                    content:contentRef.current.value,
+                    id:tempID,
+                    published:publishRef.current.checked,
+                    author:currentUser.email
+                }
+            },{merge:true}).then(()=>{
+                setStatus(true)
+            }).catch(()=>{
+                setStatus(false)
+            })
+        }
+       
+    }
     return (
         <>
          <Col>
@@ -29,7 +92,13 @@ export default function AddNewPost() {
                <Col >
                <Jumbotron className="w-100">
                <Container>
-               <Form onSubmit={()=>{<Alert>Submitted</Alert>}}>
+               {status
+               ?<Alert variant="success"><Alert.Heading>Post Added!</Alert.Heading>Successfully added post.</Alert>
+               :status === false?<Alert variant="danger"><Alert.Heading>Post was not added!</Alert.Heading>the post was not added to the database. Please try again.</Alert>
+               :status === 'undefined'?null
+               :null
+               }
+               <Form onSubmit={pushData}>
 
                 <Form.Group>
                     <Form.Label>
@@ -50,7 +119,7 @@ export default function AddNewPost() {
                         <b>Enter Content </b>
                     </Form.Label>
                     
-                    <Form.Control as="textarea" required style={{width:1000}} resize="none" rows={25}style={{resize:'none', width:"100%"}} ref={contentRef}/>
+                    <Form.Control as="textarea" required rows={25}style={{resize:'none', width:"100%"}} ref={contentRef}/>
                 </Form.Group>
 
                 <Form.Group>
@@ -86,8 +155,7 @@ export default function AddNewPost() {
                     type="switch"
                     id="custom-switch"
                     label="Publish"
-                    ref={publishRef}
-                    required
+                    ref={publishRef}               
                 />
                 <Button variant="primary" type="submit" className="mt-5" size="lg">
                     Submit
@@ -100,9 +168,10 @@ export default function AddNewPost() {
 
                <Col xs lg="3">
                 <Jumbotron>
+                <h3>Tips</h3>
                     {showNote
-                    ?<Alert variant="info" className="w-100" onClose={()=>setShowNote(false)} dismissable><Alert.Heading>Tip</Alert.Heading><p>You can use HTML Tags to format your content (ex. {special[0]}b{special[1]} for <b>bold</b>)</p></Alert>
-                    :<Button onClick={()=>{setShowNote(true)}}>Show Tip</Button>
+                    ?<Alert variant="info" onClose={()=>{setShowNote(false)}} dismissible><Alert.Heading>#1</Alert.Heading><p>You can use HTML Tags to format your content (ex. <code>{special[0]}b{special[1]}</code> for <b>bold</b>)</p></Alert>
+                    :<Button onClick={()=>{setShowNote(true)}}>Show Tips</Button>
                     }  
                 </Jumbotron>
                </Col> 

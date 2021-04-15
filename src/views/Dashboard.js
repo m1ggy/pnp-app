@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {useAuth} from '../contexts/AuthContext'
 import {useHistory, Switch, Route, useRouteMatch} from 'react-router-dom'
-import {Button, Alert, Navbar, Form, Row, Col, Jumbotron} from 'react-bootstrap'
+import {Button, Alert, Navbar, Form, Row, Col} from 'react-bootstrap'
 import Sidebar from '../components/Sidebar'
 import DashboardMain from '../components/dashboard components/DashboardMain'
 import AddNewPost from '../components/dashboard components/AddNewPost'
@@ -19,7 +19,7 @@ export default function Dashboard() {
     const {logout, currentUser} = useAuth()
     const [error, setError] = useState()
     const history = useHistory()
-    const {path, url} = useRouteMatch()
+    const {path} = useRouteMatch()
     async function handleLogout(){
         setError('')
         try{
