@@ -1,4 +1,4 @@
-import React, {useRef} from 'react'
+import React, {useRef, useState} from 'react'
 import {Jumbotron, Col, Row, InputGroup, Form, Alert, Container, Button} from 'react-bootstrap'
 import {firestore} from '../../firebase/firebase'
 
@@ -10,7 +10,11 @@ export default function AddNewPost() {
     const contentRef = useRef()
     const imageRef = useRef()
     const publishRef = useRef()
-    const typeRef = useRef()
+    const typeEventRef = useRef()
+    const typeNewsRef = useRef()
+    const typeOthersRef = useRef()
+
+    const [showNote, setShowNote] = useState(true)
 
     const special = ["<",">"]
     
@@ -23,7 +27,7 @@ export default function AddNewPost() {
          
                <Row>
                <Col >
-               <Jumbotron className="w-75">
+               <Jumbotron className="w-100">
                <Container>
                <Form onSubmit={()=>{<Alert>Submitted</Alert>}}>
 
@@ -31,21 +35,21 @@ export default function AddNewPost() {
                     <Form.Label>
                     <b>Enter Title</b>
                     </Form.Label>
-                    <Form.Control type="text" placeholder="Title" required style={{width:"100%"}} ref={titleRef}/>
+                    <Form.Control type="text" placeholder="Title" required style={{width:"50%"}} ref={titleRef}/>
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>
                     <b>Enter Subtitle</b>
                     </Form.Label>
-                    <Form.Control type="text" placeholder="Subtitle" required style={{width:"100%"}} ref={subtitleRef}/>
+                    <Form.Control type="text" placeholder="Subtitle" required style={{width:"75%"}} ref={subtitleRef}/>
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>
                         <b>Enter Content </b>
                     </Form.Label>
-                    <Alert variant="info" className="w-50"> Note: You can use HTML Tags to format your content (ex. {special[0]}b{special[1]} for <b>bold</b>)</Alert>
+                    
                     <Form.Control as="textarea" required style={{width:1000}} resize="none" rows={25}style={{resize:'none', width:"100%"}} ref={contentRef}/>
                 </Form.Group>
 
@@ -60,18 +64,21 @@ export default function AddNewPost() {
                             label="Events"
                             name="type"
                             id="events"
+                            ref={typeEventRef}
                         />
                         <Form.Check
                             type="radio"
                             label="News"
                             name="type"
                             id="news"
+                            ref={typeNewsRef}
                         />
                         <Form.Check
                             type="radio"
                             label="Others"
                             name="type"
                             id="others"
+                            ref={typeOthersRef}
                         />
                 </Form.Group>
 
@@ -90,12 +97,17 @@ export default function AddNewPost() {
             </Container>
                </Jumbotron>
                </Col>
-               <Col xs lg="2">
-               <Alert variant="danger" className="w-50" lg="auto">Hello</Alert>
-               </Col>   
-               </Row>
-                   
-                               
+
+               <Col xs lg="3">
+                <Jumbotron>
+                    {showNote
+                    ?<Alert variant="info" className="w-100" onClose={()=>setShowNote(false)} dismissable><Alert.Heading>Tip</Alert.Heading><p>You can use HTML Tags to format your content (ex. {special[0]}b{special[1]} for <b>bold</b>)</p></Alert>
+                    :<Button onClick={()=>{setShowNote(true)}}>Show Tip</Button>
+                    }  
+                </Jumbotron>
+               </Col> 
+
+               </Row>                                         
            </Col>
           
 
