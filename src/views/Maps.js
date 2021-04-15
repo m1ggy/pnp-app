@@ -3,10 +3,10 @@ import '../styles/map.css'
 import Header from '../components/Header'
 import NavBarMain from '../components/NavBarMain'
 import FooterMain from '../components/FooterMain'
-
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet';
+import { Jumbotron } from 'react-bootstrap'
 delete L.Icon.Default.prototype._getIconUrl;
 
 
@@ -21,9 +21,13 @@ function Maps (){
     <>
             <Header/>
             <NavBarMain/>
-        <div>
-            <h1 className="title">Maps</h1>
-        </div>
+
+
+        <Jumbotron className="mt-2">
+         <h1 className="title">Maps</h1>
+        </Jumbotron>
+            
+        
         
         <div id="mapid" style={{display:'flex'}}>
             <MapContainer center={[14.1407, 121.4692]} zoom={13} scrollWheelZoom={false} style={{ height: '500px', width: '800px', margin:'auto' }}>

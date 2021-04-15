@@ -11,7 +11,7 @@ function Home (){
        
             <Header/>
             <NavBarMain/>
-            <Jumbotron>
+            <Jumbotron className="mt-2">
                 <h1 className="title">Latest Post</h1>
             </Jumbotron>
             <FooterMain/>

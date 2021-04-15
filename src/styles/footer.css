@@ -1,10 +1,12 @@
 .footer {
-    position:absolute;
+    position:relative;
     left:0;
     bottom:0;
     right:0;
     margin:auto;
     display:flex;
+    margin-bottom: 40px;
+    margin-top: 40px;
 }
 .footerContent {
     margin: auto;

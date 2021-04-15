@@ -6,7 +6,7 @@ export default function Sidebar() {
     const {path, url} = useRouteMatch()
    
     return (
-        <div className="sidebarContainer border h-100 d-inline-block bg-light pl-5">
+        <div className="sidebarContainer border bg-light pl-5 pb-5">
             <Col>
            
                 <Row className="mt-3">
