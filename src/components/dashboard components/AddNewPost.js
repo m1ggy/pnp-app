@@ -26,7 +26,7 @@ export default function AddNewPost() {
 
     function pushData(e){
         setStatus()
-
+        
         e.preventDefault()
         ///create unique id for matching the image in storage
         const tempID = uniqid()
@@ -79,7 +79,7 @@ export default function AddNewPost() {
                 setStatus(false)
             })
         }
-       
+        e.target.reset()
     }
     return (
         <>
