@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react'
-import {Jumbotron, Col, Row, Form, Alert, Container, Button, Modal} from 'react-bootstrap'
-import {firestore} from '../../firebase/firebase'
+import {Jumbotron, Col, Row, Form, Alert, Container, Button} from 'react-bootstrap'
+import {firestore, storage} from '../../firebase/firebase'
 import {useAuth} from '../../contexts/AuthContext'
 import uniqid from 'uniqid'
 
@@ -18,20 +18,23 @@ export default function AddNewPost() {
     const {currentUser} = useAuth()
 
     const [showNote, setShowNote] = useState(true)
-    const [showStatus, setShowStatus] = useState(false)
 
     const special = ["<",">"]
     
     const db = firestore.collection('posts')
+    const storageRef = storage.ref()
 
     function pushData(e){
+
         setStatus()
         
         e.preventDefault()
         ///create unique id for matching the image in storage
         const tempID = uniqid()
+        const imageStorageRef = storageRef.child(`images/${tempID}.jpg`)
 
         if(typeEventRef.current.checked === true){
+            imageStorageRef.put(imageRef)
             db.doc('events').set({
                 [titleRef.current.value]:{
                     title:titleRef.current.value,
@@ -46,6 +49,7 @@ export default function AddNewPost() {
             }).catch(()=>{
                 setStatus(false)
             })
+            
         }
         else if(typeNewsRef.current.checked === true){
             db.doc('news').set({
