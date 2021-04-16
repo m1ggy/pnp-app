@@ -13,6 +13,8 @@ import DownloadsMain from '../components/dashboard components/DownloadsMain'
 import MapsMain from '../components/dashboard components/MapsMain'
 import ChartsMain from '../components/dashboard components/ChartsMain'
 import AccountsMain from '../components/dashboard components/AccountsMain'
+import ManageGalleries from '../components/dashboard components/ManageGalleries'
+import AddNewGallery from '../components/dashboard components/AddNewGallery'
 
 export default function Dashboard() {
 
@@ -37,61 +39,61 @@ export default function Dashboard() {
         path={`${path}/account`} 
         key={`${path}/account`}
         render={()=><AccountsMain/>}
-        //message={"Account"}
         />,
         <Route 
         path={`${path}/charts`} 
         key={`${path}/charts`}
         render={()=><ChartsMain/>}
-        //message={"Charts"}
         />,
         <Route 
         path={`${path}/map`} 
         key={`${path}/map`}
         render={()=><MapsMain/>}
-        //message={"Map"}
         />,
         <Route 
         path={`${path}/downloads/view-downloads`} 
         key={`${path}/downloads/view-downloads`}
         render={()=><DownloadsMain/>}
-        //message={"Downloads"}
         />,
         <Route 
         path={`${path}/downloads/manage-downloads`} 
         key={`${path}/downloads/manage-downloads`}
         render={()=><ManageDownloads/>}
-        //message={"Manage Downloads"}
         />,
         <Route 
         path={`${path}/posts/manage-posts`} 
         key={`${path}/posts/manage-posts`}
         render={()=><ManagePost/>}
-        //message={"Manage Posts"}
         />,
         <Route 
         path={`${path}/posts/published`} 
         key={`${path}/posts/published`}
         render={()=><Published/>}
-        //message={"Published Posts"}
         />,
         <Route 
         path={`${path}/posts/add-new-post`} 
         key={`${path}/posts/add-new-post`}
         render={()=><AddNewPost/>}
-        //message={"Add New Post"}
         />,
         <Route 
         path={`${path}/posts/drafts`} 
         key={`${path}/posts/drafts`}
         render={()=><Drafts/>}
-        //message={"Drafts"}
         />,
+        <Route 
+        path={`${path}/gallery/manage-galleries`} 
+        key={`${path}/gallery/manage-galleries`}
+        render={()=><ManageGalleries/>}
+        />,
+        <Route 
+        path={`${path}/gallery/add-new-gallery`} 
+        key={`${path}/gallery/add-new-gallery`}
+        render={()=><AddNewGallery/>}    
+        />, 
         <Route 
         path={`${path}`} 
         key={`${path}`}
         render={()=><DashboardMain/>}
-        // message={"Dashboard"}
         />  
     ]
     

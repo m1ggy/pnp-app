@@ -3,7 +3,6 @@ import {Col, Row, NavDropdown} from 'react-bootstrap'
 import {Link, NavLink, useRouteMatch} from 'react-router-dom'
 import '../styles/sidebar.css'
 export default function Sidebar() {
-    const {path, url} = useRouteMatch()
    
     return (
         <div className="sidebarContainer border bg-light pl-5 pb-5">
@@ -29,6 +28,13 @@ export default function Sidebar() {
                     <NavDropdown.Item><Link to="/dashboard/downloads/view-downloads">View Downloads</Link></NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item><Link to="/dashboard/downloads/manage-downloads">Manage Downloads</Link></NavDropdown.Item>
+                </NavDropdown>
+                </Row>
+                <Row className="mt-3">
+                <NavDropdown title="Galleries" id="basic-nav-dropdown" drop="right">
+                    <NavDropdown.Item><Link to="/dashboard/gallery/manage-galleries">Manage Galleries</Link></NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item><Link to="/dashboard/gallery/add-new-gallery">Add New Gallery</Link></NavDropdown.Item>
                 </NavDropdown>
                 </Row>
                 <Row className="mt-3">
