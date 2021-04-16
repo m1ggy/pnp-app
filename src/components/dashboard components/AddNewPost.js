@@ -34,8 +34,7 @@ export default function AddNewPost() {
 
         if(typeEventRef.current.checked === true){
             imageStorageRef.put(imageRef)
-            db.doc('events').set({
-                [tempID]:{
+            db.doc(currentUser.email).collection('events').doc(tempID).set({            
                     title:titleRef.current.value,
                     subtitle:subtitleRef.current.value,
                     content:contentRef.current.value,
@@ -44,7 +43,6 @@ export default function AddNewPost() {
                     author:currentUser.email,
                     date: date.toDateString(),
                     time: date.toTimeString()
-                }
             },{merge:true}).then(()=>{
                 setStatus(true)
             }).catch(()=>{
@@ -53,8 +51,7 @@ export default function AddNewPost() {
             
         }
         else if(typeNewsRef.current.checked === true){
-            db.doc('news').set({
-                [tempID]:{
+            db.doc(currentUser.email).collection('news').doc(tempID).set({         
                     title:titleRef.current.value,
                     subtitle:subtitleRef.current.value,
                     content:contentRef.current.value,
@@ -62,9 +59,7 @@ export default function AddNewPost() {
                     published:publishRef.current.checked,
                     author:currentUser.email,
                     date: date.toDateString(),
-                    time: date.toTimeString()
-                    
-                }
+                    time: date.toTimeString()            
             },{merge:true}).then(()=>{
                 setStatus(true)
             }).catch(()=>{
@@ -72,8 +67,8 @@ export default function AddNewPost() {
             })
         }
         else if(typeOthersRef.current.checked === true){
-            db.doc('others').set({
-                [tempID]:{
+            db.doc(currentUser.email).collection('others').doc(tempID).set({
+                
                     title:titleRef.current.value,
                     subtitle:subtitleRef.current.value,
                     content:contentRef.current.value,
@@ -81,8 +76,7 @@ export default function AddNewPost() {
                     published:publishRef.current.checked,
                     author:currentUser.email,
                     date: date.toDateString(),
-                    time: date.toTimeString()
-                }
+                    time: date.toTimeString()        
             },{merge:true}).then(()=>{
                 setStatus(true)
             }).catch(()=>{

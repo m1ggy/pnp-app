@@ -1,46 +1,114 @@
 import React, {useEffect, useState} from 'react'
-import { Jumbotron, Col, Row, Spinner } from 'react-bootstrap'
+import { Jumbotron, Col, Row, Spinner, Container, Button} from 'react-bootstrap'
 import { firestore } from '../../firebase/firebase'
 import { useAuth } from '../../contexts/AuthContext'
 export default function Drafts() {
 
-    const {currentUser} = useAuth()
-    const [data,setData] = useState([])
+    const [posts,setPosts] = useState([])
     const[loading, setLoading] = useState()
+    const {currentUser} = useAuth()
 
-    function getData(){
-        setLoading(true)
 
-        let postsArray = []
+    function RenderPosts () {
+        return(
+            posts.map((post, index)=>{
+                return(
+                    <Row key={index} className="border p-3"> 
 
-        firestore.collection('posts').where('author', '==', `${currentUser}`).get().then(snap=>{
-            snap.forEach(doc=>{
-                postsArray.push(doc.data())
-                console.log(postsArray)
+                            <Col lg={10}>
+                                <Row><h3>{post.title}</h3></Row>
+                                <Row><p><b>Upload Date:</b> {post.date}</p></Row>
+                                <Row><p><b>Upload Time:</b> {post.time}</p></Row>
+                            </Col>
+
+                            <Col className="m-auto">
+                            
+                                <Button variant="primary">Edit</Button>
+                               
+                            </Col>             
+                    </Row>           
+                )
             })
-            setData(postsArray)       
-        }).catch(e=>{return console.log(e)})  
-        setLoading(false)
+        )
     }
-
-    function RenderDrafts(){
-        
-            return(
-                data.map((post, index) =>{
-                    return(
-                        <p key={index}>
-                           {post.title}
-                           {index}
-                        </p>
-                    )
-                })
-            )
-        
-       
-    }
+   
 
     useEffect(()=>{
+
+        async function getData(){
+            
+            let postsArray = []
+            
+            setLoading(true)
+    
+              await firestore.collection('posts').doc(currentUser.email).collection('events').where('published', '==',false)
+               .get()
+               .then((querySnapshot)=>{
+                    if(querySnapshot.empty){
+                        console.log('No matching documents.')
+                        return;
+                    }
+
+                    querySnapshot.forEach(doc=>{
+                        if(doc.exists){
+                            console.log(doc.data())
+                            postsArray.push(doc.data())
+                        }
+                        else{
+                            console.log('empty')
+                        }
+                    })
+                }).catch(e=>{
+                    console.log("Errors: "+e)
+                })
+                await firestore.collection('posts').doc(currentUser.email).collection('news').where('published', '==',false)
+                .get()
+                .then((querySnapshot)=>{
+                     if(querySnapshot.empty){
+                         console.log('No matching documents.')
+                         return;
+                     }
+ 
+                     querySnapshot.forEach(doc=>{
+                         if(doc.exists){
+                             console.log(doc.data())
+                             postsArray.push(doc.data())
+                         }
+                         else{
+                             console.log('empty')
+                         }
+                     })
+                 }).catch(e=>{
+                     console.log("Errors: "+e)
+                 })
+                 await firestore.collection('posts').doc(currentUser.email).collection('others').where('published', '==',false)
+                 .get()
+                 .then((querySnapshot)=>{
+                      if(querySnapshot.empty){
+                          console.log('No matching documents.')
+                          return;
+                      }
+  
+                      querySnapshot.forEach(doc=>{
+                          if(doc.exists){
+                              console.log(doc.data())
+                              postsArray.push(doc.data())
+                          }
+                          else{
+                              console.log('empty')
+                          }
+                      })
+                  }).catch(e=>{
+                      console.log("Errors: "+e)
+                  })
+    
+               setPosts(postsArray)
+            
+                setLoading(false)          
+        }
+
         getData()
+
     }, [])
 
 
@@ -53,7 +121,12 @@ export default function Drafts() {
             </Row> 
 
             <Row>
-                {loading&&data?<Spinner animation="grow"/>:<RenderDrafts/>}
+            <Jumbotron className="w-100">
+                <Container>
+                 {posts?<RenderPosts/>:<Spinner animation="border"/>}
+                </Container>
+            </Jumbotron>
+               
           
             </Row>
 
