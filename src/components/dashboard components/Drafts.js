@@ -22,8 +22,12 @@ export default function Drafts() {
                             </Col>
 
                             <Col className="m-auto">
-                            
-                                <Button variant="primary">Edit</Button>
+                            <Row>
+                                <Button variant="primary" size="sm" className="w-75 m-3"><p className="m-auto">Edit</p></Button>
+                                <Button variant="danger" size="sm" className="w-75 m-3"><p className="m-auto">Delete</p></Button>
+                            </Row>
+                           
+                                
                                
                             </Col>             
                     </Row>           
@@ -123,7 +127,8 @@ export default function Drafts() {
             <Row>
             <Jumbotron className="w-100">
                 <Container>
-                 {posts?<RenderPosts/>:<Spinner animation="border"/>}
+                 {posts?<RenderPosts/>:null}
+                 {loading?<Container><Spinner animation="border" className="m-auto"/></Container>:null}
                 </Container>
             </Jumbotron>
                

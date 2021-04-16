@@ -13,20 +13,13 @@ import Contact from './views/Contact'
 import Login from './views/Login'
 import Dashboard from './views/Dashboard'
 import PrivateRoute from './routes/PrivateRoute'
-import {useEffect} from 'react'
-import GA4React, {useGA4React} from 'ga-4-react'
-import AddNewPost from './components/dashboard components/AddNewPost'
-// import {Button} from 'react-bootstrap'
+import 'bootswatch/dist/lux/bootstrap.min.css'
 
-const ga4react = new GA4React("G-2MRNV52H3Q")
+
 
 function App() {
 
-    useEffect(()=>{ 
-         ga4react.initialize().then(ga4 =>{
-            ga4.pageview(window.location.pathname)
-        }).catch(e =>{console.log(e)})
-    },[])
+
 
 
   return ( 

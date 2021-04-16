@@ -6,7 +6,6 @@ import Sidebar from '../components/Sidebar'
 import DashboardMain from '../components/dashboard components/DashboardMain'
 import AddNewPost from '../components/dashboard components/AddNewPost'
 import Drafts from '../components/dashboard components/Drafts'
-import Published from '../components/dashboard components/Published'
 import ManagePost from "../components/dashboard components/ManagePost";
 import ManageDownloads from '../components/dashboard components/ManageDownloads'
 import DownloadsMain from '../components/dashboard components/DownloadsMain'
@@ -64,11 +63,6 @@ export default function Dashboard() {
         path={`${path}/posts/manage-posts`} 
         key={`${path}/posts/manage-posts`}
         render={()=><ManagePost/>}
-        />,
-        <Route 
-        path={`${path}/posts/published`} 
-        key={`${path}/posts/published`}
-        render={()=><Published/>}
         />,
         <Route 
         path={`${path}/posts/add-new-post`} 

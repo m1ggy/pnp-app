@@ -96,12 +96,7 @@ export default function AddNewPost() {
                <Col >
                <Jumbotron className="w-100">
                <Container>
-               {status
-               ?<Alert variant="success"><Alert.Heading>Post Added!</Alert.Heading>Successfully added post.</Alert>
-               :status === false?<Alert variant="danger"><Alert.Heading>Post was not added!</Alert.Heading>the post was not added to the database. Please try again.</Alert>
-               :status === 'undefined'?null
-               :null
-               }
+               
                <Form onSubmit={pushData}>
 
                 <Form.Group>
@@ -166,6 +161,14 @@ export default function AddNewPost() {
                 </Button>
 
                 </Form>
+                <div className="mt-5">
+                    {status
+                ?<Alert variant="success"><Alert.Heading>Post Added!</Alert.Heading>Successfully added post.</Alert>
+                :status === false?<Alert variant="danger"><Alert.Heading>Post was not added!</Alert.Heading>the post was not added to the database. Please try again.</Alert>
+                :status === 'undefined'?null
+                :null
+                }
+               </div>
             </Container>
                </Jumbotron>
                </Col>

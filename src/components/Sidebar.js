@@ -20,8 +20,6 @@ export default function Sidebar() {
                         <NavDropdown.Divider />
                         <NavDropdown.Item> <Link to='/dashboard/posts/add-new-post'>Add New Post</Link></NavDropdown.Item>
                         <NavDropdown.Item><Link to='/dashboard/posts/drafts'>Drafts</Link></NavDropdown.Item>
-                        <NavDropdown.Item><Link to='/dashboard/posts/published'>Published</Link></NavDropdown.Item>
-
                      </NavDropdown>
 
                 </Row>
