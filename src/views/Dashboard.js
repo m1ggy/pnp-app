@@ -103,7 +103,7 @@ export default function Dashboard() {
                 <Form inline className="ml-3">
                     <Button onClick={handleLogout} variant="danger">Logout</Button>
                 </Form>   
-                {currentUser&&<text className="align-middle ml-2">{currentUser.email}</text>} 
+                {currentUser&&<p className="align-middle ml-2">{currentUser.email}</p>} 
             </Navbar>
                 
            <Row>

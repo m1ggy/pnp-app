@@ -3,7 +3,6 @@ import {Jumbotron, Col, Row, Form, Alert, Container, Button} from 'react-bootstr
 import {firestore, storage} from '../../firebase/firebase'
 import {useAuth} from '../../contexts/AuthContext'
 import uniqid from 'uniqid'
-
 export default function AddNewPost() {
   
     const titleRef = useRef()
@@ -27,7 +26,7 @@ export default function AddNewPost() {
     function pushData(e){
 
         setStatus()
-        
+        const date = new Date()
         e.preventDefault()
         ///create unique id for matching the image in storage
         const tempID = uniqid()
@@ -36,13 +35,15 @@ export default function AddNewPost() {
         if(typeEventRef.current.checked === true){
             imageStorageRef.put(imageRef)
             db.doc('events').set({
-                [titleRef.current.value]:{
+                [tempID]:{
                     title:titleRef.current.value,
                     subtitle:subtitleRef.current.value,
                     content:contentRef.current.value,
                     id:tempID,
                     published:publishRef.current.checked,
-                    author:currentUser.email
+                    author:currentUser.email,
+                    date: date.toDateString(),
+                    time: date.toTimeString()
                 }
             },{merge:true}).then(()=>{
                 setStatus(true)
@@ -53,13 +54,16 @@ export default function AddNewPost() {
         }
         else if(typeNewsRef.current.checked === true){
             db.doc('news').set({
-                [titleRef.current.value]:{
+                [tempID]:{
                     title:titleRef.current.value,
                     subtitle:subtitleRef.current.value,
                     content:contentRef.current.value,
                     id:tempID,
                     published:publishRef.current.checked,
-                    author:currentUser.email
+                    author:currentUser.email,
+                    date: date.toDateString(),
+                    time: date.toTimeString()
+                    
                 }
             },{merge:true}).then(()=>{
                 setStatus(true)
@@ -69,13 +73,15 @@ export default function AddNewPost() {
         }
         else if(typeOthersRef.current.checked === true){
             db.doc('others').set({
-                [titleRef.current.value]:{
+                [tempID]:{
                     title:titleRef.current.value,
                     subtitle:subtitleRef.current.value,
                     content:contentRef.current.value,
                     id:tempID,
                     published:publishRef.current.checked,
-                    author:currentUser.email
+                    author:currentUser.email,
+                    date: date.toDateString(),
+                    time: date.toTimeString()
                 }
             },{merge:true}).then(()=>{
                 setStatus(true)
