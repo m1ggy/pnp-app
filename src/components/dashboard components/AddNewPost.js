@@ -103,14 +103,14 @@ export default function AddNewPost() {
                     <Form.Label>
                     <b>Enter Title</b>
                     </Form.Label>
-                    <Form.Control type="text" placeholder="Title" required style={{width:"50%"}} ref={titleRef}/>
+                    <Form.Control type="text" placeholder="Title" required style={{width:"50%"}} ref={titleRef} className="border"/>
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>
                     <b>Enter Subtitle</b>
                     </Form.Label>
-                    <Form.Control type="text" placeholder="Subtitle" required style={{width:"75%"}} ref={subtitleRef}/>
+                    <Form.Control type="text" placeholder="Subtitle" required style={{width:"75%"}} ref={subtitleRef} className="border"/>
                 </Form.Group>
 
                 <Form.Group>
@@ -118,7 +118,7 @@ export default function AddNewPost() {
                         <b>Enter Content </b>
                     </Form.Label>
                     
-                    <Form.Control as="textarea" required rows={25}style={{resize:'none', width:"100%"}} ref={contentRef}/>
+                    <Form.Control as="textarea" required rows={25}style={{resize:'none', width:"100%"}} ref={contentRef} className="border"/>
                 </Form.Group>
 
                 <Form.Group>
@@ -156,9 +156,12 @@ export default function AddNewPost() {
                     label="Publish"
                     ref={publishRef}               
                 />
-                <Button variant="primary" type="submit" className="mt-5" size="lg">
-                    Submit
-                </Button>
+                <Container className="mt-5">
+                    <Button variant="primary" type="submit" className="mt-5 w-25 m-auto" size="md">
+                        Submit
+                    </Button>
+                </Container>
+               
 
                 </Form>
                 <div className="mt-5">

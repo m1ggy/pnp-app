@@ -23,6 +23,7 @@
   .listNavBarItem:hover{
     background-color:#135DD8;
     color: white;
+    text-decoration: none;
   }
   
   
