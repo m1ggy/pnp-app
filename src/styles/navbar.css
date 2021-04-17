@@ -5,7 +5,6 @@
   }
   .navBar {
     display: flex;
-    border: 1px solid gray;
     height: 50px;
   }
   #wrapperNavBar {

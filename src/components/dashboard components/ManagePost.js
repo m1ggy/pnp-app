@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import {Jumbotron, Row, Col, Button, Spinner, Container} from 'react-bootstrap'
+import {Jumbotron, Row, Col, Button, Spinner, Container, Image} from 'react-bootstrap'
 import { useAuth } from '../../contexts/AuthContext'
-import { firestore } from '../../firebase/firebase'
+import { firestore} from '../../firebase/firebase'
 
 export default function ManagePost() {
 
@@ -18,6 +18,7 @@ export default function ManagePost() {
 
                             <Col lg={10}>
                                 <Row><h3>{post.title}</h3></Row>
+                                <Row><div className="m-3">{post.imageURL?<Image src={post.imageURL} width="200px" height="100%"/>:<p>No Image :(</p>}</div></Row>
                                 <Row><p><b>Upload Date:</b> {post.date}</p></Row>
                                 <Row><p><b>Upload Time:</b> {post.time}</p></Row>
                             </Col>
@@ -126,7 +127,7 @@ export default function ManagePost() {
                 <Jumbotron className="w-100">
 
                     <Container>
-                    
+
                         {posts?<RenderPosts/>:null}
                         {loading?<Container><Spinner animation="border" className="m-auto"/></Container>:null}
 

@@ -17,6 +17,7 @@ export default function AddNewPost() {
     const {currentUser} = useAuth()
 
     const [showNote, setShowNote] = useState(true)
+    const [imageURL, setImageURL] = useState()
 
     const special = ["<",">"]
     
@@ -36,9 +37,17 @@ export default function AddNewPost() {
         e.preventDefault()
         ///create unique id for matching the image in storage
         const tempID = uniqid()
+
         const imageStorageRef = storageRef.child(`images/${tempID}.jpg`)
         const task = imageStorageRef.put(image)
-        task.then(()=>{console.log('Image Uploaded')}).catch(()=>{console.log("Failed to upload")})
+
+        task.on("state_changed",(snapshot)=>{
+            console.log('Image Uploaded')
+        }, error=>{console.log(error)
+        }, ()=>{
+            imageStorageRef.getDownloadURL().then(url=>{setImageURL(url)})
+        })
+
 
         if(typeEventRef.current.checked === true){
             db.doc(currentUser.email).collection('events').doc(tempID).set({            
@@ -49,7 +58,9 @@ export default function AddNewPost() {
                     published:publishRef.current.checked,
                     author:currentUser.email,
                     date: date.toDateString(),
-                    time: date.toTimeString()
+                    time: date.toTimeString(),
+                    imageURL:`${imageURL}`
+                   
             },{merge:true}).then(()=>{
                 setStatus(true)
             }).catch(()=>{
@@ -66,7 +77,9 @@ export default function AddNewPost() {
                     published:publishRef.current.checked,
                     author:currentUser.email,
                     date: date.toDateString(),
-                    time: date.toTimeString()            
+                    time: date.toTimeString(),
+                    imageURL:`${imageURL}`
+                      
             },{merge:true}).then(()=>{
                 setStatus(true)
             }).catch(()=>{
@@ -82,7 +95,9 @@ export default function AddNewPost() {
                     published:publishRef.current.checked,
                     author:currentUser.email,
                     date: date.toDateString(),
-                    time: date.toTimeString()        
+                    time: date.toTimeString(),
+                    imageURL:`${imageURL}`
+                       
             },{merge:true}).then(()=>{
                 setStatus(true)
             }).catch(()=>{
