@@ -66,8 +66,7 @@ function Home (){
                         posts.map((post, index)=>{
                             return(
                                <Row className="w-100 bg-light" style={{height:250}} key={index} >
-                               <Container>
-
+                                <div className="m-auto">
                                     <Row className="w-100 m-auto">
                                         <h3>
                                             {post.title}
@@ -82,9 +81,11 @@ function Home (){
                                         {post.imageURL?<Image src={post.imageURL} width="75%" height="50%"/>:null}
                                     </Row>    
                                     <Row className="w-100 m-auto">
+                                    <div className="m-auto">
                                         <Button variant="primary" style={{height:50}}>Read</Button>
+                                        </div>
                                     </Row> 
-                                </Container>
+                                 </div>
                                 </Row>                               
                             )
                         })
