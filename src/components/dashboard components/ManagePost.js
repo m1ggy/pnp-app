@@ -128,8 +128,8 @@ export default function ManagePost() {
 
                     <Container>
 
-                        {posts?<RenderPosts/>:null}
-                        {loading?<Container><Spinner animation="border" className="m-auto"/></Container>:null}
+                        {posts.length>0?<RenderPosts/>:<p className="m-auto">No published posts.</p>}
+                        <Container>{loading?<Spinner animation="border" className="m-auto"/>:null}</Container>
 
                     </Container>
                

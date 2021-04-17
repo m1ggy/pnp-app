@@ -7,7 +7,7 @@ import '../styles/navbar.css'
 function NavBarMain (){
     return (
        
-            <Navbar bg="light">
+            <Navbar>
             <div className="mx-auto">
                 <NavLink to='/home' className="listNavBarItem" activeClassName="listNavBarActive"> Home</NavLink>
                 <NavLink to='/maps' className="listNavBarItem" activeClassName="listNavBarActive">Map</NavLink>              

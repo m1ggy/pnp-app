@@ -41,6 +41,7 @@ export default function AddNewPost() {
         const imageStorageRef = storageRef.child(`images/${tempID}.jpg`)
         const task = imageStorageRef.put(image)
 
+        ///upload image
         task.on("state_changed",(snapshot)=>{
             console.log('Image Uploaded')
         }, error=>{console.log(error)
@@ -59,7 +60,7 @@ export default function AddNewPost() {
                     author:currentUser.email,
                     date: date.toDateString(),
                     time: date.toTimeString(),
-                    imageURL:`${imageURL}`
+                    imageURL:imageURL
                    
             },{merge:true}).then(()=>{
                 setStatus(true)
@@ -78,7 +79,7 @@ export default function AddNewPost() {
                     author:currentUser.email,
                     date: date.toDateString(),
                     time: date.toTimeString(),
-                    imageURL:`${imageURL}`
+                    imageURL:imageURL
                       
             },{merge:true}).then(()=>{
                 setStatus(true)
@@ -96,7 +97,7 @@ export default function AddNewPost() {
                     author:currentUser.email,
                     date: date.toDateString(),
                     time: date.toTimeString(),
-                    imageURL:`${imageURL}`
+                    imageURL:imageURL
                        
             },{merge:true}).then(()=>{
                 setStatus(true)
