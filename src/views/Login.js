@@ -1,7 +1,7 @@
 import React, {useState,useRef, useEffect} from 'react'
 import '../styles/login.css'
 import {useAuth} from '../contexts/AuthContext'
-import {Alert, Card, Form, Container} from 'react-bootstrap'
+import {Alert, Card, Form, Container, Button} from 'react-bootstrap'
 import {useHistory, NavLink, useLocation} from 'react-router-dom'
 
 
@@ -60,8 +60,14 @@ function Login () {
               <Form.Label>Password</Form.Label>
               <Form.Control type ="password"ref={passwordRef}required/>
             </Form.Group>
-                    
-              <input type="submit" value="Submit" onClick={handleSubmit} className="w-100 button mt-5" disabled={loading}/>   
+            <Container>
+              <div className="m-auto">  
+              <Button onClick={handleSubmit} variant="primary">
+                Login
+              </Button>  
+              </div>
+            </Container>
+
           </Form>
         </Card.Body>
         </Card>
