@@ -18,7 +18,7 @@ export default function ManagePost() {
 
                             <Col lg={10}>
                                 <Row><h3>{post.title}</h3></Row>
-                                <Row><div className="m-3">{post.imageURL?<Image src={post.imageURL} width="200px" height="100%"/>:<p>No Image :(</p>}</div></Row>
+                                <Row><div className="m-3">{post.url?<Image src={post.url} width="200px" height="100%"/>:<p>No Image :(</p>}</div></Row>
                                 <Row><p><b>Upload Date:</b> {post.date}</p></Row>
                                 <Row><p><b>Upload Time:</b> {post.time}</p></Row>
                             </Col>

@@ -13,9 +13,9 @@ export default function AddNewPost() {
     const typeEventRef = useRef()
     const typeNewsRef = useRef()
     const typeOthersRef = useRef()
+
     const [status, setStatus] = useState()
     const {currentUser} = useAuth()
-
     const [showNote, setShowNote] = useState(true)
     const [imageURL, setImageURL] = useState()
 
@@ -30,25 +30,9 @@ export default function AddNewPost() {
         }
     }
 
-    function pushData(e){
-
-        setStatus()
+    function addData(url, tempID){
         const date = new Date()
-        e.preventDefault()
-        ///create unique id for matching the image in storage
-        const tempID = uniqid()
-
-        const imageStorageRef = storageRef.child(`images/${tempID}.jpg`)
-        const task = imageStorageRef.put(image)
-
-        ///upload image
-        task.on("state_changed",(snapshot)=>{
-            console.log('Image Uploaded')
-        }, error=>{console.log(error)
-        }, ()=>{
-            imageStorageRef.getDownloadURL().then(url=>{setImageURL(url)})
-        })
-
+        
 
         if(typeEventRef.current.checked === true){
             db.doc(currentUser.email).collection('events').doc(tempID).set({            
@@ -60,7 +44,7 @@ export default function AddNewPost() {
                     author:currentUser.email,
                     date: date.toDateString(),
                     time: date.toTimeString(),
-                    imageURL:imageURL
+                    url:url
                    
             },{merge:true}).then(()=>{
                 setStatus(true)
@@ -79,7 +63,7 @@ export default function AddNewPost() {
                     author:currentUser.email,
                     date: date.toDateString(),
                     time: date.toTimeString(),
-                    imageURL:imageURL
+                    url:url
                       
             },{merge:true}).then(()=>{
                 setStatus(true)
@@ -97,7 +81,7 @@ export default function AddNewPost() {
                     author:currentUser.email,
                     date: date.toDateString(),
                     time: date.toTimeString(),
-                    imageURL:imageURL
+                    url:url
                        
             },{merge:true}).then(()=>{
                 setStatus(true)
@@ -105,7 +89,30 @@ export default function AddNewPost() {
                 setStatus(false)
             })
         }
-        e.target.reset()
+    }
+
+    async function pushData(e){
+
+        e.preventDefault()
+
+        setStatus()
+         ///create unique id for matching the image in storage
+         const tempID = uniqid()
+
+        const imageStorageRef = storageRef.child(`images/${tempID}.jpg`)
+        ///upload image
+       await imageStorageRef.put(image)
+        .then(()=>{
+            imageStorageRef.getDownloadURL()
+            .then((url)=>{
+                    addData(url, tempID)
+                    e.target.reset()
+            }).catch((e)=>{
+                console.log("firebase: "+e)
+            })
+        }).catch((e)=>{
+            console.log(e)
+        })
     }
     return (
         <>
