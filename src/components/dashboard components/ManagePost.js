@@ -124,8 +124,14 @@ export default function ManagePost() {
             </Row>
             <Row>
                 <Jumbotron className="w-100">
-                {posts?<RenderPosts/>:null}
-                 {loading?<Container><Spinner animation="border" className="m-auto"/></Container>:null}
+
+                    <Container>
+                    
+                        {posts?<RenderPosts/>:null}
+                        {loading?<Container><Spinner animation="border" className="m-auto"/></Container>:null}
+
+                    </Container>
+               
                 </Jumbotron>
             </Row>
        

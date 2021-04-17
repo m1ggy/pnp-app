@@ -8,7 +8,7 @@ export default function AddNewPost() {
     const titleRef = useRef()
     const subtitleRef = useRef()
     const contentRef = useRef()
-    const imageRef = useRef()
+    const [image, setImage] = useState()
     const publishRef = useRef()
     const typeEventRef = useRef()
     const typeNewsRef = useRef()
@@ -23,6 +23,12 @@ export default function AddNewPost() {
     const db = firestore.collection('posts')
     const storageRef = storage.ref()
 
+    function handleImage(e){
+        if(e.target.files[0]){
+            setImage(e.target.files[0])
+        }
+    }
+
     function pushData(e){
 
         setStatus()
@@ -31,9 +37,10 @@ export default function AddNewPost() {
         ///create unique id for matching the image in storage
         const tempID = uniqid()
         const imageStorageRef = storageRef.child(`images/${tempID}.jpg`)
+        const task = imageStorageRef.put(image)
+        task.then(()=>{console.log('Image Uploaded')}).catch(()=>{console.log("Failed to upload")})
 
         if(typeEventRef.current.checked === true){
-            imageStorageRef.put(imageRef)
             db.doc(currentUser.email).collection('events').doc(tempID).set({            
                     title:titleRef.current.value,
                     subtitle:subtitleRef.current.value,
@@ -68,7 +75,6 @@ export default function AddNewPost() {
         }
         else if(typeOthersRef.current.checked === true){
             db.doc(currentUser.email).collection('others').doc(tempID).set({
-                
                     title:titleRef.current.value,
                     subtitle:subtitleRef.current.value,
                     content:contentRef.current.value,
@@ -122,7 +128,7 @@ export default function AddNewPost() {
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.File label="Enter Banner Image" required accept="image/*" style={{width:300}} ref={imageRef}/>
+                    <Form.File label="Enter Banner Image" required accept="image/*" style={{width:300}} onChange={handleImage}/>
                 </Form.Group>
 
                 <Form.Group className="mt-4">
