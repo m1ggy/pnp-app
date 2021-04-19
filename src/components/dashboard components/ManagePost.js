@@ -11,6 +11,17 @@ export default function ManagePost() {
 
 
     function RenderPosts () {
+
+        if(posts.length === 0){
+            return (
+                <Container>
+                    <p>
+                        No Published Posts.
+                    </p>
+                </Container>
+            )
+        }
+
         return(
             posts.map((post, index)=>{
                 return(
@@ -128,8 +139,7 @@ export default function ManagePost() {
 
                     <Container>
 
-                        {posts.length>0?<RenderPosts/>:<p className="m-auto">No published posts.</p>}
-                        <Container>{loading?<Spinner animation="border" className="m-auto"/>:null}</Container>
+                        <Container>{loading?<Spinner animation="border" className="m-auto"/>:<RenderPosts/>}</Container>
 
                     </Container>
                
