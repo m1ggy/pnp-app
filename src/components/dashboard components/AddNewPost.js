@@ -17,7 +17,6 @@ export default function AddNewPost() {
     const [status, setStatus] = useState()
     const {currentUser} = useAuth()
     const [showNote, setShowNote] = useState(true)
-    const [imageURL, setImageURL] = useState()
 
     const special = ["<",">"]
     
