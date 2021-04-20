@@ -14,7 +14,7 @@ import ChartsMain from '../components/dashboard components/ChartsMain'
 import AccountsMain from '../components/dashboard components/AccountsMain'
 import ManageGalleries from '../components/dashboard components/ManageGalleries'
 import AddNewGallery from '../components/dashboard components/AddNewGallery'
-
+import AddNewDownload from '../components/dashboard components/AddNewDownload'
 export default function Dashboard() {
 
     const {logout, currentUser} = useAuth()
@@ -50,9 +50,9 @@ export default function Dashboard() {
         render={()=><MapsMain/>}
         />,
         <Route 
-        path={`${path}/downloads/view-downloads`} 
-        key={`${path}/downloads/view-downloads`}
-        render={()=><DownloadsMain/>}
+        path={`${path}/downloads/add-new-download`} 
+        key={`${path}/downloads/add-new-download`}
+        render={()=><AddNewDownload/>}
         />,
         <Route 
         path={`${path}/downloads/manage-downloads`} 
