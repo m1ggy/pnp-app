@@ -41,41 +41,23 @@ export default function ManageDownloads() {
     }, [])
 
     function RenderDownloads (){
-    if(downloadType){
-        if(downloads){
-            
-            return(
-                downloadType.map((type)=>{
-                        
-                   return downloads.map((item, index)=>{
-                        let renderItem =  Object.keys(item)
-                      
-                       return renderItem.map((render,index)=>{
 
-                        if(item[`${renderItem[0]}`].type === type){
-                           
-                            return(
-                                <Container key={render+index}>
-                                    <p>{item[`${renderItem[0]}`].name}</p>
-                                    <p>{item[`${renderItem[0]}`].type}</p>
-                                </Container>
-
-                            )
-                        }
-                       })
-
-                    })
-                    
-                })
-            )
-        
-        }
-    }
-    return(
-        <p>
-            No Downloads
-        </p>
-    )
+       return downloads.map((item, index)=>{
+          let extracted = Object.keys(item)
+          
+            return extracted.map(dl=>{
+                console.log(item[`${dl}`].name)
+                return (
+                        <div key={index+item[`${dl}`].id}>
+                        <p>{item[`${dl}`].name}</p>
+                        <p>{item[`${dl}`].id}</p>
+                        <p>{item[`${dl}`].type.label}</p>
+           
+                    </div>
+                )
+            })
+       })
+    
 }
 
 
