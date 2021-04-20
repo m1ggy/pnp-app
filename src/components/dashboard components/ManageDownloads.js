@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Jumbotron, Col, Row, Container, Spinner} from 'react-bootstrap'
+import { Jumbotron, Col, Row, Container, Spinner, Button} from 'react-bootstrap'
 import { firestore } from '../../firebase/firebase'
 
 
@@ -41,22 +41,46 @@ export default function ManageDownloads() {
     }, [])
 
     function RenderDownloads (){
-
+if(downloads){
        return downloads.map((item, index)=>{
           let extracted = Object.keys(item)
           
             return extracted.map(dl=>{
                 console.log(item[`${dl}`].name)
                 return (
-                        <div key={index+item[`${dl}`].id}>
-                        <p>{item[`${dl}`].name}</p>
-                        <p>{item[`${dl}`].id}</p>
-                        <p>{item[`${dl}`].type.label}</p>
-           
-                    </div>
+                    <Row key={index+item[`${dl}`].id} className="border" >
+                          
+                        <Col lg={8}>
+                        <Container className="m-5">
+                            <div>
+                            <p style={{fontSize:20, fontWeight:'bold'}}>{item[`${dl}`].name}</p>                  
+                            <p style={{fontSize:15, fontWeight:'bold'}}>Category: {item[`${dl}`].type.label}</p>
+                            <p style={{fontSize:15, fontWeight:'bold'}}>ID:{item[`${dl}`].id}</p>
+                            <a href={item[`${dl}`].url}>Link to File</a>
+                            </div>
+                        </Container>
+                        </Col>    
+                        <Col lg={4}>
+                        <Container className="w-100" style={{height:'100%'}}>
+                            <div className="m-auto">
+                                <Button variant="danger" size="sm">
+                                    Delete
+                                </Button>
+                            </div> 
+                            </Container>             
+                        </Col>                                                          
+                        
+                    </Row>
                 )
             })
        })
+    }
+
+    return(
+        <Container>
+            <p className="m-auto">No Downloads</p>
+        </Container>
+    )
     
 }
 
@@ -77,7 +101,7 @@ export default function ManageDownloads() {
                 <div className="m-auto">
 
                     {loading?<Spinner animation="border"/>:null}
-                    {downloads?<RenderDownloads/>:<p>No Downloads</p>}
+                    {downloads?<RenderDownloads/>:null}
 
                 </div>
                 </Container>
