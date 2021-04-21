@@ -3,17 +3,20 @@ import Header from '../components/Header'
 import NavBarMain from '../components/NavBarMain'
 import FooterMain from '../components/FooterMain'
 import { Jumbotron, Row, Col, Spinner, Image, Container, Button } from 'react-bootstrap'
-import { firestore } from '../firebase/firebase'
+import { firestore, firebaseAnalytics } from '../firebase/firebase'
+
 
 
 function Home (){
 
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(false)
+    const log = firebaseAnalytics
     
 
     useEffect(()=>{
        
+        log.logEvent('page_view');
 
         async function getData(){
             let tempArray = []
