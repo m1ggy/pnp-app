@@ -13,7 +13,7 @@ import Contact from './views/Contact'
 import Login from './views/Login'
 import Dashboard from './views/Dashboard'
 import PrivateRoute from './routes/PrivateRoute'
-import 'bootswatch/dist/lux/bootstrap.min.css'
+import 'bootswatch/dist/cosmo/bootstrap.min.css'
 
 
 
