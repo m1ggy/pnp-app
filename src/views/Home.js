@@ -3,7 +3,7 @@ import Header from '../components/Header'
 import NavBarMain from '../components/NavBarMain'
 import FooterMain from '../components/FooterMain'
 import { Jumbotron, Row, Col, Spinner, Image, Container, Button } from 'react-bootstrap'
-import { firestore, firebaseAnalytics } from '../firebase/firebase'
+import { firestore } from '../firebase/firebase'
 
 
 
@@ -11,12 +11,12 @@ function Home (){
 
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(false)
-    const log = firebaseAnalytics
+   
     
 
     useEffect(()=>{
        
-        log.logEvent('page_view');
+        window.gtag('config', 'G-2MRNV52H3Q', { 'page_title': document.title, page_path: window.location.pathname + window.location.search })
 
         async function getData(){
             let tempArray = []
