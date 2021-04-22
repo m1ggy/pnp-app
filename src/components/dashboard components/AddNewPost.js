@@ -98,7 +98,7 @@ export default function AddNewPost() {
          ///create unique id for matching the image in storage
          const tempID = uniqid()
 
-        const imageStorageRef = storageRef.child(`images/${tempID}.jpg`)
+        const imageStorageRef = storageRef.child(`images/${tempID}`)
         ///upload image
        await imageStorageRef.put(image)
         .then(()=>{
