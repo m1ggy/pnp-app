@@ -38,11 +38,11 @@ function GalleryMain (){
         return gallery.map((gallery)=>{
 
             return(
-                <Col md={6} lg={4} xs={12} key={gallery.id} className="border" style={{display:'flex', justifyContent:'center', marginTop:'10px'}}>
+                <Col md={6} lg={4} xs={12} key={gallery.id} style={{display:'flex', justifyContent:'center', marginTop:'20px'}}>
                     <Image src={gallery.data.imagesURL[0]} id="imageHover"/>
                     <div id="galleryDesc">
-                        <p>{gallery.data.title}</p>
-                        <p>{gallery.data.subtitle}</p>
+                        <h3  style={{color:'white'}}>{gallery.data.title}</h3>
+                        <p  style={{color:'white'}}>{gallery.data.subtitle}</p>
                     </div>
                    
                 </Col>
