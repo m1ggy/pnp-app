@@ -8,7 +8,7 @@ import Home from './views/Home'
 import Maps from './views/Maps'
 import NewsAndEvents from './views/NewsAndEvents'
 import Downloads from './views/Downloads'
-import Gallery from './views/Gallery'
+import GalleryMain from './views/GalleryMain'
 import Contact from './views/Contact'
 import Login from './views/Login'
 import Dashboard from './views/Dashboard'
@@ -45,7 +45,7 @@ function App() {
                     <Downloads/>
                 </Route>
                 <Route path='/gallery'>
-                    <Gallery/>
+                    <GalleryMain/>
                 </Route>
                 <Route path='/contact'>
                     <Contact/>

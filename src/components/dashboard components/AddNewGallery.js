@@ -79,7 +79,7 @@ export default function AddNewGallery() {
         },{merge:true})
 
        setMessage({type:'success', msg:'Successfully Uploaded! The Gallery has been uploaded.'})
-       setPreview()
+       setPreview(undefined)
 
         e.target.reset()
         setLoading(false)
@@ -111,29 +111,30 @@ export default function AddNewGallery() {
         <Row>
 
             <Jumbotron className="w-100">
-            <Row className="w-100">
-                 <div className="w-100">
-                    <Form className="m-auto" onSubmit={pushDataStorage}>
+            <Row>
+                 <div className="w-100" style={{display:'flex', justifyContent:"center"}}>
+                    <Form onSubmit={pushDataStorage} className="w-75">
                     <Form.Group>
                         <Form.Label>
                             Title
                         </Form.Label>
-                        <Form.Control type="text" required style={{width:"50%"}} ref={titleRef} className="border"/>
+                        <Form.Control type="text" required ref={titleRef} className="border"/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Subtitle
                         </Form.Label>
-                        <Form.Control type="text" required style={{width:"50%"}} ref={subtitleRef} className="border"/>
+                        <Form.Control type="text" required ref={subtitleRef} className="border"/>
                     </Form.Group>
 
                     <Form.Group>
-                    <Form.File label="Select Images" required accept="image/*" style={{width:300}} onChange={readImages} multiple/>
+                    <Form.File label="Select Images" required accept="image/*" onChange={readImages} multiple/>
                 </Form.Group>
-                {preview?<Container className="mt-5"><h3>Preview</h3><RenderPreview/></Container>:null}
+                {preview&&<h3>Preview</h3>}
+                {preview?<Container className="mt-5"><RenderPreview/></Container>:null}
                 {loading&&<Spinner animation="border"/>}
                                 
-                                    <div className="mt-5">
+                                    <div className="mt-5 w-100" style={{display:'flex', justifyContent:'center'}}>
                                      <Button type="submit">Submit</Button>
                                     </div>
                        

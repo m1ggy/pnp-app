@@ -1,0 +1,28 @@
+#imageHover:hover{
+    filter:blur(8px);
+}
+
+#imageHover{
+    display: block;
+    max-width:690px;
+    max-height:285px;
+    width: auto;
+    height: auto;
+    position: relative;
+    z-index: 1;
+    align-self: center;
+}
+
+#galleryDesc{
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 80%;
+    padding: 20px;
+    text-align: center;
+    color:black;
+    pointer-events:none;
+}
