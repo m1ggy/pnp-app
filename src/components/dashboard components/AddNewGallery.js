@@ -139,9 +139,10 @@ export default function AddNewGallery() {
                                     </div>
                        
                     </Form>  
-                    <div className="mt-5" style={{display:'flex', justifyContent:'center', alignContent:'center', padding:10}}>
-                         {message&&<Alert variant={message.type} style={{display:'flex', justifyContent:'center', alignContent:'center'}}><p>{message.msg}</p></Alert>}
-                    </div>
+                    
+                </div>
+                <div className="mt-5 w-100" style={{display:'flex', justifyContent:"center"}}>
+                         {message&&<Alert variant={message.type}>{message.msg}</Alert>}
                     </div>
                     
             </Row>  
