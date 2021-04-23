@@ -9,8 +9,6 @@ function GalleryMain (){
     const [gallery, setGallery] = useState()
     const [loading, setLoading] = useState(false)
     const db = firestore.collection('galleries')
-    const [groupedImages, setGroupedImages] = useState()
-    const [show, setShow] = useState(false)
 
     useEffect(()=>{
 
@@ -40,7 +38,7 @@ function GalleryMain (){
         return gallery.map((gallery)=>{
 
             return(
-                <Col md={4} lg={4} xs={12} key={gallery.id} className="border" style={{display:'flex', justifyContent:'center'}}>
+                <Col md={6} lg={4} xs={12} key={gallery.id} className="border" style={{display:'flex', justifyContent:'center', marginTop:'10px'}}>
                     <Image src={gallery.data.imagesURL[0]} id="imageHover"/>
                     <div id="galleryDesc">
                         <p>{gallery.data.title}</p>
@@ -77,7 +75,7 @@ function GalleryMain (){
 
                 <Row className="w-100">
                     <Jumbotron className="mt-2 w-100" style={{display:'flex', justifyContent:'center'}}>
-                    <Row className="w-100 border">
+                    <Row className="w-100">
                     {loading?<Spinner animation="border"/>:null}  
                         {gallery?<RenderGalleries/>:null}
                     </Row>

@@ -14,6 +14,7 @@ export default function AddNewGallery() {
     const [message, setMessage] = useState()
     const { currentUser } = useAuth()
 
+
     const db = firestore.collection('galleries')
     useEffect(()=>{
         setLoading(true)
@@ -130,7 +131,6 @@ export default function AddNewGallery() {
                     <Form.Group>
                     <Form.File label="Select Images" required accept="image/*" onChange={readImages} multiple/>
                 </Form.Group>
-                {preview&&<h3>Preview</h3>}
                 {preview?<Container className="mt-5"><RenderPreview/></Container>:null}
                 {loading&&<Spinner animation="border"/>}
                                 
