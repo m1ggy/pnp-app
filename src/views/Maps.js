@@ -1,6 +1,5 @@
 import React from 'react'
 import '../styles/map.css'
-import Header from '../components/Header'
 import NavBarMain from '../components/NavBarMain'
 import FooterMain from '../components/FooterMain'
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
@@ -19,11 +18,8 @@ L.Icon.Default.mergeOptions({
 function Maps (){
     return(
     <>
-            <Header/>
             <NavBarMain/>
-
-
-        <Jumbotron className="mt-2">
+        <Jumbotron className="mt-2" style={{marginTop:100}}>
          <h1 className="title">Maps</h1>
         </Jumbotron>
             

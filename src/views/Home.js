@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react'
-import Header from '../components/Header'
 import NavBarMain from '../components/NavBarMain'
 import FooterMain from '../components/FooterMain'
 import { Jumbotron, Row, Col, Spinner, Image, Container, Button } from 'react-bootstrap'
@@ -123,12 +122,10 @@ function Home (){
     return(
         <>
         <Col>
-        <Row>
-        <Header className="mt-2 w-100"/>
-        </Row>
+
         <Row className="w-100">
 
-        <Container>
+        <Container style={{marginTop:100}}>
             <NavBarMain className="mt-2 w-100 m-auto"/>
         </Container>
         

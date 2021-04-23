@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import Header from '../components/Header'
+
 import NavBarMain from '../components/NavBarMain'
 import FooterMain from '../components/FooterMain'
 import { Jumbotron, Row, Col, Container, Spinner, Button } from 'react-bootstrap'
@@ -93,12 +93,8 @@ useEffect(()=>{
         <>
         <Col>
 
-            <Row>
-                <Header className="mt-2 w-100"/>
-            </Row>
-
             <Row className="w-100">
-                <Container>
+                <Container style={{marginTop:100}}>
                     <NavBarMain className="mt-2 w-100 m-auto"/>
                 </Container>
             </Row>

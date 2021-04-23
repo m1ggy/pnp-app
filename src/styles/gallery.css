@@ -29,6 +29,7 @@
     color:black;
     pointer-events:none;
     display: none;
+    transition: background-color 2s;
 }
 /* #galleryDesc:hover{
     
