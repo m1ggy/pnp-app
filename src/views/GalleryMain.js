@@ -3,11 +3,15 @@ import NavBarMain from '../components/NavBarMain'
 import FooterMain from '../components/FooterMain'
 import { Jumbotron, Row, Col, Spinner, Container, Image} from 'react-bootstrap'
 import { firestore } from '../firebase/firebase'
+import { Link, useRouteMatch } from 'react-router-dom'
 import '../styles/gallery.css'
+import GalleryEntry from './GalleryEntry'
 function GalleryMain (){
     const [gallery, setGallery] = useState()
     const [loading, setLoading] = useState(false)
     const db = firestore.collection('galleries')
+
+    const {url} = useRouteMatch()
 
     useEffect(()=>{
 
@@ -38,12 +42,14 @@ function GalleryMain (){
 
             return(
                 <Col md={6} lg={4} xs={12} key={gallery.id} style={{display:'flex', justifyContent:'center', marginTop:'20px'}}>
-                    <Image src={gallery.data.imagesURL[0]} id="imageHover"/>
-                    <div id="galleryDesc">
-                        <h3  style={{color:'white'}}>{gallery.data.title}</h3>
-                        <p  style={{color:'white'}}>{gallery.data.subtitle}</p>
-                    </div>
-                   
+                    <Link to={`${url}/${gallery.id}`}>
+                        <Image src={gallery.data.imagesURL[0]} id="imageHover"/>
+                        <div id="galleryDesc">
+                            <h3  style={{color:'white'}}>{gallery.data.title}</h3>
+                            <p  style={{color:'white'}}>{gallery.data.subtitle}</p>
+                            <p style={{color:'white', fontSize:13}} muted>{gallery.data.dateUploaded}</p>
+                        </div>
+                    </Link>
                 </Col>
             )
 
@@ -79,7 +85,7 @@ function GalleryMain (){
 
             </Row>
           
-                <FooterMain/>                             
+                <FooterMain/>                           
         </Col>
     </>
     )

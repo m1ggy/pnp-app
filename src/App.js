@@ -13,6 +13,7 @@ import Contact from './views/Contact'
 import Login from './views/Login'
 import Dashboard from './views/Dashboard'
 import PrivateRoute from './routes/PrivateRoute'
+import GalleryEntry from './views/GalleryEntry'
 import 'bootswatch/dist/lux/bootstrap.min.css'
 
 
@@ -44,6 +45,9 @@ function App() {
                 <Route path='/downloads'>
                     <Downloads/>
                 </Route>
+                <Route path='/gallery/:id'>   
+                    <GalleryEntry/>    
+                </Route>
                 <Route path='/gallery'>
                     <GalleryMain/>
                 </Route>
@@ -53,6 +57,7 @@ function App() {
                 <Route path='/login'>
                     <Login/>
                 </Route>
+
                 
             </Switch> 
     
