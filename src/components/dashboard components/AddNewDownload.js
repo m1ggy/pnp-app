@@ -72,6 +72,7 @@ export default function AddNewDownload() {
         }).catch(()=>{
             setMessage({type:'danger', msg:'An Error Occurred. File was not uploaded.'})
         })
+        
     }
 
     function handleSubmit(e){
