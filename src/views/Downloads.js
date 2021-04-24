@@ -15,45 +15,57 @@ const db = firestore.collection('downloads')
 
 
 function RenderDownloads(){
-    if(downloads == null) return
 
-    return(
-        downloads.map((data, index)=>{
-            const d = Object.keys(data.data)
-            return(
-                <Container key={index} className="border m-3 p-5">
-                    <div className="m-3">
-                        {data.id === 'bidsAndArchives'?<h3>Bids And Archives</h3>:null}
-                        {data.id === 'generalDownloads'?<h3>General Downloads</h3>:null}
-                        {data.id === 'transparencySeal'?<h3>Transparency Seal</h3>:null}
-                    </div>
-                        <RenderEachDownload data={data.data} listKey={d}/>
-                </Container>
-            )
-        })
-    )
+    let types = [
+        {type:'advisories',label:'Advisory'}, 
+        {type:'bidsAndArchives',label:'Bids and Archives'}, 
+        {type:'generalDownloads',label:'General Downloads'}, 
+        {type:'transparencySeal', label:'Transparency Seal'}
+            ]
+
+    if(downloads == null) return;
+
+    return types.map((type, index)=>{
+          let filtered = downloads.filter((item)=>{
+               return item.id == type.type
+           })
+           return(
+            <Container key={type.type+index} className="border p-5">
+                     <h3>{type.label}</h3>
+                     <RenderEachDownload data={filtered} label={type.label}/>
+            </Container>
+        )
+    })
+
+
 }
-function RenderEachDownload({data, listKey}){
+
+function RenderEachDownload({data, label}){
     if(data == null|| typeof data == undefined){
         return (<p>No Items inside</p>)
     }
-
+    else if(data.length<1){
+        return (
+            <p>{label} is empty.</p>
+        )
+    }
     return (
-        listKey.map((item, index)=>{
-           
+       data.map((item, index)=>{
+           console.log(item)
             return(
-                <Container key={data[`${item}`].id+index} className="p-3 border">
+                <Container key={item.id+index} className="p-3 border">
                 <Row>
                
                     <Col lg={10}>
-                     <p style={{fontWeight:'bold', fontSize:16}}>{data[`${item}`].name}</p>
+                     <p style={{fontWeight:'bold', fontSize:16}}>{item.data.name}</p>
+                     <p style={{fontSize:13}}>{item.data.size} MB</p>
                      </Col>
                     <Col lg={2}>
-                        <Container className="w-100">
-                            <Button variant="link" href={data[`${item}`].url}>
+                       
+                            <Button variant="primary" href={item.data.url}>
                                 Download
                             </Button>
-                        </Container>
+                        
                     </Col>
                 
                   </Row>
@@ -61,6 +73,7 @@ function RenderEachDownload({data, listKey}){
             )
         })
     )
+   
 }
 
 
@@ -77,7 +90,7 @@ useEffect(()=>{
             if(snapshot.empty) return
 
             snapshot.forEach(doc=>{
-             tempArray.push({id:doc.id,data:doc.data()})
+             tempArray.push({id:doc.data().type.value,data:doc.data()})
             })
             console.log(tempArray)
             setDownloads(tempArray)
@@ -109,7 +122,7 @@ useEffect(()=>{
             <Jumbotron className="w-100">
                 <Container>
                     {loading&&<Spinner animation="border"/>}
-                    {downloads&&<RenderDownloads/>}
+                    {downloads?<RenderDownloads/>:<div style={{display:'flex', justifyContent:'center'}}><p>No Downloads</p></div>}
                 </Container>
                 </Jumbotron>
             </Row>
