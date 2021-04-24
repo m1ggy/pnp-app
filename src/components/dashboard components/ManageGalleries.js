@@ -1,18 +1,21 @@
 import { useState, useEffect } from 'react'
-import { Jumbotron, Col, Row, Container, Modal, Button, Spinner} from 'react-bootstrap'
+import { Jumbotron, Col, Row, Container, Modal, Button, Spinner, ButtonGroup, Alert} from 'react-bootstrap'
 import { storage, firestore } from '../../firebase/firebase'
 import { useAuth } from '../../contexts/AuthContext'
+import { set } from 'react-ga'
 
 
 export default function ManageGallery() {
 
     const [loading, setLoading] = useState(false)
     const [gallery, setGallery] = useState([])
+    const [showModal, setShowModal] = useState(false)
+    const [message, setMessage] = useState()
+    const [messageShowModal, setMessageShowModal] = useState(false)
+    const [selectedGallery, setSelectedGallery] = useState()
     const db = firestore.collection('galleries')
     const { currentUser } = useAuth()
 
-useEffect(()=>{
-    
     async function getGalleries(){
         setLoading(true)
         let tempArray = []
@@ -33,9 +36,87 @@ useEffect(()=>{
         )
     }
 
+useEffect(()=>{
+
     getGalleries()
 
 }, [])
+
+function deleteGallery(id){
+    handleCloseModal()
+    db.doc(id).delete().then(()=>{
+            setMessage({type:'primary', msg:'Successfully deleted gallery'})
+    }).catch(()=>{
+        setMessage({type:'danger', msg:'Failed to delete gallery'})
+    })
+  
+    setSelectedGallery()
+    getGalleries()
+    setMessageShowModal(true)
+}
+
+
+const handleCloseModal = () =>{
+    setShowModal(false)
+}
+
+
+
+function DeleteModal(){
+
+    if(selectedGallery === null||typeof selectedGallery === 'undefined')
+    {return null;}
+
+    return(
+        <Modal show={showModal} onHide={handleCloseModal}>
+            <Modal.Header>
+             <h3>
+                Are you sure?
+                </h3>
+            </Modal.Header>
+            <Modal.Body>
+                Do you want to delete {selectedGallery.data.title}?
+            </Modal.Body>
+            <Modal.Footer>
+            <ButtonGroup>
+                <Button variant="primary" size="sm" className="w-75 m-3" onClick={()=>{deleteGallery(selectedGallery.id)}}>
+                    Yes
+                </Button>
+                <Button variant="danger" size="sm" className="w-75 m-3" onClick={handleCloseModal}>
+                    Cancel
+                </Button>
+                </ButtonGroup>
+               
+            </Modal.Footer>
+        </Modal>
+    )
+}
+
+function MessageModal(){
+    if(message=== null||typeof message === 'undefined'){return null}
+
+
+
+        return(
+            <Modal show={messageShowModal} onHide={()=>{setMessageShowModal(false)}}>
+            <Modal.Header>
+                {message.type === 'primary'?<h3>Success!</h3>:<h3>Failed!</h3>}
+            </Modal.Header>
+            <Modal.Body>
+             <p>{message.msg}</p>
+            </Modal.Body>
+            <Modal.Footer>
+            <ButtonGroup>
+            <Button variant="primary" size="sm" className="w-75 m-3" onClick={()=>{setMessageShowModal(false)}}>
+                   Close
+            </Button>
+            </ButtonGroup>
+            </Modal.Footer>
+        </Modal>
+        )
+
+    
+}
 
 
 function RenderGalleries(){
@@ -50,7 +131,6 @@ function RenderGalleries(){
 
     return(
         gallery.map((item)=>{
-
                 return(
                     <Row key={item.id} className="w-100 border p-3"> 
                         <Col lg={10}>
@@ -58,10 +138,8 @@ function RenderGalleries(){
                             <p>Date Uploaded: {item.data.dateUploaded}</p>
                         </Col>
                         <Col lg={2}> 
-                            <Button variant="danger" lg>Delete</Button>
-                        </Col>
-                            
-                           
+                            <Button variant="danger" size="sm" className="w-75 m-3" onClick={()=>{setShowModal(true);setSelectedGallery(item)}}>Delete</Button>
+                        </Col>                    
                        
                     </Row>
                 )
@@ -73,7 +151,7 @@ function RenderGalleries(){
     return (
         <Col>
         <Row>
-         <Jumbotron className="w-100"><h1>Manage Downloads</h1></Jumbotron> 
+         <Jumbotron className="w-100"><h1>Manage Galleries</h1></Jumbotron> 
         </Row>
         <Row>
 
@@ -86,7 +164,10 @@ function RenderGalleries(){
                         {gallery&&<RenderGalleries/>}
                         <div style={{display:'flex', justifyContent:'center'}}>
                         {loading&&<Spinner animation="border"/>}
+                        <DeleteModal/>
+                        <MessageModal/>
                         </div>
+                       
                     </Col>
                 </Container>
             </Jumbotron>

@@ -23,9 +23,9 @@ export default function Drafts() {
 
                             <Col className="m-auto">
                             <Row>
-                                <Button variant="primary" size="sm" className="w-75 m-3"><p className="m-auto">Publish</p></Button>
-                                <Button variant="info" size="sm" className="w-75 m-3"><p className="m-auto">Edit</p></Button>                 
-                                <Button variant="danger" size="sm" className="w-75 m-3"><p className="m-auto">Delete</p></Button>
+                                <Button variant="primary" size="sm" className="m-3 w-75">Publish</Button>
+                                <Button variant="info" size="sm" className="m-3 w-75">Edit</Button>                 
+                                <Button variant="danger" size="sm" className="m-3 w-75">Delete</Button>
                             </Row>
                            
                                 

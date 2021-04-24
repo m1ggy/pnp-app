@@ -27,11 +27,11 @@ export default function Sidebar() {
                 <Row className="mt-3">
 
                     <NavDropdown title="Downloads" id="basic-nav-dropdown" drop="right">
-
-                        <NavDropdown.Item><Link to="/dashboard/downloads/add-new-download">Add New Download</Link></NavDropdown.Item>
-                        <NavDropdown.Divider />
+                        
                         <NavDropdown.Item><Link to="/dashboard/downloads/manage-downloads">Manage Downloads</Link></NavDropdown.Item>
-
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item><Link to="/dashboard/downloads/add-new-download">Add New Download</Link></NavDropdown.Item>
+                       
                     </NavDropdown>
 
                 </Row>
