@@ -50,8 +50,7 @@ export default function AddNewDownload() {
 
         const date = new Date()
        
-       await db.doc(type.value).set({
-            [id]:{
+       await db.doc(id).set({          
                 author: currentUser.email,
                 id:id,
                 url:url,
@@ -59,7 +58,6 @@ export default function AddNewDownload() {
                 date:date.toDateString(),
                 time:date.toTimeString(),
                 name:file.name
-            }
         }, {merge:true})
         .then(()=>{
             setMessage({type:'success', msg:'File Uploaded successfully'})
