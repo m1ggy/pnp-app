@@ -1,6 +1,6 @@
 import React, {useState, useRef} from 'react'
 import uniqid from 'uniqid'
-import { Jumbotron, Col, Row, Container, Spinner, Form, Button, Modal, Alert } from 'react-bootstrap'
+import { Jumbotron, Col, Row, Container, Spinner, Form, Button, ProgressBar, Alert } from 'react-bootstrap'
 import { storage, firestore } from '../../firebase/firebase'
 import { useAuth } from '../../contexts/AuthContext'
 import Select from 'react-select'
@@ -13,6 +13,7 @@ export default function AddNewDownload() {
     const [loading, setLoading] = useState(false)
     const [type, setType] = useState()
     const [file, setFile] = useState()
+    const [progress, setProgress] = useState()
     const types = [
         {value:'transparencySeal', label:'Transparency Seal'},
         {value:'bidsAndArchives', label:'Bids And Archives'},
@@ -30,20 +31,26 @@ export default function AddNewDownload() {
         const uploadTask = storageRef.child(`downloads/${path}/${id}-${file.name}`)
 
          await uploadTask.put(file)
-        .then(()=>{
-
-           uploadTask.getDownloadURL()
-           .then((url)=>{
-
-               return pushData(url, id, file)
-
-           })
-           .catch(e=>{
-
-               console.log(e)
-
+        .on('state_changed',(taskSnapshot)=>{
+                setProgress((100.0*taskSnapshot.bytesTransferred)/taskSnapshot.totalBytes)
+        },
+        (e)=>{
+            setMessage({type:'danger', msg:'Failed to upload File'})
+        },
+        ()=>{
+            uploadTask.getDownloadURL()
+            .then((url)=>{
+ 
+                return pushData(url, id, file)
+ 
             })
-        })
+            .catch(e=>{
+ 
+                console.log(e)
+ 
+             })
+        }
+        )
     }
 
     async function pushData(url, id, file){
@@ -57,7 +64,8 @@ export default function AddNewDownload() {
                 type:type,
                 date:date.toDateString(),
                 time:date.toTimeString(),
-                name:file.name
+                name:file.name,
+                size:file.size/1e+6
         }, {merge:true})
         .then(()=>{
             setMessage({type:'success', msg:'File Uploaded successfully'})
@@ -118,6 +126,7 @@ export default function AddNewDownload() {
                                 </Button>}
                                 
                             </div>
+                            {progress&&<ProgressBar variant="success" now={progress} label={`${progress}%`} className="mt-5"/>}
                             {message&&<Alert variant={message.type} className="mt-5">{message.msg}</Alert>}
                         </Container>
 
