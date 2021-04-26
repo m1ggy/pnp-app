@@ -51,7 +51,6 @@ function RenderEachDownload({data, label}){
     }
     return (
        data.map((item, index)=>{
-           console.log(item)
             return(
                 <Container key={item.id+index} className="p-3 border">
                 <Row>

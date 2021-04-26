@@ -1,88 +1,197 @@
 import React, {useEffect, useState} from 'react'
-import { Jumbotron, Col, Row, Container, Spinner, Button} from 'react-bootstrap'
-import { firestore } from '../../firebase/firebase'
+import { Jumbotron, Col, Row, Container, Spinner, Button, Modal, ButtonGroup} from 'react-bootstrap'
+import { firestore, storage } from '../../firebase/firebase'
 
 
 export default function ManageDownloads() {
 
     const db = firestore.collection('downloads')
+    const storageRef = storage.ref('downloads')
+
     const [loading, setLoading] = useState(false)
     const [downloads, setDownloads] = useState()
-    const [downloadType, setDownloadType] = useState()
-   
+    const [selectedDownload, setSelectedDownload] = useState()
+    const [message, setMessage] = useState()
+    const [showModal, setShowModal] = useState(false)
+    const [messageShowModal, setMessageShowModal] = useState(false)
 
- 
-
-    useEffect(()=>{
-
-        async function getDownloads(){
-            await db.get().then(
-                (querySnapshot=>{
-                    if(querySnapshot.empty){
-                        setDownloads()
-                        return;
-                    }
-                    let tempArray = []
-                    let idArray = []
-                    querySnapshot.forEach(doc=>{
-                        idArray.push(doc.id)
-                        tempArray.push(doc.data())
-                    })
-                    setDownloads(tempArray)
-                    setDownloadType(idArray)
+    async function getDownloads(){
+        setLoading(true) 
+        await db.get().then(
+            (querySnapshot=>{
+                if(querySnapshot.empty){
+                    setDownloads()
+                    return;
+                }
+                let tempArray = []
+                querySnapshot.forEach(doc=>{       
+                    tempArray.push({id:doc.data().type.value,data:doc.data()})
                 })
-            )
-        }
-
-        setLoading(true)     
-        getDownloads()
+                console.log(tempArray)
+                setDownloads(tempArray)
+            })
+        )
         setLoading(false)
-
+    }
+   
+    useEffect(()=>{         
+        getDownloads()
     }, [])
 
-    function RenderDownloads (){
-if(downloads){
-       return downloads.map((item, index)=>{
-          let extracted = Object.keys(item)
-          
-            return extracted.map(dl=>{
-                console.log(item[`${dl}`].name)
-                return (
-                    <Row key={index+item[`${dl}`].id} className="border" >
-                          
-                        <Col lg={8}>
-                        <Container className="m-5">
-                            <div>
-                            <p style={{fontSize:20, fontWeight:'bold'}}>{item[`${dl}`].name}</p>                  
-                            <p style={{fontSize:15, fontWeight:'bold'}}>Category: {item[`${dl}`].type.label}</p>
-                            <p style={{fontSize:15, fontWeight:'bold'}}>ID:{item[`${dl}`].id}</p>
-                            <a href={item[`${dl}`].url}>Link to File</a>
-                            </div>
-                        </Container>
-                        </Col>    
-                        <Col lg={4}>
-                        <Container className="w-100" style={{height:'100%'}}>
-                            <div className="m-auto">
-                                <Button variant="danger" size="sm">
-                                    Delete
-                                </Button>
-                            </div> 
-                            </Container>             
-                        </Col>                                                          
-                        
-                    </Row>
+    async function deleteDownload(item){
+        handleCloseModal()
+        
+        const deleteTask = await storageRef.child(`${item.data.id}/${item.data.id}-${item.data.name}`)
+
+        deleteTask.delete().then(()=>{
+            setMessage({...message, type:'primary', msg2:'Successfully deleted download file in storage'})
+        }).catch(()=>{
+            setMessage({...message, type:'danger', msg2:'Failed to delete download file in storage'})
+        })
+
+        await db.doc(item.data.id).delete().then(()=>{
+                setMessage({...message,type:'primary', msg:'Successfully deleted download file in database'})
+        }).catch(()=>{
+            setMessage({...message,type:'danger', msg:'Failed to delete download file in database'})
+        })
+      
+        setSelectedDownload()
+        getDownloads()
+        setMessageShowModal(true)
+    }
+    
+    
+    const handleCloseModal = () =>{
+        setShowModal(false)
+    }
+    
+    
+    
+    function DeleteModal(){
+    
+        if(selectedDownload === null||typeof selectedDownload === 'undefined')
+        {return null;}
+    
+        return(
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header>
+                 <h3>
+                    Are you sure?
+                    </h3>
+                </Modal.Header>
+                <Modal.Body>
+                    Do you want to delete {selectedDownload.data.name}?
+                </Modal.Body>
+                <Modal.Footer>
+                <ButtonGroup>
+                    <Button variant="primary" size="sm" className="w-75 m-3" onClick={()=>{deleteDownload(selectedDownload)}}>
+                        Yes
+                    </Button>
+                    <Button variant="danger" size="sm" className="w-75 m-3" onClick={handleCloseModal}>
+                        Cancel
+                    </Button>
+                    </ButtonGroup>
+                   
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+    
+    function MessageModal(){
+        if(message=== null||typeof message === 'undefined'){return null}
+
+            return(
+                <Modal show={messageShowModal} onHide={()=>{setMessageShowModal(false)}}>
+                <Modal.Header>
+                    {message.type === 'primary'?<h3>Success!</h3>:<h3>Failed!</h3>}
+                </Modal.Header>
+                <Modal.Body>
+                 <p>{message.msg}</p>
+                 <p>{message.msg2}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                <ButtonGroup>
+                <Button variant="primary" size="sm" className="w-75 m-3" onClick={()=>{setMessageShowModal(false)}}>
+                       Close
+                </Button>
+                </ButtonGroup>
+                </Modal.Footer>
+            </Modal>
+            )
+    
+        
+    }
+    
+
+    function RenderDownloads(){
+
+        let types = [
+            {type:'advisories',label:'Advisory'}, 
+            {type:'bidsAndArchives',label:'Bids and Archives'}, 
+            {type:'generalDownloads',label:'General Downloads'}, 
+            {type:'transparencySeal', label:'Transparency Seal'}
+                ]
+    
+                if(downloads.length === 0){
+                    return(
+                        <div style={{display:'flex', justifyContent:'center'}}>
+                            <p>You have no Downloads.</p>
+                        </div>
+                    )
+                }
+                
+        return types.map((type, index)=>{
+              let filtered = downloads.filter((item)=>{
+                   return item.id == type.type
+               })
+               return(
+                <Container key={type.type+index} className="border p-5">
+                         <h3>{type.label}</h3>
+                         <RenderEachDownload data={filtered} label={type.label}/>
+                </Container>
+            )
+        })
+    
+    
+    }
+    
+    function RenderEachDownload({data, label}){
+        if(data == null|| typeof data == undefined){
+            return (<p>No Items inside</p>)
+        }
+        else if(data.length<1){
+            return (
+                <p>{label} is empty.</p>
+            )
+        }
+        return (
+           data.map((item, index)=>{
+                return(
+                    <Container key={item.id+index} className="p-3 border">
+                    <Row>
+                   
+                        <Col lg={10}>
+                         <p style={{fontWeight:'bold', fontSize:16}}>{item.data.name}</p>
+                         <p style={{fontSize:13}}>{item.data.size} MB</p>
+                         <p style={{fontSize:13}}>Date Uploaded: {item.data.date}</p>
+                         <p style={{fontSize:13}}>Time Uploaded: {item.data.time}</p>
+                         <a href={item.data.url}>Link to File</a>
+                         </Col>
+
+                        <Col lg={2}>                                          
+                              
+                                    <Button variant="danger" size="sm" className="w-75 m-3" onClick={()=>{setShowModal(true);setSelectedDownload(item)}}>
+                                        Delete
+                                    </Button>                                                                                                
+                        </Col>
+                    
+                      </Row>
+                    </Container>    
                 )
             })
-       })
+        )
+       
     }
-
-    return(
-        <Container>
-            <p className="m-auto">No Downloads</p>
-        </Container>
-    )
-    
-}
 
 
     return (
@@ -101,8 +210,14 @@ if(downloads){
                 <div className="m-auto">
 
                     {loading?<Spinner animation="border"/>:null}
-                    {downloads?<RenderDownloads/>:null}
+                    {downloads
 
+                    ?<RenderDownloads/>
+                    :<div style={{display:'flex', justifyContent:'center'}}>
+                            <p>You have no Downloads.</p>
+                    </div>}
+                    <DeleteModal/>
+                    <MessageModal/>
                 </div>
                 </Container>
             </Jumbotron>

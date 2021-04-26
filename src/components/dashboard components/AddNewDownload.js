@@ -26,9 +26,9 @@ export default function AddNewDownload() {
      }
 
 
-    async function uploadFiles(path, id, file){
+    async function uploadFiles(id, file){
         setMessage()
-        const uploadTask = storageRef.child(`downloads/${path}/${id}-${file.name}`)
+        const uploadTask = storageRef.child(`downloads/${id}/${id}-${file.name}`)
 
          await uploadTask.put(file)
         .on('state_changed',(taskSnapshot)=>{
@@ -81,7 +81,7 @@ export default function AddNewDownload() {
         const id = uniqid()
        
         setLoading(true)
-        uploadFiles(type.value, id, file)
+        uploadFiles(id, file)
         e.target.reset()
         setLoading(false)
     }
