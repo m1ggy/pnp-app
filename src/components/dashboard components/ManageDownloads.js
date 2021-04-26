@@ -41,9 +41,9 @@ export default function ManageDownloads() {
     async function deleteDownload(item){
         handleCloseModal()
         
-        const deleteTask = await storageRef.child(`${item.data.id}/${item.data.id}-${item.data.name}`)
+        const deleteTask = storageRef.child(`${item.data.id}/${item.data.id}-${item.data.name}`)
 
-        deleteTask.delete().then(()=>{
+       await deleteTask.delete().then(()=>{
             setMessage({...message, type:'primary', msg2:'Successfully deleted download file in storage'})
         }).catch(()=>{
             setMessage({...message, type:'danger', msg2:'Failed to delete download file in storage'})

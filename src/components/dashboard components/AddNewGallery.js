@@ -60,9 +60,9 @@ export default function AddNewGallery() {
             e.preventDefault()
         const tempID = uniqid()
         const date = new Date()
-        
+        let tempArray = []
         Array.from(images).forEach(image=>{
-            
+                tempArray.push(image.name)
             storageRef.child(`galleries/${tempID}/${image.name}`).put(image).then(()=>{
                     getImageURL(tempID, image)
             }).catch(()=>{
@@ -76,7 +76,8 @@ export default function AddNewGallery() {
             subtitle:subtitleRef.current.value,
             author: currentUser.email,
             dateUploaded: date.toDateString(),
-            timeUploaded: date.toTimeString()
+            timeUploaded: date.toTimeString(),
+            names:tempArray
         },{merge:true})
 
        setMessage({type:'success', msg:'Successfully Uploaded! The Gallery has been uploaded.'})

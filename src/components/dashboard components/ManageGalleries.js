@@ -14,6 +14,7 @@ export default function ManageGallery() {
     const [messageShowModal, setMessageShowModal] = useState(false)
     const [selectedGallery, setSelectedGallery] = useState()
     const db = firestore.collection('galleries')
+    const storageRef = storage.ref('galleries')
     const { currentUser } = useAuth()
 
     async function getGalleries(){
@@ -42,17 +43,34 @@ useEffect(()=>{
 
 }, [])
 
-function deleteGallery(id){
+function deleteImages(item){
+
+    const deleteTask = storageRef.child(`${item.id}`)
+
+    item.data.names.forEach((name)=>{
+        deleteTask.child(`${name}`).delete().then(()=>{
+            setMessage({type:'primary', msg:`Deleted ${item.data.title}`})
+        }).catch(()=>{
+            setMessage({type:'danger', msg:`Cannot delete ${item.data.title}`})
+        })
+    })
+}
+
+function deleteGallery(item){
+
     handleCloseModal()
-    db.doc(id).delete().then(()=>{
+
+    deleteImages(item)
+
+    db.doc(item.id).delete().then(()=>{
             setMessage({type:'primary', msg:'Successfully deleted gallery'})
     }).catch(()=>{
         setMessage({type:'danger', msg:'Failed to delete gallery'})
     })
   
     setSelectedGallery()
-    getGalleries()
     setMessageShowModal(true)
+    
 }
 
 
@@ -79,7 +97,7 @@ function DeleteModal(){
             </Modal.Body>
             <Modal.Footer>
             <ButtonGroup>
-                <Button variant="primary" size="sm" className="w-75 m-3" onClick={()=>{deleteGallery(selectedGallery.id)}}>
+                <Button variant="primary" size="sm" className="w-75 m-3" onClick={()=>{deleteGallery(selectedGallery)}}>
                     Yes
                 </Button>
                 <Button variant="danger" size="sm" className="w-75 m-3" onClick={handleCloseModal}>
@@ -107,7 +125,7 @@ function MessageModal(){
             </Modal.Body>
             <Modal.Footer>
             <ButtonGroup>
-            <Button variant="primary" size="sm" className="w-75 m-3" onClick={()=>{setMessageShowModal(false)}}>
+            <Button variant="primary" size="sm" className="w-75 m-3" onClick={()=>{setMessageShowModal(false);getGalleries()}}>
                    Close
             </Button>
             </ButtonGroup>
