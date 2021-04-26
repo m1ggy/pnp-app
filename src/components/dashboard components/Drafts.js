@@ -6,7 +6,7 @@ export default function Drafts() {
 
     const [posts,setPosts] = useState([])
     const[loading, setLoading] = useState()
-    const {currentUser} = useAuth()
+    const db = firestore.collection('posts')
 
 
     function RenderPosts () {
@@ -46,8 +46,8 @@ export default function Drafts() {
             
             setLoading(true)
     
-              await firestore.collection('posts').doc(currentUser.email).collection('events').where('published', '==',false)
-               .get()
+              await db.where('published', '==', true)
+                .get()
                .then((querySnapshot)=>{
                     if(querySnapshot.empty){
                         console.log('No matching documents.')
@@ -66,50 +66,10 @@ export default function Drafts() {
                 }).catch(e=>{
                     console.log("Errors: "+e)
                 })
-                await firestore.collection('posts').doc(currentUser.email).collection('news').where('published', '==',false)
-                .get()
-                .then((querySnapshot)=>{
-                     if(querySnapshot.empty){
-                         console.log('No matching documents.')
-                         return;
-                     }
- 
-                     querySnapshot.forEach(doc=>{
-                         if(doc.exists){
-                             console.log(doc.data())
-                             postsArray.push(doc.data())
-                         }
-                         else{
-                             console.log('empty')
-                         }
-                     })
-                 }).catch(e=>{
-                     console.log("Errors: "+e)
-                 })
-                 await firestore.collection('posts').doc(currentUser.email).collection('others').where('published', '==',false)
-                 .get()
-                 .then((querySnapshot)=>{
-                      if(querySnapshot.empty){
-                          console.log('No matching documents.')
-                          return;
-                      }
-  
-                      querySnapshot.forEach(doc=>{
-                          if(doc.exists){
-                              console.log(doc.data())
-                              postsArray.push(doc.data())
-                          }
-                          else{
-                              console.log('empty')
-                          }
-                      })
-                  }).catch(e=>{
-                      console.log("Errors: "+e)
-                  })
     
                setPosts(postsArray)
             
-                setLoading(false)          
+            setLoading(false)          
         }
 
         getData()

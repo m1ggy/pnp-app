@@ -3,22 +3,29 @@ import {Jumbotron, Col, Row, Form, Alert, Container, Button} from 'react-bootstr
 import {firestore, storage} from '../../firebase/firebase'
 import {useAuth} from '../../contexts/AuthContext'
 import uniqid from 'uniqid'
+import Select from 'react-select'
+
+
 export default function AddNewPost() {
   
     const titleRef = useRef()
     const subtitleRef = useRef()
     const contentRef = useRef()
-    const [image, setImage] = useState()
     const publishRef = useRef()
-    const typeEventRef = useRef()
-    const typeNewsRef = useRef()
-    const typeOthersRef = useRef()
 
+    const [image, setImage] = useState() 
+    const [type, setType] = useState()
     const [status, setStatus] = useState()
-    const {currentUser} = useAuth()
     const [showNote, setShowNote] = useState(true)
 
+    const {currentUser} = useAuth()
+
     const special = ["<",">"]
+    const types = [
+        {value:'news', label:'News'},
+        {value:'events',label:'Events'},
+        {value:'others',label:'Others'}
+    ]
     
     const db = firestore.collection('posts')
     const storageRef = storage.ref()
@@ -32,9 +39,7 @@ export default function AddNewPost() {
     function addData(url, tempID){
         const date = new Date()
         
-
-        if(typeEventRef.current.checked === true){
-            db.doc(currentUser.email).collection('events').doc(tempID).set({            
+            db.doc(tempID).set({            
                     title:titleRef.current.value,
                     subtitle:subtitleRef.current.value,
                     content:contentRef.current.value,
@@ -43,51 +48,15 @@ export default function AddNewPost() {
                     author:currentUser.email,
                     date: date.toDateString(),
                     time: date.toTimeString(),
-                    url:url
+                    url:url,
+                    type
                    
             },{merge:true}).then(()=>{
                 setStatus(true)
             }).catch(()=>{
                 setStatus(false)
             })
-            
-        }
-        else if(typeNewsRef.current.checked === true){
-            db.doc(currentUser.email).collection('news').doc(tempID).set({         
-                    title:titleRef.current.value,
-                    subtitle:subtitleRef.current.value,
-                    content:contentRef.current.value,
-                    id:tempID,
-                    published:publishRef.current.checked,
-                    author:currentUser.email,
-                    date: date.toDateString(),
-                    time: date.toTimeString(),
-                    url:url
-                      
-            },{merge:true}).then(()=>{
-                setStatus(true)
-            }).catch(()=>{
-                setStatus(false)
-            })
-        }
-        else if(typeOthersRef.current.checked === true){
-            db.doc(currentUser.email).collection('others').doc(tempID).set({
-                    title:titleRef.current.value,
-                    subtitle:subtitleRef.current.value,
-                    content:contentRef.current.value,
-                    id:tempID,
-                    published:publishRef.current.checked,
-                    author:currentUser.email,
-                    date: date.toDateString(),
-                    time: date.toTimeString(),
-                    url:url
-                       
-            },{merge:true}).then(()=>{
-                setStatus(true)
-            }).catch(()=>{
-                setStatus(false)
-            })
-        }
+       
     }
 
     async function pushData(e){
@@ -153,37 +122,23 @@ export default function AddNewPost() {
                     <Form.File label="Enter Banner Image" required accept="image/*" style={{width:300}} onChange={handleImage}/>
                 </Form.Group>
 
-                <Form.Group className="mt-4">
-                <Form.Label><b>Select Post Type:</b></Form.Label>
-                        <Form.Check
-                            type="radio"
-                            label="Events"
-                            name="type"
-                            id="events"
-                            ref={typeEventRef}
-                        />
-                        <Form.Check
-                            type="radio"
-                            label="News"
-                            name="type"
-                            id="news"
-                            ref={typeNewsRef}
-                        />
-                        <Form.Check
-                            type="radio"
-                            label="Others"
-                            name="type"
-                            id="others"
-                            ref={typeOthersRef}
-                        />
-                </Form.Group>
-
                 <Form.Check 
                     type="switch"
                     id="custom-switch"
-                    label="Publish"
-                    ref={publishRef}               
+                    label="Publish?"
+                    ref={publishRef}   
+                    className="mt-5 mb-3"            
                 />
+
+                <Form.Group>
+                    <Form.Label>
+                        Select File Category
+                    </Form.Label>
+                    <Select options={types} onChange={setType} styles={{zIndex:100}}/>
+
+                </Form.Group>
+
+               
                 <Container className="mt-5">
                     <Button variant="primary" type="submit" className="mt-5 w-25 m-auto" size="md">
                         Submit
