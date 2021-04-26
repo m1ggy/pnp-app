@@ -20,9 +20,6 @@ import 'bootswatch/dist/lux/bootstrap.min.css'
 
 function App() {
 
-
-
-
   return ( 
     <div className="App">
      <Router>
@@ -56,15 +53,11 @@ function App() {
                 </Route>
                 <Route path='/login'>
                     <Login/>
-                </Route>
-
-                
-            </Switch> 
-    
-            
-            </AuthProvider>      
-        </Router>  
-</div>   
+                </Route>           
+        </Switch> 
+      </AuthProvider>      
+     </Router>  
+    </div>   
   );
 }
 
