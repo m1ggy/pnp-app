@@ -10,7 +10,7 @@ function Home (){
 
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(false)
-   
+    const db = firestore.collection('posts')
     
 
     useEffect(()=>{
@@ -20,7 +20,7 @@ function Home (){
         async function getData(){
             let tempArray = []
             setLoading(true)
-         await firestore.collectionGroup('events').where('published', '==',true).get().then(
+         await db.where('published', '==',true).get().then(
              querySnapshot=>{
                 if(querySnapshot.empty){               
                     return
@@ -31,28 +31,7 @@ function Home (){
                 })
              }
          )
-         await firestore.collectionGroup('news').where('published', '==',true).get().then(
-            querySnapshot=>{
-               if(querySnapshot.empty){               
-                   return
-               }
-
-               querySnapshot.forEach(doc=>{
-                    tempArray.push(doc.data())
-               })
-            }
-        )
-        await firestore.collectionGroup('others').where('published', '==',true).get().then(
-            querySnapshot=>{
-               if(querySnapshot.empty){
-                   return
-               }
-
-               querySnapshot.forEach(doc=>{
-                    tempArray.push(doc.data())
-               })
-            }
-        )
+        
          setPosts(tempArray)
 
         setLoading(false)
@@ -65,58 +44,60 @@ function Home (){
 
     
 
-    function RenderPosts(){
-        
-        
-        if(posts){
-            return(
-                        posts.map((post, index)=>{  
-                            
-                            return(
-                               <Row className="w-100 bg-light p-3" style={{height:"25%"}} key={index} >
-                               
-                                <Col lg={3}>
-                                    <Container>
-                                        <div className="m-auto">
-                                            {post.url?<Image src={post.url} height="100" width="100"/>:<p>NO IMAGE</p>}
-                                            {loading?<Spinner animation="grow"/>:null}
-                                        </div>
-                                    </Container>
-                                </Col>
+    function RenderPosts(){      
+        if(posts=== null||typeof posts === undefined)return null;
 
-                                <Col>
-                                 <Row className="w-100 m-auto">
-                                        <h3>
-                                            {post.title}
-                                        </h3>
-                                    </Row>   
-                                    <Row className="w-100 m-auto">
-                                        <p>
-                                            {post.subtitle}
-                                        </p>
-                                    </Row>    
+        if(posts){
+            if(posts.length === 0){
+                return(
+                    <div style={{display:'flex', justifyContent:"center"}}>
+                        <p>No Published Posts</p>
+                    </div>
+                )
+            }
+        }
+            return(
+                    posts.map((post, index)=>{  
+                            
+                        return(
+                            <Row className="w-100 p-3 border" style={{height:"25%"}} key={index} >
+                               
+                            <Col lg={3} className="border">
+                                    
+                                <div style={{display:'flex', justifyContent:'center', alignContent:'center'}}>
+                                    {post.url?<Image src={post.url} width="200px" height="100%"/>:<p>NO IMAGE</p>}
+                                </div>
+                                  
+                            </Col>
+
+                            <Col lg={9}>
+                                <Row className="w-100 m-auto">
+                                    <h3>
+                                        {post.title}
+                                    </h3>
+                                </Row>   
+                                <Row className="w-100 m-auto">
+                                    <p>
+                                        {post.subtitle}
+                                    </p>
+                                </Row>
+                                <Row className="w-100 m-auto">
+                                    <p style={{fontSize:15}}>
+                                        {post.date}
+                                    </p>
+                                </Row>    
                                        
-                                    <Row className="w-100 m-auto">
+                                <Row className="w-100 m-auto">
                                     <div className="m-auto">
                                         <Button variant="primary" style={{height:50}}>Read</Button>
-                                        </div>
+                                    </div>
                                     </Row> 
                                 </Col>
                                    
-                                
-                                </Row>                               
+                            </Row>                               
                             )
                         })
-                    )
-                }
-        else{
-            return(
-                <Container>
-                    <p>No Posts</p>
-                </Container>
-            )
-        }
-           
+                    )                     
     }
 
     return(
@@ -136,10 +117,12 @@ function Home (){
             </Jumbotron>
             </Row>
             <Row>
+            <Jumbotron className="mt-2 w-100">
                     <Container>
                         {posts&&<RenderPosts/>}
                         {loading?<Spinner animation="border" className="m-auto"/>:null}
-                    </Container>     
+                    </Container>  
+                    </Jumbotron>   
             </Row>
             
                      

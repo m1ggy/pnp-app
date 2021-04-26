@@ -56,6 +56,12 @@ export default function AddNewPost() {
             }).catch(()=>{
                 setStatus(false)
             })
+
+            if(publishRef.current.checked){
+                db.doc(tempID).set({
+                    publishDate:date.toDateString()
+                },{merge:true})
+            }
        
     }
 

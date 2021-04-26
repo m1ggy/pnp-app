@@ -76,9 +76,11 @@ function GalleryMain (){
 
                 <Row className="w-100">
                     <Jumbotron className="mt-2 w-100" style={{display:'flex', justifyContent:'center'}}>
-                    <Row className="w-100">
+                    <Row className="w-100" style={{display:'flex', justifyContent:'center'}}>
                     {loading?<Spinner animation="border"/>:null}  
-                        {gallery?<RenderGalleries/>:null}
+                        {gallery
+                        ?<RenderGalleries/>
+                        :<div><p>No Galleries</p></div>}
                     </Row>
                     </Jumbotron>                    
                 </Row>
