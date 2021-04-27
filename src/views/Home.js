@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import NavBarMain from '../components/NavBarMain'
 import FooterMain from '../components/FooterMain'
-import { Jumbotron, Row, Col, Spinner, Image, Container, Button } from 'react-bootstrap'
+import { Jumbotron, Row, Col, Spinner, Image, Container, Button, Pagination } from 'react-bootstrap'
 import { firestore } from '../firebase/firebase'
 
 
@@ -11,7 +11,11 @@ function Home (){
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(false)
     const db = firestore.collection('posts')
-    
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage] = useState(5)
+    const [pageNumbers, setPageNumbers] = useState()
+
+
 
     useEffect(()=>{
        
@@ -33,14 +37,37 @@ function Home (){
          )
         
          setPosts(tempArray)
+         paginateNumbers(tempArray)
 
         setLoading(false)
         }
 
         getData()
 
+        function paginateNumbers(arr){
+
+                let temp = []
+                let totalPosts = arr.length
+
+            for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
+                temp.push(i);
+            }
+            setPageNumbers(temp)
+        }
+       
+
         
     }, [])
+
+    function paginate(num){
+        setCurrentPage(num)
+    }
+    function prevPage(){
+        setCurrentPage(currentPage-1)
+    }
+    function nextPage(){
+        setCurrentPage(currentPage+1)
+    }
 
     
 
@@ -56,8 +83,13 @@ function Home (){
                 )
             }
         }
+
+        const indexOfLastPost = currentPage * postsPerPage;
+        const indexOfFirstPost = indexOfLastPost - postsPerPage;
+        const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
             return(
-                    posts.map((post, index)=>{  
+                    currentPosts.map((post, index)=>{  
                             
                         return(
                             <Row className="w-100 p-3 border" style={{height:"25%"}} key={index} >
@@ -121,7 +153,25 @@ function Home (){
                     <Container>
                         {posts&&<RenderPosts/>}
                         {loading?<Spinner animation="border" className="m-auto"/>:null}
-                    </Container>  
+                    </Container> 
+                     
+                     <div style={{display:'flex', justifyContent:"center", marginTop:15}}>
+                   {pageNumbers&&<Pagination>
+                        <Pagination.Item onclick={prevPage}>
+                            Previous
+                        </Pagination.Item>
+                        {pageNumbers.map((num, index)=>{
+                            return(
+                                <Pagination.Item onClick={()=>{paginate(num)}} key={index}>
+                                    {num}
+                                </Pagination.Item>
+                            )
+                        })}
+                        <Pagination.Item onclick={nextPage}>
+                           Next
+                        </Pagination.Item>
+                   </Pagination>}
+                   </div>
                     </Jumbotron>   
             </Row>
             

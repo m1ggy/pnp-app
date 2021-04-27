@@ -5,7 +5,7 @@ import FooterMain from '../components/FooterMain'
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet';
-import { Jumbotron } from 'react-bootstrap'
+import { Jumbotron, Container } from 'react-bootstrap'
 delete L.Icon.Default.prototype._getIconUrl;
 
 
@@ -18,7 +18,11 @@ L.Icon.Default.mergeOptions({
 function Maps (){
     return(
     <>
-            <NavBarMain/>
+    <NavBarMain className="mt-2 w-100 m-auto"/>
+
+        <Container style={{marginTop:100}}>
+        </Container>
+        
         <Jumbotron className="mt-2" style={{marginTop:100}}>
          <h1 className="title">Maps</h1>
         </Jumbotron>
