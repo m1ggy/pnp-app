@@ -62,15 +62,7 @@ function Home (){
     function paginate(num){
         setCurrentPage(num)
     }
-    function prevPage(){
-        setCurrentPage(currentPage-1)
-    }
-    function nextPage(){
-        setCurrentPage(currentPage+1)
-    }
-
     
-
     function RenderPosts(){      
         if(posts=== null||typeof posts === undefined)return null;
 
@@ -156,20 +148,14 @@ function Home (){
                     </Container> 
                      
                      <div style={{display:'flex', justifyContent:"center", marginTop:15}}>
-                   {pageNumbers&&<Pagination>
-                        <Pagination.Item onclick={prevPage}>
-                            Previous
-                        </Pagination.Item>
+                   {pageNumbers&&<Pagination size="lg">
                         {pageNumbers.map((num, index)=>{
                             return(
                                 <Pagination.Item onClick={()=>{paginate(num)}} key={index}>
                                     {num}
                                 </Pagination.Item>
                             )
-                        })}
-                        <Pagination.Item onclick={nextPage}>
-                           Next
-                        </Pagination.Item>
+                        })}    
                    </Pagination>}
                    </div>
                     </Jumbotron>   
