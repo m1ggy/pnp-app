@@ -23,6 +23,15 @@ export default function Sidebar() {
                      </NavDropdown>
 
                 </Row>
+                <Row>
+                    <NavDropdown title="Announcements" id="basic-nav-dropdown" drop="right">
+
+                    <NavDropdown.Item><Link to='/dashboard/announcement/manage-announcements'>Manage Announcements</Link></NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item> <Link to='/dashboard/announcement/add-new-announcement'>Add New Announcement</Link></NavDropdown.Item>
+
+                    </NavDropdown>
+                </Row>
 
                 <Row className="mt-3">
 

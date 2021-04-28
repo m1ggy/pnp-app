@@ -15,6 +15,9 @@ import AccountsMain from '../components/dashboard components/AccountsMain'
 import ManageGalleries from '../components/dashboard components/ManageGalleries'
 import AddNewGallery from '../components/dashboard components/AddNewGallery'
 import AddNewDownload from '../components/dashboard components/AddNewDownload'
+import ManageAnnouncement from '../components/dashboard components/ManageAnnouncement'
+import AddNewAnnouncement from '../components/dashboard components/AddNewAnnouncement'
+
 export default function Dashboard() {
 
     const {logout, currentUser} = useAuth()
@@ -68,6 +71,16 @@ export default function Dashboard() {
         path={`${path}/posts/add-new-post`} 
         key={`${path}/posts/add-new-post`}
         render={()=><AddNewPost/>}
+        />,
+        <Route 
+        path={`${path}/announcement/manage-announcements`} 
+        key={`${path}/announcement/manage-announcements`}
+        render={()=><ManageAnnouncement/>}
+        />, 
+        <Route 
+        path={`${path}/announcement/add-new-announcement`} 
+        key={`${path}/announcement/add-new-announcement`}
+        render={()=><AddNewAnnouncement/>}
         />,
         <Route 
         path={`${path}/posts/drafts`} 
