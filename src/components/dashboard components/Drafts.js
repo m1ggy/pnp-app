@@ -14,10 +14,12 @@ export default function Drafts() {
     const [editModal, setEditModal] = useState(false)
     const db = firestore.collection('posts')
     const storageRef = storage.ref('images')
-    const contentRef = useRef()
+    const publishRef = useRef()
+
+
     const titleRef = useRef()
     const subtitleRef = useRef()
-    const publishRef = useRef()
+    const contentRef = useRef()
 
     function RenderPosts (){
         if(posts === null|| typeof posts === undefined) return null;
@@ -128,11 +130,13 @@ export default function Drafts() {
         setShowMessageModal(true)
     }
 
-    function editPost(){
+    function editPost(e){
+        e.preventDefault()
+        console.log(titleRef.current)
+        console.log(subtitleRef.current)
+        console.log(contentRef.current)
 
     }
-
-
 
     function EditModal(){
         
@@ -140,9 +144,10 @@ export default function Drafts() {
         {return null;}
 
 
-        titleRef.current = selectedItem.title
-        subtitleRef.current = selectedItem.subtitle
-        contentRef.current = selectedItem.content
+            titleRef.current = selectedItem.title
+            subtitleRef.current = selectedItem.title
+            contentRef.current = selectedItem.content
+
         return(
             <Modal 
             show={editModal} 
@@ -159,18 +164,34 @@ export default function Drafts() {
 
                  <Form onSubmit={editPost}>
 
-                <Form.Group>
+                 <Form.Group>
                     <Form.Label>
                     <b>Enter Title</b>
                     </Form.Label>
-                    <Form.Control type="text" placeholder="Title" required style={{width:"50%"}} className="border" value={titleRef.current}/>
+                    <Form.Control 
+                    type="text" 
+                    placeholder="Title" 
+                    required 
+                    style={{width:"50%"}} 
+                    className="border" 
+                    defaultValue={titleRef.current} 
+                    onChange={(event)=>{titleRef.current = event.target.value}}
+                    />
                 </Form.Group>
-
                 <Form.Group>
                     <Form.Label>
                     <b>Enter Subtitle</b>
                     </Form.Label>
-                    <Form.Control type="text" placeholder="Subtitle" required style={{width:"75%"}} className="border" value={ subtitleRef.current}/>
+                    <Form.Control 
+                    type="text" 
+                    placeholder="Subtitle" 
+                    required 
+                    style={{width:"75%"}} 
+                    className="border" 
+                    defaultValue={subtitleRef.current} 
+                    onChange={(event)=>{subtitleRef.current = event.target.value}}
+
+                    />
                 </Form.Group>
 
                 <Form.Group>
@@ -178,7 +199,15 @@ export default function Drafts() {
                         <b>Enter Content </b>
                     </Form.Label>
                     
-                    <Form.Control as="textarea" required rows={25}style={{resize:'none', width:"100%"}} className="border" value={contentRef.current}/>
+                    <Form.Control 
+                    as="textarea" 
+                    required 
+                    rows={25}
+                    style={{resize:'none', width:"100%"}} 
+                    className="border" 
+                    defaultValue={contentRef.current} 
+                    onChange={(event)=>{contentRef.current = event.target.value}}
+                    />
                 </Form.Group>
 
                 <Form.Check 
