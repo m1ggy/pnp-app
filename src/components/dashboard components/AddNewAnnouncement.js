@@ -28,7 +28,8 @@ export default function AddNewAnnouncement() {
             title:title,
             content:content,
             dateUploaded:date.toDateString(),
-            timeUploaded:date.toTimeString()
+            timeUploaded:date.toTimeString(),
+            id:tempID
         },{merge:true}).then(()=>{
             setTitle('')
             setContent('')
