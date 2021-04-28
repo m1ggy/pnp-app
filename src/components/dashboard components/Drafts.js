@@ -1,7 +1,9 @@
 import React, {useEffect, useState, useRef} from 'react'
-import { Jumbotron, Col, Row, Spinner, Container, Button, Modal, ButtonGroup, Form} from 'react-bootstrap'
+import { Jumbotron, Col, Row, Spinner, Container, Button, Modal, ButtonGroup, Form, Image} from 'react-bootstrap'
 import { firestore, storage } from '../../firebase/firebase'
+import Select from 'react-select'
 import '../../styles/drafts.css'
+
 export default function Drafts() {
 
     const [posts,setPosts] = useState([])
@@ -12,14 +14,21 @@ export default function Drafts() {
     const [showMessageModal, setShowMessageModal] = useState(false)
     const [publishModal, setPublishModal] = useState(false)
     const [editModal, setEditModal] = useState(false)
+
+    const types = [
+        {value:'news', label:'News'},
+        {value:'events',label:'Events'},
+        {value:'others',label:'Others'}
+    ]
+
     const db = firestore.collection('posts')
     const storageRef = storage.ref('images')
-    const publishRef = useRef()
-
 
     const titleRef = useRef()
     const subtitleRef = useRef()
     const contentRef = useRef()
+    const imageRef = useRef()
+    const typeRef = useRef()
 
     function RenderPosts (){
         if(posts === null|| typeof posts === undefined) return null;
@@ -39,8 +48,10 @@ export default function Drafts() {
 
                             <Col lg={10}>
                                 <Row><h3>{post.title}</h3></Row>
+                                <Row><div className="m-3">{post.url?<Image src={post.url} width="200px" height="100%"/>:<p>No Image :(</p>}</div></Row>
                                 <Row><p><b>Upload Date:</b> {post.date}</p></Row>
                                 <Row><p><b>Upload Time:</b> {post.time}</p></Row>
+                               
                             </Col>
 
                             <Col className="m-auto">
@@ -130,12 +141,68 @@ export default function Drafts() {
         setShowMessageModal(true)
     }
 
-    function editPost(e){
+    async function editPost(e){
         e.preventDefault()
         console.log(titleRef.current)
         console.log(subtitleRef.current)
         console.log(contentRef.current)
+        console.log(imageRef.current)
+        console.log(typeRef.current)
+        console.log(selectedItem.id)
 
+        await db.doc(selectedItem.id).set({
+            title:titleRef.current,
+            subtitle:subtitleRef.current,
+            content:contentRef.current,
+        },{merge:true}).then(()=>{
+            setMessage({type:'primary', msg:'Successfully updated post.'})
+        })
+
+        if(typeRef.current != null){
+            await db.doc(selectedItem.id).set({
+               type:typeRef.current
+            },{merge:true}).then(()=>{
+                setMessage({type:'primary', msg:'Successfully updated post.'})
+            })
+        }
+
+        if(imageRef.current != null){
+            await storageRef.child(selectedItem.id).delete().then(()=>{
+
+                const upload = storageRef.child(`${selectedItem.id}`).put(imageRef.current)
+
+                upload.then(()=>{
+
+                    storageRef.child(selectedItem.id).getDownloadURL().then((url)=>{
+                       db.doc(selectedItem.id).set({
+                            url
+                        },{merge:true}).then(()=>{
+                            
+                                setMessage({type:'primary', msg:'Successfully updated post.'})
+                                
+                        })
+                    })
+
+                }).catch((e)=>{
+                    setMessage({type:'danger', msg:`Error: ${e}`})
+                })
+            })
+        }
+
+        setEditModal(false)
+        setShowMessageModal(true)
+        titleRef.current = undefined
+        subtitleRef.current = undefined
+        contentRef.current = undefined
+        imageRef.current = undefined
+        typeRef.current = undefined
+        e.target.reset()
+    }
+    
+    function handleImage(e){
+        if(e.target.files[0]){
+            imageRef.current = e.target.files[0]
+        }
     }
 
     function EditModal(){
@@ -145,7 +212,7 @@ export default function Drafts() {
 
 
             titleRef.current = selectedItem.title
-            subtitleRef.current = selectedItem.title
+            subtitleRef.current = selectedItem.subtitle
             contentRef.current = selectedItem.content
 
         return(
@@ -195,6 +262,10 @@ export default function Drafts() {
                 </Form.Group>
 
                 <Form.Group>
+                    <Form.File label="Enter Banner Image NOTE: If you don't want to change the image, ignore this." accept="image/*" style={{width:300}} onChange={handleImage}/>
+                </Form.Group>
+
+                <Form.Group>
                     <Form.Label>
                         <b>Enter Content </b>
                     </Form.Label>
@@ -210,13 +281,14 @@ export default function Drafts() {
                     />
                 </Form.Group>
 
-                <Form.Check 
-                    type="switch"
-                    id="custom-switch"
-                    label="Publish?"
-                    ref={publishRef}   
-                    className="mt-5 mb-3"            
-                />
+                <Form.Group>
+                    <Form.Label>
+                        Select File Category
+                    </Form.Label>
+                    <Select options={types} onChange={(e)=>{typeRef.current = e}} styles={{zIndex:100}}/>
+
+                </Form.Group>
+
 
                
                 <Container className="mt-5">
