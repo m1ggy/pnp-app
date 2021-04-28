@@ -10,41 +10,44 @@ export default function AddNewAnnouncement() {
     const [message, setMessage] = useState()
     const [disable, setDisable] = useState(false)
     const db = firestore.collection('announcements')
-    const titleRef = useRef()
-    const contentRef = useRef()
+    const [title, setTitle] = useState('')
+    const [content, setContent] = useState('')
 
     const { currentUser } = useAuth()
 
-    function handleSubmit(e){
-        setMessage()
-        setDisable(true)
-            e.preventDefault()
-            pushData()
-            e.target.reset()
-
-        setDisable(false)
-
-    }
-
    async function pushData(){
-      
+
+    setMessage()
 
         const date = new Date()
         const tempID = uniqid()
+        console.log(content)
 
-      await db.doc(tempID).set({
+     return await db.doc(tempID).set({
             author:currentUser.email,
-            title:titleRef.current.value,
-            content:contentRef.current.value,
+            title:title,
+            content:content,
             dateUploaded:date.toDateString(),
             timeUploaded:date.toTimeString()
         },{merge:true}).then(()=>{
+            setTitle('')
+            setContent('')
             setMessage({type:'success', msg:'Announcement has been added!'})
         }).catch((e)=>{
             setMessage({type:'danger', msg:`Error: ${e}`})
         })
         
     }
+
+    useEffect(()=>{
+        if(disable){
+            pushData().then(()=>{
+                setDisable(false)
+            })
+        }
+    },[disable])
+
+    const handleClick = (e) => setDisable(true);
 
     return (
        <>
@@ -62,23 +65,23 @@ export default function AddNewAnnouncement() {
 
                 <Container>
 
-                    <Form onSubmit={(e)=>handleSubmit(e)}>
+                    <Form>
                         <Form.Group>
                         <Form.Label>
                         Announcement Title
                         </Form.Label>
-                         <Form.Control type="text" placeholder="Title" required style={{width:"75%"}} ref={titleRef} className="border"/>
+                         <Form.Control type="text" placeholder="Title" required style={{width:"75%"}} className="border" value={title} onChange={(event)=>{setTitle(event.target.value)}}/>
                         </Form.Group>
 
                         <Form.Group>
                         <Form.Label>
                         Announcement Content
                         </Form.Label>
-                         <Form.Control as="textarea" placeholder="Content" required rows={15}style={{resize:'none', width:"100%"}} ref={contentRef} className="border"/>
+                         <Form.Control as="textarea" placeholder="Content" required rows={15}style={{resize:'none', width:"100%"}} value={content} className="border" onChange={(event)=>{setContent(event.target.value)}}/>
                         </Form.Group>
 
                             <div style={{display:'flex', justifyContent:"center"}}>
-                            <Button variant="primary" type="submit" className="m-auto" size="md" disabled={disable}>
+                            <Button variant="primary" type="submit" className="m-auto" size="md" disabled={disable} onClick={!disable? handleClick:null}>
                                 Submit
                             </Button>
                             </div>
