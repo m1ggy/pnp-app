@@ -81,7 +81,7 @@ export default function PostEntry() {
                         </Row>
                         <Row className="w-100">
                             <p style={{textAlign:'justify'}} className="m-auto">
-                                {item.datePublished} {item.time}
+                                {item.date} {item.time}
                             </p>
                         </Row>
 
