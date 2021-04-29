@@ -2,14 +2,17 @@ import React from 'react'
 import {Col, Row, NavDropdown} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 import '../styles/sidebar.css'
+
+
+
 export default function Sidebar() {
    
     return (
-        <div className="sidebarContainer border bg-light pl-5 pb-5">
+        <div className="sidebarContainer border pl-5 pb-5">
             <Col>
            
                 <Row className="mt-3">
-                    <Link to={`/dashboard`}>Dashboard</Link>
+               <Link to={`/dashboard`}>Dashboard</Link>
                 </Row>
                 
                 <Row className="mt-3">

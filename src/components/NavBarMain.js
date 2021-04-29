@@ -7,6 +7,7 @@ function NavBarMain (){
     return (
        
             <Navbar bg="light" expand="lg" fixed="top">
+             <Link to='/'>
                 <Navbar.Brand>
                 <img
                 width="30px"
@@ -17,6 +18,8 @@ function NavBarMain (){
                 />{' '}
                Philippine National Police
                 </Navbar.Brand>
+            </Link>
+
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="m-auto">

@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import NavBarMain from '../components/NavBarMain'
 import FooterMain from '../components/FooterMain'
-import { Jumbotron, Row, Col, Spinner, Image, Container, Button, Pagination } from 'react-bootstrap'
+import { Jumbotron, Row, Col, Spinner, Image, Container, Button, Pagination, Alert } from 'react-bootstrap'
 import { firestore } from '../firebase/firebase'
+import { Link, useRouteMatch } from 'react-router-dom'
 
 
 
@@ -11,9 +12,11 @@ function Home (){
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(false)
     const db = firestore.collection('posts')
+    const [announcement, setAnnouncement] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(5)
     const [pageNumbers, setPageNumbers] = useState()
+    const {url} = useRouteMatch()
 
 
 
@@ -38,6 +41,25 @@ function Home (){
         
          setPosts(tempArray)
          paginateNumbers(tempArray)
+
+         let annArray = []
+
+         firestore.collection('announcements').get().then((querySnapshot)=>{
+             if(querySnapshot.empty){
+                 return
+             }
+
+             querySnapshot.forEach(doc =>{
+                 console.log(doc.data())
+                 annArray.push(doc.data())
+             })
+             console.log(annArray)
+             setAnnouncement(annArray)
+         })
+
+        
+
+         
 
         setLoading(false)
         }
@@ -113,7 +135,7 @@ function Home (){
                                        
                                 <Row className="w-100 m-auto">
                                     <div className="m-auto">
-                                        <Button variant="primary" style={{height:50}}>Read</Button>
+                                    <Link to={`news-and-events/${post.id}`}><Button>Read</Button></Link>
                                     </div>
                                     </Row> 
                                 </Col>
@@ -124,30 +146,58 @@ function Home (){
                     )                     
     }
 
+    function RenderAnnouncements(){
+        if(announcement=== null||typeof announcement === undefined)return null;
+
+        if(announcement){
+            if(announcement.length === 0){
+                return(
+                    <div style={{display:'flex', justifyContent:"center"}}>
+                        <p>No Published Announcements</p>
+                    </div>
+                )
+            }
+        }
+
+        return(
+            announcement.map((item)=>{
+                return(
+                    <Alert variant="info" key={item.id}>
+                        <Alert.Heading>
+                            {item.title}
+                        </Alert.Heading>
+                        <p>{item.content}</p>
+                        <p>{item.dateUploaded}</p>
+                    </Alert>
+                )
+            })
+        )
+    }
+
     return(
         <>
         <Col>
 
-        <Row className="w-100">
-
-        <Container style={{marginTop:100}}>
-            <NavBarMain className="mt-2 w-100 m-auto"/>
-        </Container>
         
-        </Row>
-            <Row>
+            <Container style={{marginTop:100}}>
+                <NavBarMain className="mt-2 w-100 m-auto"/>
+            </Container> 
+
+        <Row>
             <Jumbotron className="mt-2 w-100">
                 <h1 className="title">Latest Post</h1>
             </Jumbotron>
             </Row>
+        <Row>
+        <Col lg={9} className="border">
+
             <Row>
-            <Jumbotron className="mt-2 w-100">
+            <Jumbotron className="w-100">
                     <Container>
-                        {posts&&<RenderPosts/>}
-                        {loading?<Spinner animation="border" className="m-auto"/>:null}
+                        {loading?<Spinner animation="border" className="m-auto"/>:<RenderPosts/>}
                     </Container> 
                      
-                     <div style={{display:'flex', justifyContent:"center", marginTop:15}}>
+                     <div style={{display:'flex', justifyContent:"center", marginTop:20}}>
                    {pageNumbers&&<Pagination size="lg">
                         {pageNumbers.map((num, index)=>{
                             return(
@@ -160,8 +210,16 @@ function Home (){
                    </div>
                     </Jumbotron>   
             </Row>
-            
-                     
+            </Col>
+
+            <Col lg={3} className="border">
+                <Jumbotron>
+                    <RenderAnnouncements/>
+                </Jumbotron>
+            </Col>  
+
+            </Row> 
+
              <FooterMain/>             
             </Col>
         </>

@@ -14,6 +14,8 @@ import Login from './views/Login'
 import Dashboard from './views/Dashboard'
 import PrivateRoute from './routes/PrivateRoute'
 import GalleryEntry from './views/GalleryEntry'
+import PostEntry from './views/PostEntry'
+
 import 'bootswatch/dist/lux/bootstrap.min.css'
 
 
@@ -35,6 +37,9 @@ function App() {
                 </Route>
                 <Route path='/maps'>
                     <Maps/>
+                </Route>
+                <Route path='/news-and-events/:id'>
+                    <PostEntry/>
                 </Route>
                 <Route path='/news-and-events'>
                     <NewsAndEvents/>
