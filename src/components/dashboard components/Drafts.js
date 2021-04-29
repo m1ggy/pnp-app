@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react'
 import { Jumbotron, Col, Row, Spinner, Container, Button, Modal, ButtonGroup, Form, Image} from 'react-bootstrap'
 import { firestore, storage } from '../../firebase/firebase'
+import { useAuth } from '../../contexts/AuthContext'
 import Select from 'react-select'
 import '../../styles/drafts.css'
 
@@ -15,6 +16,7 @@ export default function Drafts() {
     const [publishModal, setPublishModal] = useState(false)
     const [editModal, setEditModal] = useState(false)
 
+    const {currentUser} = useAuth()
     const types = [
         {value:'news', label:'News'},
         {value:'events',label:'Events'},
@@ -36,7 +38,9 @@ export default function Drafts() {
         if(posts){
             if(posts.length === 0){
                 return(
+                    <div style={{display:'flex', justifyContent:'center'}}>
                     <p>No posts in drafts.</p>
+                    </div>
                 )
             }
         }
@@ -92,7 +96,9 @@ export default function Drafts() {
                 console.log("Errors: "+e)
             })
 
-           setPosts(postsArray)
+            let filtered = postsArray.filter((post)=>{return post.author == currentUser.email})
+            console.log(filtered)
+            setPosts(filtered)
         
         setLoading(false)          
     }
@@ -143,12 +149,6 @@ export default function Drafts() {
 
     async function editPost(e){
         e.preventDefault()
-        console.log(titleRef.current)
-        console.log(subtitleRef.current)
-        console.log(contentRef.current)
-        console.log(imageRef.current)
-        console.log(typeRef.current)
-        console.log(selectedItem.id)
 
         await db.doc(selectedItem.id).set({
             title:titleRef.current,
@@ -413,9 +413,7 @@ export default function Drafts() {
 
             <Row>
             <Jumbotron className="w-100">
-               
-                 {posts?<RenderPosts/>:<p>No posts in drafts.</p>}
-                 {loading?<Container><Spinner animation="border" className="m-auto"/></Container>:null}
+                 {loading?<Container><Spinner animation="border" className="m-auto"/></Container>:<RenderPosts/>}
                 <DeleteModal/>
                 <MessageModal/>
                 <PublishModal/>

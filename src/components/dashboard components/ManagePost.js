@@ -99,7 +99,7 @@ export default function ManagePost() {
                 console.log("Errors: "+e)
             })
 
-           let filtered = postsArray.filter((post)=>{return post.author == currentUser.email})
+           let filtered = postsArray.filter((post)=>{post.author == currentUser.email})
            console.log(filtered)
            setPosts(filtered)
         
