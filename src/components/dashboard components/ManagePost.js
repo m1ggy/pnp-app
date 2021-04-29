@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import {Jumbotron, Row, Col, Button, Spinner, Container, Image, Modal, ButtonGroup} from 'react-bootstrap'
+import React, { useState, useEffect, useRef } from 'react'
+import {Jumbotron, Row, Col, Button, Spinner, Container, Image, Modal, ButtonGroup, Form} from 'react-bootstrap'
 import { useAuth } from '../../contexts/AuthContext'
 import { firestore, storage} from '../../firebase/firebase'
+
 
 export default function ManagePost() {
 
@@ -11,21 +12,31 @@ export default function ManagePost() {
     const [showModal, setShowModal] = useState(false)
     const [message, setMessage] = useState()
     const [showMessageModal, setShowMessageModal] = useState(false)
+    const [editModal, setEditModal] = useState(false)
+
+    const {currentUser} = useAuth()
+
     const db = firestore.collection('posts')
     const storageRef = storage.ref('images')
+
+    const titleRef = useRef()
+    const subtitleRef = useRef()
+    const contentRef = useRef()
+    const imageRef = useRef()
 
 
     function RenderPosts () {
 
         if(posts.length === 0){
             return (
-                <Container>
+                <div style={{display:'flex', justifyContent:'center'}}>
                     <p>
                         No Published Posts.
                     </p>
-                </Container>
+                </div>
             )
         }
+
 
         return(
             posts.map((post, index)=>{
@@ -41,7 +52,7 @@ export default function ManagePost() {
 
                             <Col className="m-auto">
                             <Row>
-                                <Button variant="primary" size="sm" className="m-3 w-75">Edit</Button>
+                                <Button variant="primary" size="sm" className="m-3 w-75" onClick={()=>{setEditModal(true);setSelectedItem(post)}}>Edit</Button>
                                 <Button variant="danger" size="sm" className="m-3 w-75" onClick={()=>{setShowModal(true);setSelectedItem(post)}}>Delete</Button>
                             </Row>
                            
@@ -87,10 +98,165 @@ export default function ManagePost() {
             }).catch(e=>{
                 console.log("Errors: "+e)
             })
-           
-           setPosts(postsArray)
+
+           let filtered = postsArray.filter((post)=>{return post.author == currentUser.email})
+           console.log(filtered)
+           setPosts(filtered)
         
             setLoading(false)          
+    }
+
+    async function editPost(e){
+        e.preventDefault()
+        console.log(titleRef.current)
+        console.log(subtitleRef.current)
+        console.log(contentRef.current)
+        console.log(imageRef.current)
+        console.log(selectedItem.id)
+
+        await db.doc(selectedItem.id).set({
+            title:titleRef.current,
+            subtitle:subtitleRef.current,
+            content:contentRef.current,
+        },{merge:true}).then(()=>{
+            setMessage({type:'primary', msg:'Successfully updated post.'})
+        })
+
+        if(imageRef.current != null){
+            await storageRef.child(selectedItem.id).delete().then(()=>{
+
+                const upload = storageRef.child(`${selectedItem.id}`).put(imageRef.current)
+
+                upload.then(()=>{
+
+                    storageRef.child(selectedItem.id).getDownloadURL().then((url)=>{
+                       db.doc(selectedItem.id).set({
+                            url
+                        },{merge:true}).then(()=>{
+                            
+                                setMessage({type:'primary', msg:'Successfully updated post.'})
+                                
+                        })
+                    })
+
+                }).catch((e)=>{
+                    setMessage({type:'danger', msg:`Error: ${e}`})
+                })
+            })
+        }
+
+        setEditModal(false)
+        setShowMessageModal(true)
+        titleRef.current = undefined
+        subtitleRef.current = undefined
+        contentRef.current = undefined
+        imageRef.current = undefined
+        e.target.reset()
+    }
+    
+    function handleImage(e){
+        if(e.target.files[0]){
+            imageRef.current = e.target.files[0]
+        }
+    }
+
+    function EditModal(){
+        
+        if(selectedItem === null||typeof selectedItem === 'undefined')
+        {return null;}
+
+
+            titleRef.current = selectedItem.title
+            subtitleRef.current = selectedItem.subtitle
+            contentRef.current = selectedItem.content
+
+        return(
+            <Modal 
+            show={editModal} 
+            onHide={()=>{setEditModal(false)}} 
+            centered
+            dialogClassName="edit-modal"
+            >
+                <Modal.Header>
+                 <h3>
+                    Edit Post
+                    </h3>
+                </Modal.Header>
+                <Modal.Body>
+
+                 <Form onSubmit={editPost}>
+
+                 <Form.Group>
+                    <Form.Label>
+                    <b>Enter Title</b>
+                    </Form.Label>
+                    <Form.Control 
+                    type="text" 
+                    placeholder="Title" 
+                    required 
+                    style={{width:"50%"}} 
+                    className="border" 
+                    defaultValue={titleRef.current} 
+                    onChange={(event)=>{titleRef.current = event.target.value}}
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>
+                    <b>Enter Subtitle</b>
+                    </Form.Label>
+                    <Form.Control 
+                    type="text" 
+                    placeholder="Subtitle" 
+                    required 
+                    style={{width:"75%"}} 
+                    className="border" 
+                    defaultValue={subtitleRef.current} 
+                    onChange={(event)=>{subtitleRef.current = event.target.value}}
+
+                    />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.File label="Enter Banner Image NOTE: If you don't want to change the image, ignore this." accept="image/*" style={{width:300}} onChange={handleImage}/>
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>
+                        <b>Enter Content </b>
+                    </Form.Label>
+                    
+                    <Form.Control 
+                    as="textarea" 
+                    required 
+                    rows={25}
+                    style={{resize:'none', width:"100%"}} 
+                    className="border" 
+                    defaultValue={contentRef.current} 
+                    onChange={(event)=>{contentRef.current = event.target.value}}
+                    />
+                </Form.Group>
+
+               
+                <Container className="mt-5">
+                    <Button variant="primary" type="submit" className="mt-5 w-25 m-auto" size="md">
+                        Submit
+                    </Button>
+                </Container>
+               
+
+                </Form>
+                   
+                </Modal.Body>
+                <Modal.Footer>
+                <ButtonGroup>
+                    <Button variant="danger" size="sm" className="w-75 m-3" onClick={()=>{setEditModal(false)}}>
+                        Cancel
+                    </Button>
+                    </ButtonGroup>
+                   
+                </Modal.Footer>
+            </Modal>
+        )
     }
 
     const handleCloseModal = () =>{
@@ -185,8 +351,10 @@ export default function ManagePost() {
                     <Container>
 
                        {loading?<Spinner animation="border" className="m-auto"/>:<RenderPosts/>}
+                       
                         <DeleteModal/>
                         <MessageModal/>
+                        <EditModal/>
                     </Container>
                
                 </Jumbotron>
