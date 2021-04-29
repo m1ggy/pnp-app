@@ -164,8 +164,7 @@ let filtered = announcement.filter(item => item.author === currentUser.email)
         <Row>
             <Jumbotron className="w-100">
             <Container>
-               {loading&&<Spinner animation="border m-auto"/>}
-               {announcement?<RenderAnnouncements/>:<p>No Announcements</p>}
+               {loading?<Spinner animation="border m-auto"/>:<RenderAnnouncements/>}
                <DeleteModal/>
                <MessageModal/>
                </Container>
