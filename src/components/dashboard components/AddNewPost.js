@@ -1,9 +1,10 @@
 import React, {useRef, useState} from 'react'
 import {Jumbotron, Col, Row, Form, Alert, Container, Button} from 'react-bootstrap'
-import {firestore, storage} from '../../firebase/firebase'
+import { firestore, storage, firebase } from '../../firebase/firebase'
 import {useAuth} from '../../contexts/AuthContext'
 import uniqid from 'uniqid'
 import Select from 'react-select'
+import RichTextEditor from 'react-rte';
 
 
 export default function AddNewPost() {
@@ -17,15 +18,37 @@ export default function AddNewPost() {
     const [type, setType] = useState()
     const [status, setStatus] = useState()
     const [showNote, setShowNote] = useState(true)
+    const [content, setContent] = useState(RichTextEditor.createEmptyValue())
 
     const {currentUser} = useAuth()
 
     const special = ["<",">"]
+
     const types = [
         {value:'news', label:'News'},
         {value:'events',label:'Events'},
         {value:'others',label:'Others'}
     ]
+
+    const toolbarConfig = {
+        // Optionally specify the groups to display (displayed in the order listed).
+        display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
+        INLINE_STYLE_BUTTONS: [
+          {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
+          {label: 'Italic', style: 'ITALIC'},
+          {label: 'Underline', style: 'UNDERLINE'}
+        ],
+        BLOCK_TYPE_DROPDOWN: [
+          {label: 'Normal', style: 'unstyled'},
+          {label: 'Heading Large', style: 'header-one'},
+          {label: 'Heading Medium', style: 'header-two'},
+          {label: 'Heading Small', style: 'header-three'}
+        ],
+        BLOCK_TYPE_BUTTONS: [
+          {label: 'Bullet', style: 'unordered-list-item'},
+          {label: 'Number', style: 'ordered-list-item'}
+        ]
+      };
     
     const db = firestore.collection('posts')
     const storageRef = storage.ref()
@@ -35,19 +58,26 @@ export default function AddNewPost() {
             setImage(e.target.files[0])
         }
     }
+    function onChangeContent(value){
+        setContent(value)
+        console.log(value)
+    }
 
     function addData(url, tempID){
+
         const date = new Date()
+        const timestamp = firebase.firestore.FieldValue.serverTimestamp();
         
             db.doc(tempID).set({            
                     title:titleRef.current.value,
                     subtitle:subtitleRef.current.value,
-                    content:contentRef.current.value,
+                    content:content.toString('html'),
                     id:tempID,
                     published:publishRef.current.checked,
                     author:currentUser.email,
                     date: date.toDateString(),
                     time: date.toTimeString(),
+                    timestamp,
                     url:url,
                     type
                    
@@ -120,8 +150,7 @@ export default function AddNewPost() {
                     <Form.Label>
                         <b>Enter Content </b>
                     </Form.Label>
-                    
-                    <Form.Control as="textarea" required rows={25}style={{resize:'none', width:"100%"}} ref={contentRef} className="border"/>
+                        <RichTextEditor value={content} onChange={onChangeContent} toolbarConfig={toolbarConfig}/>
                 </Form.Group>
 
                 <Form.Group>

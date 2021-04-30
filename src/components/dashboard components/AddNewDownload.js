@@ -1,7 +1,7 @@
 import React, {useState, useRef} from 'react'
 import uniqid from 'uniqid'
 import { Jumbotron, Col, Row, Container, Spinner, Form, Button, ProgressBar, Alert } from 'react-bootstrap'
-import { storage, firestore } from '../../firebase/firebase'
+import { storage, firestore, firebase } from '../../firebase/firebase'
 import { useAuth } from '../../contexts/AuthContext'
 import Select from 'react-select'
 export default function AddNewDownload() {
@@ -20,6 +20,7 @@ export default function AddNewDownload() {
         {value:'advisories', label:'Advisories'},
         {value:'generalDownloads', label:'General Downloads'}
     ]
+
 
     function handleFile (e){
        setFile(e.target.files[0])
@@ -56,12 +57,14 @@ export default function AddNewDownload() {
     async function pushData(url, id, file){
 
         const date = new Date()
+        const timestamp = firebase.firestore.FieldValue.serverTimestamp();
        
        await db.doc(id).set({          
                 author: currentUser.email,
                 id:id,
                 url:url,
                 type:type,
+                timestamp,
                 date:date.toDateString(),
                 time:date.toTimeString(),
                 name:file.name,

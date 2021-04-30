@@ -173,7 +173,7 @@ export default function ManageDownloads() {
                         <Col lg={10}>
                          <p style={{fontWeight:'bold', fontSize:16}}>{item.data.name}</p>
                          <p style={{fontSize:13}}>{item.data.size} MB</p>
-                         <p style={{fontSize:13}}>Date Uploaded: {item.data.date}</p>
+                         {/* <p style={{fontSize:13}}>Date Uploaded: {item.data.date}</p> */}
                          <p style={{fontSize:13}}>Time Uploaded: {item.data.time}</p>
                          <a href={item.data.url}>Link to File</a>
                          </Col>

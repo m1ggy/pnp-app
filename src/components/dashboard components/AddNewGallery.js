@@ -16,6 +16,7 @@ export default function AddNewGallery() {
 
 
     const db = firestore.collection('galleries')
+
     useEffect(()=>{
         setLoading(true)
         if (!images) {
@@ -56,11 +57,15 @@ export default function AddNewGallery() {
     }
 
     function pushDataStorage(e){
+
         setLoading(true)
-            e.preventDefault()
+        e.preventDefault()
         const tempID = uniqid()
         const date = new Date()
         let tempArray = []
+
+        const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+
         Array.from(images).forEach(image=>{
                 tempArray.push(image.name)
             storageRef.child(`galleries/${tempID}/${image.name}`).put(image).then(()=>{
@@ -77,6 +82,7 @@ export default function AddNewGallery() {
             author: currentUser.email,
             dateUploaded: date.toDateString(),
             timeUploaded: date.toTimeString(),
+            timestamp,
             names:tempArray
         },{merge:true})
 

@@ -4,7 +4,7 @@ import NavBarMain from '../components/NavBarMain'
 import FooterMain from '../components/FooterMain'
 import { firestore } from '../firebase/firebase'
 import { useEffect, useState } from 'react'
-
+import DOMPurify from 'dompurify'
 
 export default function PostEntry() {
 
@@ -75,9 +75,9 @@ export default function PostEntry() {
                         </Row>
 
                         <Row className="w-100 p-5">
-                            <p style={{textAlign:'justify'}} className="m-auto">
-                                {item.content}
-                            </p>
+                           
+                               <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(item.content)}}></div>
+                          
                         </Row>
                         <Row className="w-100">
                             <p style={{textAlign:'justify'}} className="m-auto">
