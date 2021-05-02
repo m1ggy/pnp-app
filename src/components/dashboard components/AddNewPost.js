@@ -11,7 +11,6 @@ export default function AddNewPost() {
   
     const titleRef = useRef()
     const subtitleRef = useRef()
-    const contentRef = useRef()
     const publishRef = useRef()
 
     const [image, setImage] = useState() 
@@ -92,7 +91,7 @@ export default function AddNewPost() {
                     publishDate:date.toDateString()
                 },{merge:true})
             }
-       
+       setContent(RichTextEditor.createEmptyValue())
     }
 
     async function pushData(e){

@@ -4,6 +4,8 @@ import { firestore, storage } from '../../firebase/firebase'
 import { useAuth } from '../../contexts/AuthContext'
 import Select from 'react-select'
 import '../../styles/drafts.css'
+import RichTextEditor from 'react-rte';
+import EditRTE from './EditRTE'
 
 export default function Drafts() {
 
@@ -15,8 +17,10 @@ export default function Drafts() {
     const [showMessageModal, setShowMessageModal] = useState(false)
     const [publishModal, setPublishModal] = useState(false)
     const [editModal, setEditModal] = useState(false)
-
+    const [content, setContent] = useState(RichTextEditor.createEmptyValue())
+    const getContent = useRef('')
     const {currentUser} = useAuth()
+    
     const types = [
         {value:'news', label:'News'},
         {value:'events',label:'Events'},
@@ -31,6 +35,26 @@ export default function Drafts() {
     const contentRef = useRef()
     const imageRef = useRef()
     const typeRef = useRef()
+
+    const toolbarConfig = {
+        // Optionally specify the groups to display (displayed in the order listed).
+        display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
+        INLINE_STYLE_BUTTONS: [
+          {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
+          {label: 'Italic', style: 'ITALIC'},
+          {label: 'Underline', style: 'UNDERLINE'}
+        ],
+        BLOCK_TYPE_DROPDOWN: [
+          {label: 'Normal', style: 'unstyled'},
+          {label: 'Heading Large', style: 'header-one'},
+          {label: 'Heading Medium', style: 'header-two'},
+          {label: 'Heading Small', style: 'header-three'}
+        ],
+        BLOCK_TYPE_BUTTONS: [
+          {label: 'Bullet', style: 'unordered-list-item'},
+          {label: 'Number', style: 'ordered-list-item'}
+        ]
+      };
 
     function RenderPosts (){
         if(posts === null|| typeof posts === undefined) return null;
@@ -61,7 +85,7 @@ export default function Drafts() {
                             <Col className="m-auto">
                                 <Row>
                                     <Button variant="primary" size="sm" className="m-3 w-75" onClick={()=>{setPublishModal(true);setSelectedItem(post)}}>Publish</Button>
-                                    <Button variant="info" size="sm" className="m-3 w-75" onClick={()=>{setEditModal(true);setSelectedItem(post)}}>Edit</Button>                 
+                                    <Button variant="info" size="sm" className="m-3 w-75" onClick={()=>{setEditModal(true);setSelectedItem(post);setContent(RichTextEditor.createValueFromString(post.content,'html'))}}>Edit</Button>                 
                                     <Button variant="danger" size="sm" className="m-3 w-75" onClick={()=>{setShowModal(true);setSelectedItem(post)}}>Delete</Button>
                                 </Row>                                                                           
                             </Col>             
@@ -102,6 +126,15 @@ export default function Drafts() {
         
         setLoading(false)          
     }
+
+    function setContentToRef(value){
+            getContent.current = value
+            console.log(getContent.current.toString('html'))
+    }
+
+    useEffect(()=>{
+        console.log(getContent.current)
+    }, [getContent.current])
 
     const handleCloseModal = () =>{
         setShowModal(false)
@@ -149,11 +182,11 @@ export default function Drafts() {
 
     async function editPost(e){
         e.preventDefault()
-
+        console.log(getContent.current)
         await db.doc(selectedItem.id).set({
             title:titleRef.current,
             subtitle:subtitleRef.current,
-            content:contentRef.current,
+            content:getContent.current.toString('html')
         },{merge:true}).then(()=>{
             setMessage({type:'primary', msg:'Successfully updated post.'})
         })
@@ -213,7 +246,7 @@ export default function Drafts() {
 
             titleRef.current = selectedItem.title
             subtitleRef.current = selectedItem.subtitle
-            contentRef.current = selectedItem.content
+            console.log(getContent.current)
 
         return(
             <Modal 
@@ -269,16 +302,8 @@ export default function Drafts() {
                     <Form.Label>
                         <b>Enter Content </b>
                     </Form.Label>
+                    <EditRTE post={selectedItem} sendData={setContentToRef}/>
                     
-                    <Form.Control 
-                    as="textarea" 
-                    required 
-                    rows={25}
-                    style={{resize:'none', width:"100%"}} 
-                    className="border" 
-                    defaultValue={contentRef.current} 
-                    onChange={(event)=>{contentRef.current = event.target.value}}
-                    />
                 </Form.Group>
 
                 <Form.Group>
