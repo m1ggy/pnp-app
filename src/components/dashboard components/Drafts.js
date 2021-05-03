@@ -36,26 +36,6 @@ export default function Drafts() {
     const imageRef = useRef()
     const typeRef = useRef()
 
-    const toolbarConfig = {
-        // Optionally specify the groups to display (displayed in the order listed).
-        display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
-        INLINE_STYLE_BUTTONS: [
-          {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
-          {label: 'Italic', style: 'ITALIC'},
-          {label: 'Underline', style: 'UNDERLINE'}
-        ],
-        BLOCK_TYPE_DROPDOWN: [
-          {label: 'Normal', style: 'unstyled'},
-          {label: 'Heading Large', style: 'header-one'},
-          {label: 'Heading Medium', style: 'header-two'},
-          {label: 'Heading Small', style: 'header-three'}
-        ],
-        BLOCK_TYPE_BUTTONS: [
-          {label: 'Bullet', style: 'unordered-list-item'},
-          {label: 'Number', style: 'ordered-list-item'}
-        ]
-      };
-
     function RenderPosts (){
         if(posts === null|| typeof posts === undefined) return null;
 
@@ -129,12 +109,7 @@ export default function Drafts() {
 
     function setContentToRef(value){
             getContent.current = value
-            console.log(getContent.current.toString('html'))
     }
-
-    useEffect(()=>{
-        console.log(getContent.current)
-    }, [getContent.current])
 
     const handleCloseModal = () =>{
         setShowModal(false)
@@ -226,7 +201,7 @@ export default function Drafts() {
         setShowMessageModal(true)
         titleRef.current = undefined
         subtitleRef.current = undefined
-        contentRef.current = undefined
+        getContent.current = undefined
         imageRef.current = undefined
         typeRef.current = undefined
         e.target.reset()

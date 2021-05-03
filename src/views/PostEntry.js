@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { Jumbotron, Col, Row, Breadcrumb,Spinner, Container, Image } from 'react-bootstrap'
+import { Jumbotron, Col, Row, Breadcrumb, Spinner, Container, Image } from 'react-bootstrap'
 import NavBarMain from '../components/NavBarMain'
 import FooterMain from '../components/FooterMain'
 import { firestore } from '../firebase/firebase'
@@ -17,6 +17,8 @@ export default function PostEntry() {
 
 
     useEffect(()=>{
+        
+        window.gtag('config', 'G-2MRNV52H3Q', { 'page_title': document.title, page_path: window.location.pathname + window.location.search })
 
         async function getData(){
             setLoading(true)
@@ -59,22 +61,38 @@ export default function PostEntry() {
                     <Row style={{display:'flex', justifyContent:'center'}} key={item.id} className="w-100">
 
                     <Row className="w-100">
+                    <Breadcrumb>
+                    <Breadcrumb.Item>
+                        <Link to={`/news-and-events`}>News and Events</Link>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>
+                        <Link to={`/news-and-events/${item.type.value}`}>{item.type.label}</Link>  
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item active>
+                     {item.title}
+                    </Breadcrumb.Item>
+                    </Breadcrumb>
+                    </Row>
+
+                        <Row className="w-100">
+
                         <h2>
                             {item.title}
                         </h2>
                         </Row>
-
-                        <Row className="w-100">
-                         <Image src={item.url} height="500px" className="m-auto"/>
-                        </Row>
-
                         <Row className="w-100">
                             <p style={{textAlign:'justify'}} className="m-auto">
                                 {item.subtitle}
                             </p>
                         </Row>
 
-                        <Row className="w-100 p-5">
+
+                        <Row className="w-100">
+                         <Image src={item.url} height="500px" className="m-auto"/>
+                        </Row>
+
+                       
+                        <Row className="w-100 pr-5 pl-5">
                            
                                <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(item.content)}}></div>
                           

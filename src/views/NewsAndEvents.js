@@ -158,7 +158,7 @@ function NewsAndEvents (){
             </Row>
 
             <Row>
-                <Jumbotron className="w-100 mt-2">
+                <Jumbotron className="w-100">
                     <h1 className="title">News and Events</h1>
                 </Jumbotron>
             </Row>

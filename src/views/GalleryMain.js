@@ -62,7 +62,7 @@ function GalleryMain (){
 
             <Row className="w-100">
             <Container style={{marginTop:100}}>
-                <NavBarMain className="mt-2 w-100 m-auto"/>
+                <NavBarMain className="w-100 m-auto"/>
                 </Container>
             </Row>
 
@@ -75,7 +75,7 @@ function GalleryMain (){
                 </Row>
 
                 <Row className="w-100">
-                    <Jumbotron className="mt-2 w-100" style={{display:'flex', justifyContent:'center'}}>
+                    <Jumbotron className="w-100" style={{display:'flex', justifyContent:'center'}}>
                     <Row className="w-100" style={{display:'flex', justifyContent:'center'}}>
                     {loading?<Spinner animation="border"/>:null}  
                         {gallery

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import {Jumbotron, Row, Col, Button, Spinner, Container, Image, Modal, ButtonGroup, Form} from 'react-bootstrap'
 import { useAuth } from '../../contexts/AuthContext'
 import { firestore, storage} from '../../firebase/firebase'
-
+import EditRTE from './EditRTE'
+import RichTextEditor from 'react-rte';
 
 export default function ManagePost() {
 
@@ -23,6 +24,7 @@ export default function ManagePost() {
     const subtitleRef = useRef()
     const contentRef = useRef()
     const imageRef = useRef()
+    const getContent = useRef('')
 
 
     function RenderPosts () {
@@ -64,6 +66,10 @@ export default function ManagePost() {
             })
         )
     }
+
+    function setContentToRef(value){
+        getContent.current = value
+}
    
 
     useEffect(()=>{
@@ -108,19 +114,23 @@ export default function ManagePost() {
 
     async function editPost(e){
         e.preventDefault()
-        console.log(titleRef.current)
-        console.log(subtitleRef.current)
-        console.log(contentRef.current)
-        console.log(imageRef.current)
-        console.log(selectedItem.id)
 
+
+      
         await db.doc(selectedItem.id).set({
             title:titleRef.current,
             subtitle:subtitleRef.current,
-            content:contentRef.current,
         },{merge:true}).then(()=>{
             setMessage({type:'primary', msg:'Successfully updated post.'})
         })
+
+        if(typeof getContent.current != 'undefined'){
+            await db.doc(selectedItem.id).set({
+                content:getContent.current.toString('html')
+            },{merge:true}).then(()=>{
+                setMessage({type:'primary', msg:'Successfully updated post.'})
+            })
+        }
 
         if(imageRef.current != null){
             await storageRef.child(selectedItem.id).delete().then(()=>{
@@ -149,7 +159,7 @@ export default function ManagePost() {
         setShowMessageModal(true)
         titleRef.current = undefined
         subtitleRef.current = undefined
-        contentRef.current = undefined
+        getContent.current = undefined
         imageRef.current = undefined
         e.target.reset()
     }
@@ -225,15 +235,7 @@ export default function ManagePost() {
                         <b>Enter Content </b>
                     </Form.Label>
                     
-                    <Form.Control 
-                    as="textarea" 
-                    required 
-                    rows={25}
-                    style={{resize:'none', width:"100%"}} 
-                    className="border" 
-                    defaultValue={contentRef.current} 
-                    onChange={(event)=>{contentRef.current = event.target.value}}
-                    />
+                    <EditRTE post={selectedItem} sendData={setContentToRef}/>
                 </Form.Group>
 
                
