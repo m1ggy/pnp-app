@@ -1,13 +1,12 @@
-import React from 'react'
-import '../styles/map.css'
-import NavBarMain from '../components/NavBarMain'
-import FooterMain from '../components/FooterMain'
-import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
-import 'leaflet/dist/leaflet.css'
+import React from 'react';
+import '../styles/map.css';
+import NavBarMain from '../components/NavBarMain';
+import FooterMain from '../components/FooterMain';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Jumbotron, Container } from 'react-bootstrap'
+import { Jumbotron, Container } from 'react-bootstrap';
 delete L.Icon.Default.prototype._getIconUrl;
-
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -15,35 +14,37 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-function Maps (){
-    return(
+function Maps() {
+  return (
     <>
-    <NavBarMain className="mt-2 w-100 m-auto"/>
+      <NavBarMain className='mt-2 w-100 m-auto' />
 
-        <Container style={{marginTop:100}}>
-        </Container>
-        
-        <Jumbotron className="mt-2" style={{marginTop:100}}>
-         <h1 className="title">Maps</h1>
-        </Jumbotron>
-            
-        
-        
-        <div id="mapid" style={{display:'flex'}}>
-            <MapContainer center={[14.1407, 121.4692]} zoom={13} scrollWheelZoom={false} style={{ height: '500px', width: '800px', margin:'auto' }}>
-                <TileLayer
-                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker position={[14.1407, 121.4692]}>
-                    <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
-                    </Popup>
-                </Marker>
+      <Container style={{ marginTop: 100 }}></Container>
+
+      <Jumbotron className='mt-2' style={{ marginTop: 100 }}>
+        <h1 className='title'>Maps</h1>
+      </Jumbotron>
+
+      <div id='mapid' style={{ display: 'flex' }}>
+        <MapContainer
+          center={[14.1407, 121.4692]}
+          zoom={13}
+          scrollWheelZoom={false}
+          style={{ height: '500px', width: '800px', margin: 'auto' }}
+        >
+          <TileLayer
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          />
+          <Marker position={[14.1407, 121.4692]}>
+            <Popup>
+              A pretty CSS3 popup. <br /> Easily customizable.
+            </Popup>
+          </Marker>
         </MapContainer>
-        </div>
-        <FooterMain/>
+      </div>
+      <FooterMain />
     </>
-    )
+  );
 }
-export default Maps
+export default Maps;

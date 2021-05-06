@@ -1,54 +1,98 @@
-import React, { useEffect } from 'react'
-import { Jumbotron, Col, Row, Spinner } from 'react-bootstrap'
-import { BetaAnalyticsDataClient } from '@google-analytics/data'
-
+import React, { useEffect, useState } from 'react';
+import { Jumbotron, Col, Row, Spinner } from 'react-bootstrap';
+import { ReactGA } from '../../firebase/firebase';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function DashboardMain() {
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const { checkSignedIn, renderButton, analyticsUser } = useAuth();
+  const [data, setData] = useState(null);
 
-    const propertyId = 'G-2MRNV52H3Q'
-    const analyticsDataClient = new BetaAnalyticsDataClient();
+  const updateSignin = (signedIn) => {
+    //(3)
+    setIsSignedIn(signedIn);
+    if (!signedIn) {
+      renderButton();
+    }
+  };
 
-    useEffect(()=>{
+  const init = () => {
+    //(2)
+    checkSignedIn()
+      .then((signedIn) => {
+        updateSignin(signedIn);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-        async function runReport() {
-            const [response] = await analyticsDataClient.runReport({
-              property: `properties/${propertyId}`,
-              dateRanges: [
-                {
-                  startDate: '2020-03-31',
-                  endDate: 'today',
-                },
-              ],
-              dimensions: [
-                {
-                  name: 'country',
-                },
-              ],
-              metrics: [
-                {
-                  name: 'activeUsers',
-                },
-              ],
-            });
-          
-            console.log('Report result:');
-            response.rows.forEach(row => {
-              console.log(row.dimensionValues[0], row.metricValues[0]);
-            });
-          }
-          
-          runReport();
+  useEffect(() => {
+    window.gapi.load('auth2', init); //(1)
+  });
 
-    }, [])
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
-    return (
-        <>
-        <Row>
-           <Jumbotron className="w-100"><h1>Dashboard</h1></Jumbotron>  
-        </Row>
-        <Row>
+  useEffect(() => {
+    const queryReport = () => {
+      //(1)
+      window.gapi.client
+        .request({
+          path: '/v4/reports:batchGet',
+          root: 'https://analyticsreporting.googleapis.com/',
+          method: 'POST',
+          body: {
+            reportRequests: [
+              {
+                viewId: '242320855',
+                dateRanges: [
+                  {
+                    startDate: '30daysAgo',
+                    endDate: 'today',
+                  },
+                ],
+                metrics: [
+                  {
+                    expression: 'ga:pageviews',
+                  },
+                ],
+              },
+            ],
+          },
+        })
+        .then(displayResults, console.error.bind(console));
+    };
 
-        </Row>
-        </>
-    )
+    const displayResults = (response) => {
+      //(2)
+      console.log(response);
+      //  let e = await response.result.reports[0].data.rows[0].metrics[0].values[0]
+      //  console.log(e)
+      //  setData(results);
+    };
+
+    queryReport();
+  }, []);
+
+  return (
+    <>
+      <Row className='w-100'>
+        <Jumbotron className='w-100'>
+          <h1>Dashboard</h1>
+        </Jumbotron>
+      </Row>
+      <Row className='w-100'>
+        <Jumbotron
+          className='w-100'
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
+          {!isSignedIn ? <div id='signin-button'></div> : <div>Signed In</div>}
+
+          {data && <div>{data}</div>}
+        </Jumbotron>
+      </Row>
+    </>
+  );
 }

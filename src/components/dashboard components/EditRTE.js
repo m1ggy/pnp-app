@@ -1,22 +1,21 @@
-import React, { useState } from 'react'
-import RichTextEditor from 'react-rte'
+import React, { useState } from 'react';
+import RichTextEditor from 'react-rte';
 
-export default function EditRTE({post, sendData}) {
+export default function EditRTE({ post, sendData }) {
+  const [content, setContent] = useState(
+    RichTextEditor.createValueFromString(post.content, 'html')
+  );
 
-    const [content, setContent] = useState(RichTextEditor.createValueFromString(post.content, 'html'))
+  function onChangeContent(value) {
+    setContent(value);
+    sendData(value);
+  }
 
-
-      function onChangeContent(value){      
-        setContent(value)
-        sendData(value)
-    }
-
-
-    return (
-        <>        
-        <div >  
-            <RichTextEditor value={content} onChange={onChangeContent}/>   
-          </div>      
-        </>
-    )
+  return (
+    <>
+      <div>
+        <RichTextEditor value={content} onChange={onChangeContent} />
+      </div>
+    </>
+  );
 }

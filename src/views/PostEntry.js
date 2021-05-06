@@ -1,139 +1,138 @@
-import { useParams, Link } from 'react-router-dom'
-import { Jumbotron, Col, Row, Breadcrumb, Spinner, Container, Image } from 'react-bootstrap'
-import NavBarMain from '../components/NavBarMain'
-import FooterMain from '../components/FooterMain'
-import { firestore } from '../firebase/firebase'
-import { useEffect, useState } from 'react'
-import DOMPurify from 'dompurify'
+import { useParams, Link } from 'react-router-dom';
+import {
+  Jumbotron,
+  Col,
+  Row,
+  Breadcrumb,
+  Spinner,
+  Container,
+  Image,
+} from 'react-bootstrap';
+import NavBarMain from '../components/NavBarMain';
+import FooterMain from '../components/FooterMain';
+import { ReactGA, firestore } from '../firebase/firebase';
+import { useEffect, useState } from 'react';
+import DOMPurify from 'dompurify';
 
 export default function PostEntry() {
+  const { id } = useParams();
 
-    const {id} = useParams()
+  const db = firestore.collection('posts').doc(id);
 
-    const db = firestore.collection('posts').doc(id)
+  const [loading, setLoading] = useState(false);
+  const [post, setPost] = useState([]);
 
-    const [loading, setLoading] = useState(false)
-    const [post, setPost] = useState([])
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname, post.title);
 
-
-    useEffect(()=>{
-        
-        window.gtag('config', 'G-2MRNV52H3Q', { 'page_title': document.title, page_path: window.location.pathname + window.location.search })
-
-        async function getData(){
-            setLoading(true)
-            let temp = []
-            await db.get().then((q)=>{
-
-                if(q.exists){
-                    temp.push(q.data())
-                }
-                setPost(temp)
-        })
-        setLoading(false)
+    async function getData() {
+      setLoading(true);
+      let temp = [];
+      await db.get().then((q) => {
+        if (q.exists) {
+          temp.push(q.data());
         }
-
-        getData()
-        
-    },[])
-
-    function RenderPost(){
-
-        if(post === null||typeof post === 'undefined'){
-            return null;
-        }
-
-        if(post){
-            if(post.length === 0){
-                return(
-                    <div style={{display:'flex', justifyContent:'center'}}>
-                        <p>
-                            Cannot find post.
-                        </p>
-                    </div>
-                )
-            }
-        }
-
-        return(
-            post.map((item)=>{
-                return(
-                    <Row style={{display:'flex', justifyContent:'center'}} key={item.id} className="w-100">
-
-                    <Row className="w-100">
-                    <Breadcrumb>
-                    <Breadcrumb.Item>
-                        <Link to={`/news-and-events`}>News and Events</Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        <Link to={`/news-and-events/${item.type.value}`}>{item.type.label}</Link>  
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item active>
-                     {item.title}
-                    </Breadcrumb.Item>
-                    </Breadcrumb>
-                    </Row>
-
-                        <Row className="w-100">
-
-                        <h2>
-                            {item.title}
-                        </h2>
-                        </Row>
-                        <Row className="w-100">
-                            <p style={{textAlign:'justify'}} className="m-auto">
-                                {item.subtitle}
-                            </p>
-                        </Row>
-
-
-                        <Row className="w-100">
-                         <Image src={item.url} height="500px" className="m-auto"/>
-                        </Row>
-
-                       
-                        <Row className="w-100 pr-5 pl-5">
-                           
-                               <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(item.content)}}></div>
-                          
-                        </Row>
-                        <Row className="w-100">
-                            <p style={{textAlign:'justify'}} className="m-auto">
-                                {item.date} {item.time}
-                            </p>
-                        </Row>
-
-                    </Row>
-                )
-            })
-        )
+        setPost(temp);
+      });
+      setLoading(false);
     }
 
-    return (
-              <>
-        <Col>
-        <Row className="w-100">
-            <Container style={{marginTop:100}}>
-                <NavBarMain className="mt-2 w-100 m-auto"/>
-                </Container>
-            </Row>
+    getData();
+  }, []);
 
-            <Row>
-                                     
-                                    
-                <Row className="w-100">
-                    <Jumbotron className="mt-2 w-100" style={{display:'flex', justifyContent:'center'}}>
-                    <Row className="w-100" style={{display:"flex", justifyContent:'center'}}>
-                        {loading?<Spinner animation="border"/>:<RenderPost/>} 
-                       
-                    </Row>
-                    </Jumbotron>                    
-                </Row>
+  function RenderPost() {
+    if (post === null || typeof post === 'undefined') {
+      return null;
+    }
 
-            </Row>
-          
-                <FooterMain/>   
-        </Col>   
-        </>
-    )
+    if (post) {
+      if (post.length === 0) {
+        return (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <p>Cannot find post.</p>
+          </div>
+        );
+      }
+    }
+
+    return post.map((item) => {
+      return (
+        <Row
+          style={{ display: 'flex', justifyContent: 'center' }}
+          key={item.id}
+          className='w-100'
+        >
+          <Row className='w-100'>
+            <Breadcrumb>
+              <Breadcrumb.Item>
+                <Link to={`/news-and-events`}>News and Events</Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Link to={`/news-and-events/${item.type.value}`}>
+                  {item.type.label}
+                </Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item active>{item.title}</Breadcrumb.Item>
+            </Breadcrumb>
+          </Row>
+
+          <Row className='w-100'>
+            <h2>{item.title}</h2>
+          </Row>
+          <Row className='w-100'>
+            <p style={{ textAlign: 'justify' }} className='m-auto'>
+              {item.subtitle}
+            </p>
+          </Row>
+
+          <Row className='w-100'>
+            <Image src={item.url} height='500px' className='m-auto' />
+          </Row>
+
+          <Row className='w-100 pr-5 pl-5'>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(item.content),
+              }}
+            ></div>
+          </Row>
+          <Row className='w-100'>
+            <p style={{ textAlign: 'justify' }} className='m-auto'>
+              {item.date} {item.time}
+            </p>
+          </Row>
+        </Row>
+      );
+    });
+  }
+
+  return (
+    <>
+      <Col>
+        <Row className='w-100'>
+          <Container style={{ marginTop: 100 }}>
+            <NavBarMain className='mt-2 w-100 m-auto' />
+          </Container>
+        </Row>
+
+        <Row>
+          <Row className='w-100'>
+            <Jumbotron
+              className='mt-2 w-100'
+              style={{ display: 'flex', justifyContent: 'center' }}
+            >
+              <Row
+                className='w-100'
+                style={{ display: 'flex', justifyContent: 'center' }}
+              >
+                {loading ? <Spinner animation='border' /> : <RenderPost />}
+              </Row>
+            </Jumbotron>
+          </Row>
+        </Row>
+
+        <FooterMain />
+      </Col>
+    </>
+  );
 }
