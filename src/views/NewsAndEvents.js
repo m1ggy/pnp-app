@@ -29,21 +29,25 @@ function NewsAndEvents() {
     function getData() {
       let tempArray = [];
       setLoading(true);
-      db.get().then((q) => {
-        if (q.empty) {
-          return setPosts([]);
-        }
+      db.orderBy('timestamp', 'desc')
+        .get()
+        .then((q) => {
+          if (q.empty) {
+            return setPosts([]);
+          }
 
-        q.forEach((doc) => {
-          tempArray.push(doc.data());
+          q.forEach((doc) => {
+            tempArray.push(doc.data());
+          });
+
+          console.log(tempArray);
+
+          let filtered = tempArray.filter((item) => {
+            return item.published === true;
+          });
+
+          setPosts(filtered);
         });
-
-        let filtered = tempArray.filter((item) => {
-          return item.published === true;
-        });
-
-        setPosts(filtered);
-      });
       setLoading(false);
     }
 
@@ -66,7 +70,7 @@ function NewsAndEvents() {
 
     return types.map((type, index) => {
       return (
-        <Row key={type.value} className='w-100 border p-3'>
+        <Row key={type.value} className='w-100 border mt-5'>
           <Col lg={10} className='w-100 border'>
             <Row lg={4} className='w-100'>
               <h3
@@ -79,13 +83,13 @@ function NewsAndEvents() {
               </h3>
             </Row>
 
-            <Row className='w-100'>
+            <Row style={{ width: '100%' }}>
               <RenderPosts type={type} />
             </Row>
           </Col>
 
-          <Col className='w-100 border'>
-            <Link> View All</Link>
+          <Col className='w-100 m-auto'>
+            <Link to={`/news-and-events/${type.value}`}> View All</Link>
           </Col>
         </Row>
       );
@@ -109,30 +113,32 @@ function NewsAndEvents() {
     let filtered = posts.filter((post) => {
       return post.type.value === type.value;
     });
-    return filtered.map((post, index) => {
+    return filtered.map((post) => {
       return (
-        <Col md={6} lg={4} xs={12} key={post.id} className='border'>
-          {index === 0 ? (
-            <div>
-              <Image src={post.url} width='100%' height='100%' />
-              <div id='postDesc'>
-                <Row lg={12} className='w-100'>
-                  <p style={{ color: 'white' }}>{post.title}</p>
-                </Row>
-                <Row lg={12} className='w-100'>
-                  <p style={{ color: 'white', fontSize: 10 }}>
-                    {post.subtitle}
-                  </p>
-                </Row>
-              </div>
+        <Col md={6} lg={4} xs={12} key={post.id}>
+          <Link to={`/news-and-events/${post.id}`}>
+            <Image src={post.url} style={{ width: '100%' }} />
+            <div id='postDesc'>
+              <Row
+                lg={12}
+                style={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <p style={{ color: 'white', fontSize: 15 }}>{post.title}</p>
+              </Row>
+              <Row
+                lg={12}
+                style={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <p style={{ color: 'white', fontSize: 9 }}>{post.date}</p>
+              </Row>
+              <Row
+                lg={12}
+                style={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <p style={{ color: 'white', fontSize: 10 }}>{post.subtitle}</p>
+              </Row>
             </div>
-          ) : null}
-
-          {index === 1 ? <p>{post.title}</p> : null}
-
-          {index === 2 ? <p>{post.title}</p> : null}
-
-          {index === 4 ? <p>{post.title}</p> : null}
+          </Link>
         </Col>
       );
     });

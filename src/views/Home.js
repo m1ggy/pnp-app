@@ -13,7 +13,7 @@ import {
   Alert,
 } from 'react-bootstrap';
 import { firestore } from '../firebase/firebase';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -23,7 +23,6 @@ function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
   const [pageNumbers, setPageNumbers] = useState();
-  const { url } = useRouteMatch();
 
   useEffect(() => {
     window.gtag('config', 'G-2MRNV52H3Q', {
@@ -36,6 +35,7 @@ function Home() {
       setLoading(true);
       await db
         .where('published', '==', true)
+        .orderBy('timestamp', 'desc')
         .get()
         .then((querySnapshot) => {
           if (querySnapshot.empty) {
