@@ -10,13 +10,14 @@ import {
   Spinner,
   Button,
 } from 'react-bootstrap';
-import { firestore } from '../firebase/firebase';
+import { firestore, firebase } from '../firebase/firebase';
 
 function Downloads() {
   const [downloads, setDownloads] = useState();
   const [loading, setLoading] = useState();
 
   const db = firestore.collection('downloads');
+  const analytics = firestore.collection('analytics');
 
   function RenderDownloads() {
     let types = [
@@ -41,6 +42,25 @@ function Downloads() {
     });
   }
 
+  async function sendData(item) {
+    const date = new Date();
+    const dateString = date.toDateString();
+    await analytics
+      .doc('download')
+      .collection(item.data.id)
+      .doc(dateString)
+      .set(
+        {
+          count: firebase.firestore.FieldValue.increment(1),
+          date,
+        },
+        { merge: true }
+      )
+      .then(() => {
+        console.log('added pageview');
+      });
+  }
+
   function RenderEachDownload({ data, label }) {
     if (data == null || typeof data == undefined) {
       return <p>No Items inside</p>;
@@ -58,7 +78,13 @@ function Downloads() {
               <p style={{ fontSize: 13 }}>{item.data.size} MB</p>
             </Col>
             <Col lg={2}>
-              <Button variant='primary' href={item.data.url}>
+              <Button
+                variant='primary'
+                href={item.data.url}
+                onClick={() => {
+                  sendData(item);
+                }}
+              >
                 Download
               </Button>
             </Col>
@@ -70,6 +96,28 @@ function Downloads() {
 
   useEffect(() => {
     setLoading(true);
+
+    async function pageView() {
+      const date = new Date();
+      const dateString = date.toDateString();
+
+      analytics
+        .doc('pageview')
+        .collection('downloads')
+        .doc(dateString)
+        .set(
+          {
+            count: firebase.firestore.FieldValue.increment(1),
+            date,
+          },
+          { merge: true }
+        )
+        .then(() => {
+          console.log('added pageview');
+        });
+    }
+
+    pageView();
 
     async function getData() {
       let tempArray = [];

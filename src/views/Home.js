@@ -12,23 +12,41 @@ import {
   Pagination,
   Alert,
 } from 'react-bootstrap';
-import { firestore } from '../firebase/firebase';
+import { firestore, firebase } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
 
 function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const db = firestore.collection('posts');
+  const analytics = firestore.collection('analytics');
   const [announcement, setAnnouncement] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
   const [pageNumbers, setPageNumbers] = useState();
 
   useEffect(() => {
-    window.gtag('config', 'G-2MRNV52H3Q', {
-      page_title: document.title,
-      page_path: window.location.pathname + window.location.search,
-    });
+    async function pageView() {
+      const date = new Date();
+      const dateString = date.toDateString();
+
+      analytics
+        .doc('pageview')
+        .collection('home')
+        .doc(dateString)
+        .set(
+          {
+            count: firebase.firestore.FieldValue.increment(1),
+            date,
+          },
+          { merge: true }
+        )
+        .then(() => {
+          console.log('added pageview');
+        });
+    }
+
+    pageView();
 
     async function getData() {
       let tempArray = [];

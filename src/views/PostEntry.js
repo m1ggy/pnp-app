@@ -10,20 +10,39 @@ import {
 } from 'react-bootstrap';
 import NavBarMain from '../components/NavBarMain';
 import FooterMain from '../components/FooterMain';
-import { ReactGA, firestore } from '../firebase/firebase';
+import { firestore, firebase } from '../firebase/firebase';
 import { useEffect, useState } from 'react';
 import DOMPurify from 'dompurify';
+import uniqid from 'uniqid';
 
 export default function PostEntry() {
-  const { id } = useParams();
-
-  const db = firestore.collection('posts').doc(id);
-
   const [loading, setLoading] = useState(false);
   const [post, setPost] = useState([]);
+  const { id } = useParams();
 
   useEffect(() => {
-    ReactGA.pageview(window.location.pathname, post.title);
+    const db = firestore.collection('posts').doc(id);
+    const analytics = firestore.collection('analytics');
+
+    function pageView(postID) {
+      const date = new Date();
+      const dateString = date.toDateString();
+
+      analytics
+        .doc('pageview')
+        .collection(postID)
+        .doc(dateString)
+        .set(
+          {
+            count: firebase.firestore.FieldValue.increment(1),
+            date,
+          },
+          { merge: true }
+        )
+        .then(() => {
+          console.log('added pageview');
+        });
+    }
 
     async function getData() {
       setLoading(true);
@@ -32,6 +51,9 @@ export default function PostEntry() {
         if (q.exists) {
           temp.push(q.data());
         }
+
+        pageView(id);
+
         setPost(temp);
       });
       setLoading(false);

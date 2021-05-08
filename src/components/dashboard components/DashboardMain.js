@@ -1,80 +1,75 @@
 import React, { useEffect, useState } from 'react';
 import { Jumbotron, Col, Row, Spinner } from 'react-bootstrap';
-import { ReactGA } from '../../firebase/firebase';
-import { useAuth } from '../../contexts/AuthContext';
+import { firestore, firebase } from '../../firebase/firebase';
 
 export default function DashboardMain() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const { checkSignedIn, renderButton, analyticsUser } = useAuth();
   const [data, setData] = useState(null);
+  const [chartValues, setChartValues] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [dates, setDates] = useState([]);
+  const db = firestore.collection('analytics');
+  const [selectValues, setSelectValues] = useState([]);
 
-  const updateSignin = (signedIn) => {
-    //(3)
-    setIsSignedIn(signedIn);
-    if (!signedIn) {
-      renderButton();
-    }
-  };
+  useEffect(() => {
+    async function getData() {
+      setLoading(true);
 
-  const init = () => {
-    //(2)
-    checkSignedIn()
-      .then((signedIn) => {
-        updateSignin(signedIn);
-      })
-      .catch((error) => {
-        console.error(error);
+      let now = new Date();
+      let sevendaysago = new Date();
+
+      sevendaysago.setDate(sevendaysago.getDate() - 6);
+
+      let temp = [];
+
+      for (let d = sevendaysago; d <= now; d.setDate(d.getDate() + 1)) {
+        temp.push(new Date(d));
+      }
+      setDates(temp);
+      console.log(temp);
+
+      let tempData = [];
+      await db.get().then((q) => {
+        if (q.empty) {
+          return setData([]);
+        }
+
+        q.forEach((doc) => {
+          tempData.push({ id: doc.id, data: doc.data() });
+        });
+        console.log(tempData);
+
+        setData(tempData);
+
+        db.doc('pageview')
+          .collection('home')
+          .get()
+          .then((q) => {
+            if (q.empty) {
+              console.log('empty');
+            }
+
+            q.forEach((doc) => {
+              console.log(doc.data());
+            });
+          });
       });
-  };
 
-  useEffect(() => {
-    window.gapi.load('auth2', init); //(1)
-  });
-
-  useEffect(() => {
-    ReactGA.pageview(window.location.pathname);
+      setLoading(false);
+    }
+    getData();
   }, []);
 
-  useEffect(() => {
-    const queryReport = () => {
-      //(1)
-      window.gapi.client
-        .request({
-          path: '/v4/reports:batchGet',
-          root: 'https://analyticsreporting.googleapis.com/',
-          method: 'POST',
-          body: {
-            reportRequests: [
-              {
-                viewId: '242320855',
-                dateRanges: [
-                  {
-                    startDate: '30daysAgo',
-                    endDate: 'today',
-                  },
-                ],
-                metrics: [
-                  {
-                    expression: 'ga:pageviews',
-                  },
-                ],
-              },
-            ],
-          },
-        })
-        .then(displayResults, console.error.bind(console));
-    };
+  function RenderChart() {
+    if (data === null || typeof data === undefined) {
+      return null;
+    }
 
-    const displayResults = (response) => {
-      //(2)
-      console.log(response);
-      //  let e = await response.result.reports[0].data.rows[0].metrics[0].values[0]
-      //  console.log(e)
-      //  setData(results);
-    };
+    if (data.length === 0) {
+      return <p>No Data</p>;
+    }
 
-    queryReport();
-  }, []);
+    return null;
+  }
 
   return (
     <>
@@ -88,9 +83,7 @@ export default function DashboardMain() {
           className='w-100'
           style={{ display: 'flex', justifyContent: 'center' }}
         >
-          {!isSignedIn ? <div id='signin-button'></div> : <div>Signed In</div>}
-
-          {data && <div>{data}</div>}
+          {loading ? <Spinner animation='border' /> : null}
         </Jumbotron>
       </Row>
     </>
