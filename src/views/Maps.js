@@ -4,15 +4,10 @@ import NavBarMain from '../components/NavBarMain';
 import FooterMain from '../components/FooterMain';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
+import * as L from 'leaflet';
+import 'leaflet-defaulticon-compatibility';
 import { Jumbotron, Container } from 'react-bootstrap';
-delete L.Icon.Default.prototype._getIconUrl;
-
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-});
 
 function Maps() {
   return (
@@ -33,8 +28,8 @@ function Maps() {
           style={{ height: '500px', width: '800px', margin: 'auto' }}
         >
           <TileLayer
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            draggable={false}
           />
           <Marker position={[14.1407, 121.4692]}>
             <Popup>
