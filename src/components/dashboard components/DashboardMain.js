@@ -27,7 +27,8 @@ export default function DashboardMain() {
   const [selectValues, setSelectValues] = useState();
   const dateRef = useRef();
   const idRef = useRef();
-
+  const total = useRef();
+  const average = useRef();
   const [dateRange] = useState([
     { label: '1 Week Ago', value: 6 },
     { label: '1 Month Ago', value: 30.4167 },
@@ -111,11 +112,17 @@ export default function DashboardMain() {
           label: title,
           data: logs,
           fill: false,
-          borderColor: 'rgba(255, 99, 132, 1)',
+          borderColor: 'rgba(0, 0, 0, 1)',
+          backgroundColor: 'rgba(0, 0, 0, .1)',
         },
       ],
     };
-    console.log(formattedDatasets);
+    total.current = logs.reduce((a, c) => a + c);
+
+    let num = ((logs.reduce((a, c) => a + c) / logs.length) * 100) / 100;
+
+    average.current = num.toFixed(2);
+
     setChartValues(formattedDatasets);
   }
 
@@ -123,10 +130,22 @@ export default function DashboardMain() {
     if (chartValues === null || typeof chartValues === undefined) {
       return null;
     }
+    console.log(chartValues);
+
     return (
       <>
         <Container>
           <Col>
+            <Row>
+              <Col>
+                <h5 className='mt-3 mb-3'>Total Page Views: {total.current}</h5>
+              </Col>
+              <Col>
+                <h5 className='mt-3 mb-3'>
+                  Average Page Views: {average.current}
+                </h5>
+              </Col>
+            </Row>
             <Line data={chartValues} options={options} />
           </Col>
         </Container>
