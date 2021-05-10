@@ -1,74 +1,137 @@
-import React, { useEffect, useState } from 'react';
-import { Jumbotron, Col, Row, Spinner } from 'react-bootstrap';
-import { firestore, firebase } from '../../firebase/firebase';
+import React, { useEffect, useState, useRef } from 'react';
+import {
+  Jumbotron,
+  Col,
+  Row,
+  Spinner,
+  Container,
+  Form,
+  Button,
+} from 'react-bootstrap';
+import { firestore } from '../../firebase/firebase';
+import {
+  formatData,
+  formatDate,
+  formatDataCallback,
+} from '../../dashboard utils/utils';
+import { Line, Bar } from 'react-chartjs-2';
+import { useAuth } from '../../contexts/AuthContext';
+
+import Select from 'react-select';
 
 export default function DashboardMain() {
-  const [data, setData] = useState(null);
   const [chartValues, setChartValues] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dates, setDates] = useState([]);
-  const db = firestore.collection('analytics');
-  const [selectValues, setSelectValues] = useState([]);
+  const db = firestore.collection('posts');
+  const [selectValues, setSelectValues] = useState();
+  const dateRef = useRef();
+  const idRef = useRef();
+
+  const [dateRange] = useState([
+    { label: '1 Week Ago', value: 6 },
+    { label: '1 Month Ago', value: 30.4167 },
+    { label: '6 Months Ago', value: 182.5 },
+    { label: '1 Year Ago', value: 365 },
+  ]);
+
+  const options = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
+  };
+
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     async function getData() {
       setLoading(true);
 
-      let now = new Date();
-      let sevendaysago = new Date();
-
-      sevendaysago.setDate(sevendaysago.getDate() - 6);
-
-      let temp = [];
-
-      for (let d = sevendaysago; d <= now; d.setDate(d.getDate() + 1)) {
-        temp.push(new Date(d));
-      }
-      setDates(temp);
-      console.log(temp);
-
-      let tempData = [];
-      await db.get().then((q) => {
-        if (q.empty) {
-          return setData([]);
-        }
-
-        q.forEach((doc) => {
-          tempData.push({ id: doc.id, data: doc.data() });
-        });
-        console.log(tempData);
-
-        setData(tempData);
-
-        db.doc('pageview')
-          .collection('home')
-          .get()
-          .then((q) => {
-            if (q.empty) {
-              console.log('empty');
-            }
-
-            q.forEach((doc) => {
-              console.log(doc.data());
-            });
+      setDates(formatDate(dateRange[0].value));
+      dateRef.current = formatDate(dateRange[0].value);
+      console.log(dateRef);
+      db.where('author', '==', currentUser.email)
+        .get()
+        .then((q) => {
+          if (q.empty) {
+            return;
+          }
+          let temp = [];
+          q.forEach((post) => {
+            temp.push({ value: post.id, label: post.data().title });
           });
-      });
+          console.log(temp);
+          setSelectValues(temp);
+        });
 
       setLoading(false);
     }
     getData();
   }, []);
 
+  function submit(e) {
+    setChartValues(null);
+    e.preventDefault();
+    setLoading(true);
+
+    formatData(
+      idRef.current.value,
+      dateRef.current,
+      idRef.current.label,
+      formatDataCallback
+    );
+    // setChartValues(formatted);
+    setLoading(false);
+  }
+
+  function formatDataCallback(array, dates, title) {
+    let formattedDatasets = {};
+    let logs = [];
+    let temp = [];
+
+    array.forEach((log) => {
+      temp.push(log.toDate().toDateString());
+    });
+    console.log(array);
+
+    dates.forEach((date) => {
+      logs.push(temp.reduce((pre, cur) => (cur === date ? ++pre : pre), 0));
+    });
+
+    formattedDatasets = {
+      labels: dates,
+      datasets: [
+        {
+          label: title,
+          data: logs,
+          fill: false,
+          borderColor: 'rgba(255, 99, 132, 1)',
+        },
+      ],
+    };
+    console.log(formattedDatasets);
+    setChartValues(formattedDatasets);
+  }
+
   function RenderChart() {
-    if (data === null || typeof data === undefined) {
+    if (chartValues === null || typeof chartValues === undefined) {
       return null;
     }
-
-    if (data.length === 0) {
-      return <p>No Data</p>;
-    }
-
-    return null;
+    return (
+      <>
+        <Container>
+          <Col>
+            <Line data={chartValues} options={options} />
+          </Col>
+        </Container>
+      </>
+    );
   }
 
   return (
@@ -83,7 +146,59 @@ export default function DashboardMain() {
           className='w-100'
           style={{ display: 'flex', justifyContent: 'center' }}
         >
-          {loading ? <Spinner animation='border' /> : null}
+          <Col>
+            <Row className='w-100'>
+              <Container>
+                <Form onSubmit={submit}>
+                  <Row>
+                    <Col lg={6}>
+                      <Form.Group>
+                        {' '}
+                        <h3>Date Range</h3>
+                        <Select
+                          options={dateRange}
+                          defaultValue={dateRange[0]}
+                          onChange={(value) => {
+                            dateRef.current = formatDate(value.value);
+                            console.log(dateRef.current);
+                          }}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Group>
+                        <h3>Post</h3>
+                        {selectValues && (
+                          <Select
+                            options={selectValues}
+                            onChange={(value) => {
+                              idRef.current = value;
+                              console.log(idRef);
+                            }}
+                          />
+                        )}
+                      </Form.Group>
+                    </Col>
+                    <div
+                      className='m-auto'
+                      style={{ display: 'flex', justifyContent: 'center' }}
+                    >
+                      <Button
+                        type='submit'
+                        variant='primary'
+                        className='mt-3 mb-5'
+                      >
+                        View
+                      </Button>
+                    </div>
+                  </Row>
+                </Form>
+              </Container>
+            </Row>
+            <Row className='w-100'>
+              {loading ? <Spinner animation='border' /> : <RenderChart />}
+            </Row>
+          </Col>
         </Jumbotron>
       </Row>
     </>

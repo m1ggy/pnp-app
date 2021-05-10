@@ -28,16 +28,11 @@ function Home() {
   useEffect(() => {
     async function pageView() {
       const date = new Date();
-      const dateString = date.toDateString();
-
       analytics
-        .doc('pageview')
-        .collection('home')
-        .doc(dateString)
+        .doc('home')
         .set(
           {
-            count: firebase.firestore.FieldValue.increment(1),
-            date,
+            pageview: firebase.firestore.FieldValue.arrayUnion(date),
           },
           { merge: true }
         )

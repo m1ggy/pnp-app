@@ -26,16 +26,13 @@ export default function PostEntry() {
 
     function pageView(postID) {
       const date = new Date();
-      const dateString = date.toDateString();
 
       analytics
-        .doc('pageview')
-        .collection(postID)
-        .doc(dateString)
+        .doc(postID)
+
         .set(
           {
-            count: firebase.firestore.FieldValue.increment(1),
-            date,
+            pageview: firebase.firestore.FieldValue.arrayUnion(date),
           },
           { merge: true }
         )
