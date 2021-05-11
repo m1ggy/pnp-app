@@ -9,13 +9,14 @@ import {
 } from 'react-bootstrap';
 import NavBarMain from '../components/NavBarMain';
 import FooterMain from '../components/FooterMain';
-import { firestore } from '../firebase/firebase';
+import { firestore, firebase } from '../firebase/firebase';
 import { useEffect, useState } from 'react';
 import Carousel from 'react-gallery-carousel';
 import 'react-gallery-carousel/dist/index.css';
 export default function GalleryEntry() {
   const { id } = useParams();
   const db = firestore.collection('galleries');
+  const analytics = firestore.collection('analytics');
   const [images, setImages] = useState();
   const [loading, setLoading] = useState(false);
   const [carouselImages, setCarouselImages] = useState();
@@ -41,8 +42,20 @@ export default function GalleryEntry() {
 
       return;
     }
+    function sendData() {
+      const date = new Date();
+      analytics
+        .doc(id)
+        .set({
+          pageview: firebase.firestore.FieldValue.arrayUnion(date),
+        })
+        .then(() => {
+          console.log('added gallery view');
+        });
+    }
 
     getGalleries();
+    sendData();
   }, []);
 
   return (

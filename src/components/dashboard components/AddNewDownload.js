@@ -76,7 +76,7 @@ export default function AddNewDownload() {
           timestamp,
           date: date.toDateString(),
           time: date.toTimeString(),
-          name: file.name,
+          title: file.name,
           size: file.size / 1e6,
         },
         { merge: true }

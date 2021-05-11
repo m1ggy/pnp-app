@@ -3,7 +3,6 @@ const analytics = firestore.collection('analytics');
 
 export function formatData(id, dates, title, callback) {
   let arr = [];
-  console.log(id);
   analytics
     .doc(id)
     .get()

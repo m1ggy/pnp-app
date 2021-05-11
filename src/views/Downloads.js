@@ -44,20 +44,16 @@ function Downloads() {
 
   async function sendData(item) {
     const date = new Date();
-    const dateString = date.toDateString();
     await analytics
-      .doc('download')
-      .collection(item.data.id)
-      .doc(dateString)
+      .doc(item.data.id)
       .set(
         {
-          count: firebase.firestore.FieldValue.increment(1),
-          date,
+          pageview: firebase.firestore.FieldValue.arrayUnion(date),
         },
         { merge: true }
       )
       .then(() => {
-        console.log('added pageview');
+        console.log('added download count');
       });
   }
 
