@@ -67,6 +67,7 @@ function Home() {
 
       firestore
         .collection('announcements')
+        .orderBy('timestamp', 'desc')
         .get()
         .then((querySnapshot) => {
           if (querySnapshot.empty) {
