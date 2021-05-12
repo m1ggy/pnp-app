@@ -5,15 +5,11 @@ import {
   Row,
   Breadcrumb,
   Spinner,
-  Container,
   Image,
 } from 'react-bootstrap';
-import NavBarMain from '../components/NavBarMain';
-import FooterMain from '../components/FooterMain';
 import { firestore, firebase } from '../firebase/firebase';
 import { useEffect, useState } from 'react';
 import DOMPurify from 'dompurify';
-import uniqid from 'uniqid';
 
 export default function PostEntry() {
   const [loading, setLoading] = useState(false);
@@ -35,10 +31,7 @@ export default function PostEntry() {
             pageview: firebase.firestore.FieldValue.arrayUnion(date),
           },
           { merge: true }
-        )
-        .then(() => {
-          console.log('added pageview');
-        });
+        );
     }
 
     async function getData() {
@@ -57,7 +50,7 @@ export default function PostEntry() {
     }
 
     getData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function RenderPost() {
     if (post === null || typeof post === 'undefined') {

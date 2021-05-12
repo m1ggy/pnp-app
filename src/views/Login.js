@@ -61,7 +61,11 @@ function Login() {
             </Form.Group>
             <Container>
               <div className='m-auto'>
-                <Button onClick={handleSubmit} variant='primary'>
+                <Button
+                  onClick={handleSubmit}
+                  variant='primary'
+                  disabled={loading}
+                >
                   Login
                 </Button>
               </div>

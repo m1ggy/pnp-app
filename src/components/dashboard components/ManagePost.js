@@ -14,7 +14,6 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { firestore, storage } from '../../firebase/firebase';
 import EditRTE from './EditRTE';
-import RichTextEditor from 'react-rte';
 
 export default function ManagePost() {
   const [posts, setPosts] = useState([]);
@@ -110,7 +109,7 @@ export default function ManagePost() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function getData() {
     let postsArray = [];

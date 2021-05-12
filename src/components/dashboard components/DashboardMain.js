@@ -1,12 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {
-  Jumbotron,
-  Col,
-  Row,
-  Spinner,
-  Container,
-  ListGroup,
-} from 'react-bootstrap';
+import { Jumbotron, Col, Row, Spinner, ListGroup } from 'react-bootstrap';
 import { firestore } from '../../firebase/firebase';
 import { formatDate } from '../../dashboard utils/utils';
 import { useAuth } from '../../contexts/AuthContext';
@@ -14,16 +7,17 @@ import RenderChart from '../dashboard components/RenderChart';
 import RenderTopOfTheWeek from '../dashboard components/RenderTopOfTheWeek';
 
 export default function DashboardMain() {
-  const [postChart, setPostChart] = useState(undefined);
+  const [postChart, setPostChart] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const db = firestore;
   const analytics = firestore.collection('analytics');
-  const [downloadChart, setDownloadChart] = useState(undefined);
-  const [galleryChart, setGalleryChart] = useState(undefined);
+  const [downloadChart, setDownloadChart] = useState([]);
+  const [galleryChart, setGalleryChart] = useState([]);
   const dateRef = useRef();
-  const [top, setTop] = useState(undefined);
-  const [downloadTop, setDownloadTop] = useState(undefined);
-  const [galleryTop, setGalleryTop] = useState(undefined);
+  const [top, setTop] = useState([]);
+  const [downloadTop, setDownloadTop] = useState([]);
+  const [galleryTop, setGalleryTop] = useState([]);
   const [dateRange] = useState([
     { label: '1 Week Ago', value: 6 },
     { label: '1 Month Ago', value: 30.4167 },
@@ -61,7 +55,7 @@ export default function DashboardMain() {
           q.forEach((post) => {
             temp.push({ value: post.id, label: post.data().title });
           });
-          console.log(temp);
+
           getAllData(temp, formatDatasets, setPostChart, setTop);
         });
 
@@ -76,7 +70,7 @@ export default function DashboardMain() {
           q.forEach((post) => {
             temp.push({ value: post.id, label: post.data().title });
           });
-          console.log(temp);
+
           getAllData(temp, formatDatasets, setDownloadChart, setDownloadTop);
         });
 
@@ -91,14 +85,14 @@ export default function DashboardMain() {
           q.forEach((post) => {
             temp.push({ value: post.id, label: post.data().title });
           });
-          console.log(temp);
+
           getAllData(temp, formatDatasets, setGalleryChart, setGalleryTop);
         });
 
       setLoading(false);
     }
     getData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function getAllData(arrayOfIds, callback, setData, setTop) {
     let temp = [];
@@ -192,6 +186,7 @@ export default function DashboardMain() {
           <Col>
             <Row className='w-100'>
               <Col>
+                <h2>Charts</h2>
                 {loading && postChart ? (
                   <Spinner animation='border' />
                 ) : (
@@ -203,8 +198,9 @@ export default function DashboardMain() {
                 )}
               </Col>
               <Col>
+                <h2>Top this week</h2>
                 {top && (
-                  <div>
+                  <div className='mt-5'>
                     <h4 style={{ display: 'flex', justifyContent: 'center' }}>
                       Top Posts this Week
                     </h4>
@@ -232,23 +228,21 @@ export default function DashboardMain() {
                 )}
               </Col>
               <Col>
-                {downloadTop && (
-                  <div>
-                    <h4 style={{ display: 'flex', justifyContent: 'center' }}>
-                      Top Downloads this Week
-                    </h4>
-                    <ListGroup>
-                      {loading ? (
-                        <Spinner animation='border' />
-                      ) : (
-                        <RenderTopOfTheWeek
-                          data={downloadTop}
-                          header='Downloads'
-                        />
-                      )}
-                    </ListGroup>
-                  </div>
-                )}
+                <div className='mt-5'>
+                  <h4 style={{ display: 'flex', justifyContent: 'center' }}>
+                    Top Downloads this Week
+                  </h4>
+                  <ListGroup>
+                    {loading && downloadTop ? (
+                      <Spinner animation='border' />
+                    ) : (
+                      <RenderTopOfTheWeek
+                        data={downloadTop}
+                        header='Downloads'
+                      />
+                    )}
+                  </ListGroup>
+                </div>
               </Col>
             </Row>
             <Row className='w-100 mt-5'>
@@ -265,7 +259,7 @@ export default function DashboardMain() {
               </Col>
               <Col>
                 {galleryTop && (
-                  <div>
+                  <div className='mt-5'>
                     <h4 style={{ display: 'flex', justifyContent: 'center' }}>
                       Top Galleries this Week
                     </h4>

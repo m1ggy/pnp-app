@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import NavBarMain from '../components/NavBarMain';
-import FooterMain from '../components/FooterMain';
 import {
   Col,
   Container,
@@ -40,8 +38,6 @@ function NewsAndEvents() {
             tempArray.push(doc.data());
           });
 
-          console.log(tempArray);
-
           let filtered = tempArray.filter((item) => {
             return item.published === true;
           });
@@ -52,7 +48,7 @@ function NewsAndEvents() {
     }
 
     getData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function RenderTypes() {
     if (posts === null || typeof posts === 'undefined') {

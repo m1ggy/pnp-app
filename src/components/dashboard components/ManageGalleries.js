@@ -8,11 +8,9 @@ import {
   Button,
   Spinner,
   ButtonGroup,
-  Alert,
 } from 'react-bootstrap';
 import { storage, firestore } from '../../firebase/firebase';
 import { useAuth } from '../../contexts/AuthContext';
-import { set } from 'react-ga';
 
 export default function ManageGallery() {
   const [loading, setLoading] = useState(false);
@@ -49,7 +47,7 @@ export default function ManageGallery() {
 
   useEffect(() => {
     getGalleries();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function deleteImages(item) {
     const deleteTask = storageRef.child(`${item.id}`);

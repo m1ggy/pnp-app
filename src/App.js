@@ -29,7 +29,6 @@ function App() {
     <div className='App'>
       <Router>
         <AuthProvider>
-          <NavBarMain className='mt-2 w-100 m-auto' />
           <Switch>
             <PrivateRoute path='/dashboard' component={Dashboard} />
 
@@ -37,36 +36,47 @@ function App() {
               <Redirect to='/home' />
             </Route>
             <Route exact path='/home'>
+              <NavBarMain className='mt-2 w-100 m-auto' />
               <Home />
             </Route>
             <Route path='/maps'>
+              <NavBarMain className='mt-2 w-100 m-auto' />
               <Maps />
             </Route>
             <Route path='/news-and-events/news'>
+              <NavBarMain className='mt-2 w-100 m-auto' />
               <News />
             </Route>
             <Route path='/news-and-events/events'>
+              <NavBarMain className='mt-2 w-100 m-auto' />
               <Events />
             </Route>
             <Route path='/news-and-events/others'>
+              <NavBarMain className='mt-2 w-100 m-auto' />
               <Others />
             </Route>
             <Route path='/news-and-events/:id'>
+              <NavBarMain className='mt-2 w-100 m-auto' />
               <PostEntry />
             </Route>
             <Route path='/news-and-events'>
+              <NavBarMain className='mt-2 w-100 m-auto' />
               <NewsAndEvents />
             </Route>
             <Route path='/downloads'>
+              <NavBarMain className='mt-2 w-100 m-auto' />
               <Downloads />
             </Route>
             <Route path='/gallery/:id'>
+              <NavBarMain className='mt-2 w-100 m-auto' />
               <GalleryEntry />
             </Route>
             <Route path='/gallery'>
+              <NavBarMain className='mt-2 w-100 m-auto' />
               <GalleryMain />
             </Route>
             <Route path='/contact'>
+              <NavBarMain className='mt-2 w-100 m-auto' />
               <Contact />
             </Route>
             <Route path='/login'>

@@ -35,32 +35,6 @@ export default function AddNewPost() {
     { value: 'others', label: 'Others' },
   ];
 
-  const toolbarConfig = {
-    // Optionally specify the groups to display (displayed in the order listed).
-    display: [
-      'INLINE_STYLE_BUTTONS',
-      'BLOCK_TYPE_BUTTONS',
-      'LINK_BUTTONS',
-      'BLOCK_TYPE_DROPDOWN',
-      'HISTORY_BUTTONS',
-    ],
-    INLINE_STYLE_BUTTONS: [
-      { label: 'Bold', style: 'BOLD', className: 'custom-css-class' },
-      { label: 'Italic', style: 'ITALIC' },
-      { label: 'Underline', style: 'UNDERLINE' },
-    ],
-    BLOCK_TYPE_DROPDOWN: [
-      { label: 'Normal', style: 'unstyled' },
-      { label: 'Heading Large', style: 'header-one' },
-      { label: 'Heading Medium', style: 'header-two' },
-      { label: 'Heading Small', style: 'header-three' },
-    ],
-    BLOCK_TYPE_BUTTONS: [
-      { label: 'Bullet', style: 'unordered-list-item' },
-      { label: 'Number', style: 'ordered-list-item' },
-    ],
-  };
-
   const db = firestore.collection('posts');
   const storageRef = storage.ref();
 
@@ -71,7 +45,6 @@ export default function AddNewPost() {
   }
   function onChangeContent(value) {
     setContent(value);
-    console.log(value);
   }
 
   function addData(url, tempID) {
@@ -188,7 +161,6 @@ export default function AddNewPost() {
                     <RichTextEditor
                       value={content}
                       onChange={onChangeContent}
-                      toolbarConfig={toolbarConfig}
                     />
                   </Form.Group>
 

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import NavBarMain from '../components/NavBarMain';
-import FooterMain from '../components/FooterMain';
 import {
   Jumbotron,
   Row,
@@ -28,19 +26,13 @@ function Home() {
   useEffect(() => {
     async function pageView() {
       const date = new Date();
-      analytics
-        .doc('home')
-        .set(
-          {
-            pageview: firebase.firestore.FieldValue.arrayUnion(date),
-          },
-          { merge: true }
-        )
-        .then(() => {
-          console.log('added pageview');
-        });
+      analytics.doc('home').set(
+        {
+          pageview: firebase.firestore.FieldValue.arrayUnion(date),
+        },
+        { merge: true }
+      );
     }
-
     pageView();
 
     async function getData() {
@@ -75,10 +67,8 @@ function Home() {
           }
 
           querySnapshot.forEach((doc) => {
-            console.log(doc.data());
             annArray.push(doc.data());
           });
-          console.log(annArray);
           setAnnouncement(annArray);
         });
 
@@ -96,7 +86,7 @@ function Home() {
       }
       setPageNumbers(temp);
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function paginate(num) {
     setCurrentPage(num);

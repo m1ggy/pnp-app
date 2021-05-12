@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Jumbotron,
   Row,
@@ -6,9 +6,7 @@ import {
   Form,
   Button,
   Container,
-  Modal,
   Alert,
-  Spinner,
 } from 'react-bootstrap';
 import uniqid from 'uniqid';
 import { firestore, firebase } from '../../firebase/firebase';
@@ -60,7 +58,7 @@ export default function AddNewAnnouncement() {
         setDisable(false);
       });
     }
-  }, [disable]);
+  }, [disable]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleClick = (e) => setDisable(true);
 

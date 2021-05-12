@@ -1,14 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import {
-  Jumbotron,
-  Col,
-  Row,
-  Breadcrumb,
-  Spinner,
-  Container,
-} from 'react-bootstrap';
-import NavBarMain from '../components/NavBarMain';
-import FooterMain from '../components/FooterMain';
+import { Jumbotron, Col, Row, Spinner, Container } from 'react-bootstrap';
 import { firestore, firebase } from '../firebase/firebase';
 import { useEffect, useState } from 'react';
 import Carousel from 'react-gallery-carousel';
@@ -33,7 +24,7 @@ export default function GalleryEntry() {
         snapshot.data().imagesURL.forEach((url) => {
           tempArray.push({ src: url });
         });
-        console.log(tempArray);
+
         setCarouselImages(tempArray);
         setLoading(false);
 
@@ -44,19 +35,17 @@ export default function GalleryEntry() {
     }
     function sendData() {
       const date = new Date();
-      analytics
-        .doc(id)
-        .set({
+      analytics.doc(id).set(
+        {
           pageview: firebase.firestore.FieldValue.arrayUnion(date),
-        })
-        .then(() => {
-          console.log('added gallery view');
-        });
+        },
+        { merge: true }
+      );
     }
 
     getGalleries();
     sendData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -102,8 +91,6 @@ export default function GalleryEntry() {
             </Jumbotron>
           </Row>
         </Row>
-
-        <FooterMain />
       </Col>
     </>
   );

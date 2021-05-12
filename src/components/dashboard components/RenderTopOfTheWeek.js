@@ -2,11 +2,19 @@ import React from 'react';
 import { ListGroup, Row, Col } from 'react-bootstrap';
 export default function RenderTopOfTheWeek({ data, header }) {
   if (data === null || typeof data === undefined) {
-    return null;
+    return (
+      <>
+        <p>no data this week.</p>
+      </>
+    );
   }
 
   if (data.length === 0) {
-    return <p>No {header}.</p>;
+    return (
+      <>
+        <p>no data this week.</p>
+      </>
+    );
   }
 
   console.log(data);

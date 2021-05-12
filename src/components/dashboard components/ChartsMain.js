@@ -9,7 +9,7 @@ import {
   Spinner,
 } from 'react-bootstrap';
 import { formatData, formatDate } from '../../dashboard utils/utils';
-import { Line, Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import { useAuth } from '../../contexts/AuthContext';
 import Select from 'react-select';
 import { firestore } from '../../firebase/firebase';
@@ -17,7 +17,7 @@ import { firestore } from '../../firebase/firebase';
 export default function ChartsMain() {
   const [chartValues, setChartValues] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [dates, setDates] = useState([]);
+
   const db = firestore.collection('posts');
   const [selectValues, setSelectValues] = useState();
   const dateRef = useRef();
@@ -48,10 +48,8 @@ export default function ChartsMain() {
   useEffect(() => {
     async function getData() {
       setLoading(true);
-
-      setDates(formatDate(dateRange[0].value));
       dateRef.current = formatDate(dateRange[0].value);
-      console.log(dateRef);
+
       db.where('author', '==', currentUser.email)
         .get()
         .then((q) => {
@@ -62,14 +60,14 @@ export default function ChartsMain() {
           q.forEach((post) => {
             temp.push({ value: post.id, label: post.data().title });
           });
-          console.log(temp);
+
           setSelectValues(temp);
         });
 
       setLoading(false);
     }
     getData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function submit(e) {
     setChartValues(null);
@@ -94,7 +92,6 @@ export default function ChartsMain() {
     array.forEach((log) => {
       temp.push(log.toDate().toDateString());
     });
-    console.log(array);
 
     dates.forEach((date) => {
       logs.push(temp.reduce((pre, cur) => (cur === date ? ++pre : pre), 0));
@@ -125,7 +122,6 @@ export default function ChartsMain() {
     if (chartValues === null || typeof chartValues === undefined) {
       return null;
     }
-    console.log(chartValues);
 
     return (
       <>
@@ -174,7 +170,6 @@ export default function ChartsMain() {
                           defaultValue={dateRange[0]}
                           onChange={(value) => {
                             dateRef.current = formatDate(value.value);
-                            console.log(dateRef.current);
                           }}
                         />
                       </Form.Group>
@@ -182,13 +177,16 @@ export default function ChartsMain() {
                     <Col lg={6}>
                       <Form.Group>
                         <h3>Post</h3>
-                        {selectValues && (
+                        {selectValues ? (
                           <Select
                             options={selectValues}
                             onChange={(value) => {
                               idRef.current = value;
-                              console.log(idRef);
                             }}
+                          />
+                        ) : (
+                          <Select
+                            options={{ label: 'loading.....', value: null }}
                           />
                         )}
                       </Form.Group>

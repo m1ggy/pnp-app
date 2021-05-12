@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
-import NavBarMain from '../components/NavBarMain';
-import FooterMain from '../components/FooterMain';
 import {
   Jumbotron,
   Row,
@@ -31,7 +28,7 @@ function Downloads() {
 
     return types.map((type, index) => {
       let filtered = downloads.filter((item) => {
-        return item.id == type.type;
+        return item.id === type.type;
       });
       return (
         <Container key={type.type + index} className='border p-5'>
@@ -44,17 +41,12 @@ function Downloads() {
 
   async function sendData(item) {
     const date = new Date();
-    await analytics
-      .doc(item.data.id)
-      .set(
-        {
-          pageview: firebase.firestore.FieldValue.arrayUnion(date),
-        },
-        { merge: true }
-      )
-      .then(() => {
-        console.log('added download count');
-      });
+    await analytics.doc(item.data.id).set(
+      {
+        pageview: firebase.firestore.FieldValue.arrayUnion(date),
+      },
+      { merge: true }
+    );
   }
 
   function RenderEachDownload({ data, label }) {
@@ -107,10 +99,7 @@ function Downloads() {
             date,
           },
           { merge: true }
-        )
-        .then(() => {
-          console.log('added pageview');
-        });
+        );
     }
 
     pageView();
@@ -124,14 +113,14 @@ function Downloads() {
         snapshot.forEach((doc) => {
           tempArray.push({ id: doc.data().type.value, data: doc.data() });
         });
-        console.log(tempArray);
+
         setDownloads(tempArray);
       });
     }
     getData();
 
     setLoading(false);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <>
       <Col>
@@ -154,10 +143,6 @@ function Downloads() {
               )}
             </Container>
           </Jumbotron>
-        </Row>
-
-        <Row>
-          <FooterMain />
         </Row>
       </Col>
     </>

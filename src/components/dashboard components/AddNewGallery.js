@@ -34,7 +34,7 @@ export default function AddNewGallery() {
     Array.from(images).forEach((image) => {
       tempArray.push(URL.createObjectURL(image));
     });
-    console.log(tempArray);
+
     setPreview(tempArray);
     setLoading(false);
     // // free memory when ever this component is unmounted
@@ -52,7 +52,11 @@ export default function AddNewGallery() {
       return (
         <Container key={index} style={{ marginTop: 50 }}>
           <h4>Image {index + 1}</h4>
-          <img src={image} style={{ width: '100%', height: 'auto' }} />
+          <img
+            src={image}
+            style={{ width: '100%', height: 'auto' }}
+            alt={image.name}
+          />
         </Container>
       );
     });

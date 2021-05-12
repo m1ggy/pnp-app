@@ -41,13 +41,13 @@ export default function ManageDownloads() {
 
   useEffect(() => {
     getDownloads();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function deleteDownload(item) {
     handleCloseModal();
 
     const deleteTask = storageRef.child(
-      `${item.data.id}/${item.data.id}-${item.data.name}`
+      `${item.data.id}/${item.data.id}-${item.data.title}`
     );
 
     await deleteTask
@@ -105,7 +105,7 @@ export default function ManageDownloads() {
           <h3>Are you sure?</h3>
         </Modal.Header>
         <Modal.Body>
-          Do you want to delete {selectedDownload.data.name}?
+          Do you want to delete {selectedDownload.data.title}?
         </Modal.Body>
         <Modal.Footer>
           <ButtonGroup>
@@ -188,7 +188,7 @@ export default function ManageDownloads() {
 
     return types.map((type, index) => {
       let filtered = downloads.filter((item) => {
-        return item.id == type.type;
+        return item.id === type.type;
       });
       return (
         <Container key={type.type + index} className='border p-5'>
@@ -211,7 +211,7 @@ export default function ManageDownloads() {
           <Row>
             <Col lg={10}>
               <p style={{ fontWeight: 'bold', fontSize: 16 }}>
-                {item.data.name}
+                {item.data.title}
               </p>
               <p style={{ fontSize: 13 }}>{item.data.size} MB</p>
               {/* <p style={{fontSize:13}}>Date Uploaded: {item.data.date}</p> */}
@@ -223,7 +223,6 @@ export default function ManageDownloads() {
               <Button
                 variant='danger'
                 size='sm'
-                className='w-75 m-3'
                 onClick={() => {
                   setShowModal(true);
                   setSelectedDownload(item);

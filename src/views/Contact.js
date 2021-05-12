@@ -1,17 +1,19 @@
 import { useEffect } from 'react';
-import { Col, Row, Container, Jumbotron, Nav } from 'react-bootstrap';
-import NavBarMain from '../components/NavBarMain';
-import FooterMain from '../components/FooterMain';
-import { firestore } from '../firebase/firebase';
-import uniqid from 'uniqid';
-function Contact() {
-  const analytics = firestore.collection('analytics');
+import { Col, Row, Jumbotron } from 'react-bootstrap';
+import { firestore, firebase } from '../firebase/firebase';
 
+function Contact() {
   useEffect(() => {
     async function pageView() {
-      const id = uniqid();
+      const analytics = firestore.collection('analytics');
       const date = new Date();
-      const dateString = date.toDateString();
+
+      analytics.doc('contact').set(
+        {
+          pageview: firebase.firestore.FieldValue.arrayUnion(date),
+        },
+        { merge: true }
+      );
     }
 
     pageView();
@@ -26,14 +28,14 @@ function Contact() {
       <Row>
         <Jumbotron className='w-100'>
           <Row>
-            <Col className='border' lg={4}>
-              <h1>Message us on Facebook.</h1>
+            <Col lg={4}>
+              <h3>Message us on Facebook.</h3>
             </Col>
-            <Col className='border' lg={4}>
-              <h1>Call our hotline.</h1>
+            <Col lg={4}>
+              <h3>Call our hotline.</h3>
             </Col>
-            <Col className='border' lg={4}>
-              <h1>Report a crime.</h1>
+            <Col lg={4}>
+              <h3>Report a crime.</h3>
             </Col>
           </Row>
         </Jumbotron>

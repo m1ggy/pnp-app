@@ -42,7 +42,6 @@ export default function Drafts() {
 
   const titleRef = useRef();
   const subtitleRef = useRef();
-  const contentRef = useRef();
   const imageRef = useRef();
   const typeRef = useRef();
 
@@ -142,13 +141,11 @@ export default function Drafts() {
       .get()
       .then((querySnapshot) => {
         if (querySnapshot.empty) {
-          console.log('No matching documents.');
           return;
         }
 
         querySnapshot.forEach((doc) => {
           if (doc.exists) {
-            console.log(doc.data());
             postsArray.push(doc.data());
           }
         });
@@ -158,9 +155,9 @@ export default function Drafts() {
       });
 
     let filtered = postsArray.filter((post) => {
-      return post.author == currentUser.email;
+      return post.author === currentUser.email;
     });
-    console.log(filtered);
+
     setPosts(filtered);
 
     setLoading(false);
@@ -178,7 +175,7 @@ export default function Drafts() {
     handleCloseModal();
 
     const deleteTask = storageRef.child(`${item.id}`);
-    console.log(item.id);
+
     deleteTask
       .delete()
       .then(() => {
@@ -232,7 +229,7 @@ export default function Drafts() {
 
   async function editPost(e) {
     e.preventDefault();
-    console.log(getContent.current);
+
     await db
       .doc(selectedItem.id)
       .set(
@@ -320,7 +317,6 @@ export default function Drafts() {
 
     titleRef.current = selectedItem.title;
     subtitleRef.current = selectedItem.subtitle;
-    console.log(getContent.current);
 
     return (
       <Modal
@@ -545,7 +541,7 @@ export default function Drafts() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

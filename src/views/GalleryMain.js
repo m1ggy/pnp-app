@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import NavBarMain from '../components/NavBarMain';
-import FooterMain from '../components/FooterMain';
-import {
-  Jumbotron,
-  Row,
-  Col,
-  Spinner,
-  Container,
-  Image,
-} from 'react-bootstrap';
+import { Jumbotron, Row, Col, Spinner, Image } from 'react-bootstrap';
 import { firestore } from '../firebase/firebase';
 import { Link, useRouteMatch } from 'react-router-dom';
 import '../styles/gallery.css';
-import GalleryEntry from './GalleryEntry';
+
 function GalleryMain() {
   const [gallery, setGallery] = useState();
   const [loading, setLoading] = useState(false);
@@ -32,13 +23,12 @@ function GalleryMain() {
           tempArray.push({ id: doc.id, data: doc.data() });
         });
         setGallery(tempArray);
-        console.log(tempArray);
       });
     }
 
     getGalleries();
     setLoading(false);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function RenderGalleries() {
     if (gallery === null || typeof gallery === 'undefined') return;
@@ -102,8 +92,6 @@ function GalleryMain() {
             </Jumbotron>
           </Row>
         </Row>
-
-        <FooterMain />
       </Col>
     </>
   );

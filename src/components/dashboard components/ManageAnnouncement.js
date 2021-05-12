@@ -39,7 +39,7 @@ export default function ManageAnnouncement() {
       snap.forEach((doc) => {
         tempArray.push(doc.data());
       });
-      console.log(tempArray);
+
       setAnnouncement(tempArray);
     });
 
@@ -48,7 +48,7 @@ export default function ManageAnnouncement() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function deleteAnnouncement(item) {
     setShowModal(false);

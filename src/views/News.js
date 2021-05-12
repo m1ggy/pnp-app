@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import NavBarMain from '../components/NavBarMain';
-import FooterMain from '../components/FooterMain';
 import {
   Col,
   Container,
@@ -41,7 +39,6 @@ export default function News() {
           let filtered = tempArray.filter((post) => {
             return post.published === true && post.type.value === 'news';
           });
-          console.log(filtered);
 
           setPosts(filtered);
           paginateNumbers(filtered);
@@ -61,7 +58,7 @@ export default function News() {
       }
       setPageNumbers(temp);
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function paginate(num) {
     setCurrentPage(num);
