@@ -19,11 +19,9 @@ function Contact() {
     pageView();
   }, []);
   return (
-    <>
-      <Row style={{ marginTop: 100 }}>
-        <Jumbotron className='w-100 mt-2'>
-          <h1>Contact</h1>
-        </Jumbotron>
+    <Col>
+      <Row style={{ marginTop: 150, marginBottom: 50 }}>
+        <h1>Contact</h1>
       </Row>
       <Row>
         <Jumbotron className='w-100'>
@@ -40,7 +38,7 @@ function Contact() {
           </Row>
         </Jumbotron>
       </Row>
-    </>
+    </Col>
   );
 }
 

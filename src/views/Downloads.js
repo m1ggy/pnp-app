@@ -124,10 +124,8 @@ function Downloads() {
   return (
     <>
       <Col>
-        <Row style={{ marginTop: 100 }}>
-          <Jumbotron className=' mt-2 w-100'>
-            <h1 className='title'>Downloads</h1>
-          </Jumbotron>
+        <Row style={{ marginTop: 150, marginBottom: 50 }}>
+          <h1 className='title'>Downloads</h1>
         </Row>
 
         <Row>

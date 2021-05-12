@@ -143,10 +143,8 @@ function NewsAndEvents() {
   return (
     <>
       <Col>
-        <Row style={{ marginTop: 100 }}>
-          <Jumbotron className='w-100 mt-2'>
-            <h1 className='title'>News and Events</h1>
-          </Jumbotron>
+        <Row style={{ marginTop: 150, marginBottom: 50 }}>
+          <h1 className='title'>News and Events</h1>
         </Row>
 
         <Row>

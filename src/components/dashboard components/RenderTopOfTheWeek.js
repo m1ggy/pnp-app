@@ -4,7 +4,9 @@ export default function RenderTopOfTheWeek({ data, header }) {
   if (data === null || typeof data === undefined) {
     return (
       <>
-        <p>no data this week.</p>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <p>no data this week.</p>
+        </div>
       </>
     );
   }
@@ -12,7 +14,9 @@ export default function RenderTopOfTheWeek({ data, header }) {
   if (data.length === 0) {
     return (
       <>
-        <p>no data this week.</p>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <p>no data this week.</p>
+        </div>
       </>
     );
   }

@@ -64,33 +64,28 @@ function GalleryMain() {
   return (
     <>
       <Col>
-        <Row style={{ marginTop: 100 }}>
-          <Row className='w-100'>
-            <Jumbotron className='mt-2 w-100'>
-              <h1 className='title'>Gallery</h1>
-            </Jumbotron>
-          </Row>
-
-          <Row className='w-100'>
-            <Jumbotron
+        <Row style={{ marginTop: 150, marginBottom: 50 }}>
+          <h1 className='title'>Gallery</h1>
+        </Row>
+        <Row className='w-100'>
+          <Jumbotron
+            className='w-100'
+            style={{ display: 'flex', justifyContent: 'center' }}
+          >
+            <Row
               className='w-100'
               style={{ display: 'flex', justifyContent: 'center' }}
             >
-              <Row
-                className='w-100'
-                style={{ display: 'flex', justifyContent: 'center' }}
-              >
-                {loading ? <Spinner animation='border' /> : null}
-                {gallery ? (
-                  <RenderGalleries />
-                ) : (
-                  <div>
-                    <p>No Galleries</p>
-                  </div>
-                )}
-              </Row>
-            </Jumbotron>
-          </Row>
+              {loading ? <Spinner animation='border' /> : null}
+              {gallery ? (
+                <RenderGalleries />
+              ) : (
+                <div>
+                  <p>No Galleries</p>
+                </div>
+              )}
+            </Row>
+          </Jumbotron>
         </Row>
       </Col>
     </>

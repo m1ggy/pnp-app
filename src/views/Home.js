@@ -20,7 +20,7 @@ function Home() {
   const analytics = firestore.collection('analytics');
   const [announcement, setAnnouncement] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(5);
+  const [postsPerPage] = useState(9);
   const [pageNumbers, setPageNumbers] = useState();
 
   useEffect(() => {
@@ -179,10 +179,8 @@ function Home() {
   return (
     <>
       <Col>
-        <Row style={{ marginTop: 100 }}>
-          <Jumbotron className='mt-2 w-100'>
-            <h1 className='title'>Latest Post</h1>
-          </Jumbotron>
+        <Row style={{ marginTop: 150, marginBottom: 50 }}>
+          <h1 className='title'>Latest Post</h1>
         </Row>
         <Row>
           <Col lg={9} className='border'>

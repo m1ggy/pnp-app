@@ -126,10 +126,8 @@ export default function Others() {
 
   return (
     <>
-      <Row style={{ marginTop: 100 }}>
-        <Jumbotron className='w-100'>
-          <h1 className='title'>Others</h1>
-        </Jumbotron>
+      <Row style={{ marginTop: 150, marginBottom: 50 }}>
+        <h1 className='title'>Others</h1>
       </Row>
 
       <Row>

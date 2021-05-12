@@ -126,10 +126,8 @@ export default function Events() {
 
   return (
     <>
-      <Row style={{ marginTop: 100 }}>
-        <Jumbotron className='w-100'>
-          <h1 className='title'>Events</h1>
-        </Jumbotron>
+      <Row style={{ marginTop: 150, marginBottom: 50 }}>
+        <h1 className='title'>Events</h1>
       </Row>
 
       <Row>
