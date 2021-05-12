@@ -129,13 +129,7 @@ export default function News() {
 
   return (
     <>
-      <Row>
-        <Container style={{ marginTop: 100 }} />
-
-        <NavBarMain />
-      </Row>
-
-      <Row>
+      <Row style={{ marginTop: 100 }}>
         <Jumbotron className='w-100'>
           <h1 className='title'>News</h1>
         </Jumbotron>
@@ -166,8 +160,6 @@ export default function News() {
           </Container>
         </Jumbotron>
       </Row>
-
-      <FooterMain />
     </>
   );
 }

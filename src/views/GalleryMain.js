@@ -74,13 +74,7 @@ function GalleryMain() {
   return (
     <>
       <Col>
-        <Row className='w-100'>
-          <Container style={{ marginTop: 100 }}>
-            <NavBarMain className='w-100 m-auto' />
-          </Container>
-        </Row>
-
-        <Row>
+        <Row style={{ marginTop: 100 }}>
           <Row className='w-100'>
             <Jumbotron className='mt-2 w-100'>
               <h1 className='title'>Gallery</h1>

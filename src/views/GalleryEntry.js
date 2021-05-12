@@ -61,13 +61,7 @@ export default function GalleryEntry() {
   return (
     <>
       <Col>
-        <Row className='w-100'>
-          <Container style={{ marginTop: 100 }}>
-            <NavBarMain className='mt-2 w-100 m-auto' />
-          </Container>
-        </Row>
-
-        <Row>
+        <Row style={{ marginTop: 100 }}>
           <Row className='w-100'>
             <Jumbotron className='mt-2 w-100'>
               <Link to='/gallery'>

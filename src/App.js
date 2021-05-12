@@ -20,6 +20,8 @@ import PostEntry from './views/PostEntry';
 import News from './views/News';
 import Events from './views/Events';
 import Others from './views/Others';
+import NavBarMain from './components/NavBarMain';
+import FooterMain from './components/FooterMain';
 import 'bootswatch/dist/lux/bootstrap.min.css';
 
 function App() {
@@ -27,6 +29,7 @@ function App() {
     <div className='App'>
       <Router>
         <AuthProvider>
+          <NavBarMain className='mt-2 w-100 m-auto' />
           <Switch>
             <PrivateRoute path='/dashboard' component={Dashboard} />
 
@@ -70,6 +73,7 @@ function App() {
               <Login />
             </Route>
           </Switch>
+          <FooterMain />
         </AuthProvider>
       </Router>
     </div>

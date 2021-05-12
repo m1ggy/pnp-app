@@ -147,13 +147,7 @@ function NewsAndEvents() {
   return (
     <>
       <Col>
-        <Row>
-          <Container style={{ marginTop: 100 }} />
-
-          <NavBarMain />
-        </Row>
-
-        <Row>
+        <Row style={{ marginTop: 100 }}>
           <Jumbotron className='w-100 mt-2'>
             <h1 className='title'>News and Events</h1>
           </Jumbotron>
@@ -168,8 +162,6 @@ function NewsAndEvents() {
             </Row>
           </Jumbotron>
         </Row>
-
-        <FooterMain />
       </Col>
     </>
   );

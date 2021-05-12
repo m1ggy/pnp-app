@@ -12,8 +12,6 @@ import { Jumbotron, Container } from 'react-bootstrap';
 function Maps() {
   return (
     <>
-      <NavBarMain className='mt-2 w-100 m-auto' />
-
       <Container style={{ marginTop: 100 }}></Container>
 
       <Jumbotron className='mt-2' style={{ marginTop: 100 }}>
@@ -38,7 +36,6 @@ function Maps() {
           </Marker>
         </MapContainer>
       </div>
-      <FooterMain />
     </>
   );
 }

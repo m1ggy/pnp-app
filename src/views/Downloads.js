@@ -69,7 +69,7 @@ function Downloads() {
           <Row>
             <Col lg={10}>
               <p style={{ fontWeight: 'bold', fontSize: 16 }}>
-                {item.data.name}
+                {item.data.title}
               </p>
               <p style={{ fontSize: 13 }}>{item.data.size} MB</p>
             </Col>
@@ -135,13 +135,7 @@ function Downloads() {
   return (
     <>
       <Col>
-        <Row className='w-100'>
-          <Container style={{ marginTop: 100 }}>
-            <NavBarMain className='mt-2 w-100 m-auto' />
-          </Container>
-        </Row>
-
-        <Row>
+        <Row style={{ marginTop: 100 }}>
           <Jumbotron className=' mt-2 w-100'>
             <h1 className='title'>Downloads</h1>
           </Jumbotron>

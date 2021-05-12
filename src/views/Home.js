@@ -189,11 +189,7 @@ function Home() {
   return (
     <>
       <Col>
-        <Container style={{ marginTop: 100 }}>
-          <NavBarMain className='mt-2 w-100 m-auto' />
-        </Container>
-
-        <Row>
+        <Row style={{ marginTop: 100 }}>
           <Jumbotron className='mt-2 w-100'>
             <h1 className='title'>Latest Post</h1>
           </Jumbotron>
@@ -244,8 +240,6 @@ function Home() {
             </Jumbotron>
           </Col>
         </Row>
-
-        <FooterMain />
       </Col>
     </>
   );

@@ -18,13 +18,7 @@ function Contact() {
   }, []);
   return (
     <>
-      <Row>
-        <NavBarMain />
-      </Row>
-      <Row>
-        <Container style={{ marginTop: 100 }} />
-      </Row>
-      <Row>
+      <Row style={{ marginTop: 100 }}>
         <Jumbotron className='w-100 mt-2'>
           <h1>Contact</h1>
         </Jumbotron>
@@ -43,10 +37,6 @@ function Contact() {
             </Col>
           </Row>
         </Jumbotron>
-      </Row>
-
-      <Row>
-        <FooterMain />
       </Row>
     </>
   );
