@@ -7,14 +7,14 @@ import {
   Spinner,
   Button,
 } from 'react-bootstrap';
-import { firestore, firebase } from '../firebase/firebase';
+import { firestore } from '../firebase/firebase';
+import { pageView } from '../utils/firebaseUtils';
 
 function Downloads() {
   const [downloads, setDownloads] = useState();
   const [loading, setLoading] = useState();
 
   const db = firestore.collection('downloads');
-  const analytics = firestore.collection('analytics');
 
   function RenderDownloads() {
     let types = [
@@ -40,13 +40,7 @@ function Downloads() {
   }
 
   async function sendData(item) {
-    const date = new Date();
-    await analytics.doc(item.data.id).set(
-      {
-        pageview: firebase.firestore.FieldValue.arrayUnion(date),
-      },
-      { merge: true }
-    );
+    pageView(item.data.id);
   }
 
   function RenderEachDownload({ data, label }) {
@@ -85,24 +79,7 @@ function Downloads() {
   useEffect(() => {
     setLoading(true);
 
-    async function pageView() {
-      const date = new Date();
-      const dateString = date.toDateString();
-
-      analytics
-        .doc('pageview')
-        .collection('downloads')
-        .doc(dateString)
-        .set(
-          {
-            count: firebase.firestore.FieldValue.increment(1),
-            date,
-          },
-          { merge: true }
-        );
-    }
-
-    pageView();
+    pageView('downloads');
 
     async function getData() {
       let tempArray = [];
@@ -125,11 +102,8 @@ function Downloads() {
     <>
       <Col>
         <Row style={{ marginTop: 150, marginBottom: 50 }}>
-          <h1 className='title'>Downloads</h1>
-        </Row>
-
-        <Row>
           <Jumbotron className='w-100'>
+            <h1 className='title'>Downloads</h1>
             <Container>
               {loading && <Spinner animation='border' />}
               {downloads ? (

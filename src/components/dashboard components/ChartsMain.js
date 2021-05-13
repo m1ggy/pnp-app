@@ -124,28 +124,22 @@ export default function ChartsMain() {
     }
 
     return (
-      <>
-        <Container>
+      <Col>
+        <Row>
           <Col>
-            <Row>
-              <Col>
-                <h5 className='mt-3 mb-3'>Total Page Views: {total.current}</h5>
-              </Col>
-              <Col>
-                <h5 className='mt-3 mb-3'>
-                  Average Page Views: {average.current}
-                </h5>
-              </Col>
-            </Row>
-            <Line data={chartValues} options={options} />
+            <h5 className='mt-3 mb-3'>Total Page Views: {total.current}</h5>
           </Col>
-        </Container>
-      </>
+          <Col>
+            <h5 className='mt-3 mb-3'>Average Page Views: {average.current}</h5>
+          </Col>
+        </Row>
+        <Line data={chartValues} options={options} />
+      </Col>
     );
   }
 
   return (
-    <>
+    <Col>
       <Row className='w-100'>
         <Jumbotron className='w-100'>
           <h1>Charts</h1>
@@ -213,6 +207,6 @@ export default function ChartsMain() {
           </Col>
         </Jumbotron>
       </Row>
-    </>
+    </Col>
   );
 }

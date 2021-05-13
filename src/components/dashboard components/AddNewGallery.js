@@ -21,6 +21,7 @@ export default function AddNewGallery() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState();
   const { currentUser } = useAuth();
+  const [disable, setDisable] = useState(false);
 
   const db = firestore.collection('galleries');
 
@@ -64,6 +65,7 @@ export default function AddNewGallery() {
 
   function pushDataStorage(e) {
     setLoading(true);
+    setDisable(true);
     e.preventDefault();
     const tempID = uniqid();
     const date = new Date();
@@ -108,6 +110,7 @@ export default function AddNewGallery() {
     setPreview(undefined);
 
     e.target.reset();
+    setDisable(false);
     setLoading(false);
   }
   async function pushDataFirestore(url, id) {
@@ -182,7 +185,9 @@ export default function AddNewGallery() {
                   className='mt-5 w-100'
                   style={{ display: 'flex', justifyContent: 'center' }}
                 >
-                  <Button type='submit'>Submit</Button>
+                  <Button type='submit' variant='primary' disabled={disable}>
+                    {loading ? <Spinner animation='border' /> : 'Submit'}
+                  </Button>
                 </div>
               </Form>
             </div>

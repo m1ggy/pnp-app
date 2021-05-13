@@ -172,7 +172,7 @@ export default function DashboardMain() {
     return 'rgb(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s);
   }
   return (
-    <>
+    <Col>
       <Row className='w-100'>
         <Jumbotron className='w-100'>
           <h1>Dashboard</h1>
@@ -280,6 +280,6 @@ export default function DashboardMain() {
           </Col>
         </Jumbotron>
       </Row>
-    </>
+    </Col>
   );
 }

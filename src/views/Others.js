@@ -8,6 +8,7 @@ import {
   Spinner,
   Pagination,
   Button,
+  Breadcrumb,
 } from 'react-bootstrap';
 import { firestore } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
@@ -127,31 +128,41 @@ export default function Others() {
   return (
     <>
       <Row style={{ marginTop: 150, marginBottom: 50 }}>
-        <h1 className='title'>Others</h1>
-      </Row>
-
-      <Row>
         <Jumbotron className='w-100 mt-2'>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <Link to='/news-and-events'> News and Events</Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item active>Others</Breadcrumb.Item>
+          </Breadcrumb>
+
+          <h1 className='title'>Others</h1>
           <Container>
-            <Container>
-              {loading ? <Spinner animation='border' /> : <RenderPosts />}
-            </Container>
-            {pageNumbers && (
-              <Pagination size='lg m-auto'>
-                {pageNumbers.map((num, index) => {
-                  return (
-                    <Pagination.Item
-                      onClick={() => {
-                        paginate(num);
-                      }}
-                      key={index}
-                    >
-                      {num}
-                    </Pagination.Item>
-                  );
-                })}
-              </Pagination>
-            )}
+            {loading ? <Spinner animation='border' /> : <RenderPosts />}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: 20,
+              }}
+            >
+              {pageNumbers && (
+                <Pagination size='lg m-auto'>
+                  {pageNumbers.map((num, index) => {
+                    return (
+                      <Pagination.Item
+                        onClick={() => {
+                          paginate(num);
+                        }}
+                        key={index}
+                      >
+                        {num}
+                      </Pagination.Item>
+                    );
+                  })}
+                </Pagination>
+              )}
+            </div>
           </Container>
         </Jumbotron>
       </Row>

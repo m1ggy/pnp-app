@@ -9,31 +9,23 @@ import {
   Button,
   Pagination,
   Alert,
+  Form,
 } from 'react-bootstrap';
-import { firestore, firebase } from '../firebase/firebase';
+import { firestore } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
+import { pageView } from '../utils/firebaseUtils';
 
 function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const db = firestore.collection('posts');
-  const analytics = firestore.collection('analytics');
   const [announcement, setAnnouncement] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(9);
   const [pageNumbers, setPageNumbers] = useState();
 
   useEffect(() => {
-    async function pageView() {
-      const date = new Date();
-      analytics.doc('home').set(
-        {
-          pageview: firebase.firestore.FieldValue.arrayUnion(date),
-        },
-        { merge: true }
-      );
-    }
-    pageView();
+    pageView('home');
 
     async function getData() {
       let tempArray = [];
@@ -111,22 +103,22 @@ function Home() {
 
     return currentPosts.map((post, index) => {
       return (
-        <Row className='w-100 p-3 border' style={{ height: '25%' }} key={index}>
-          <Col lg={3} className='border'>
+        <Row className='p-1' key={index}>
+          <Col lg={2}>
             <div
               style={{
                 display: 'flex',
                 justifyContent: 'center',
-                alignContent: 'center',
               }}
             >
               {post.url ? (
-                <Image src={post.url} width='200px' height='100%' />
+                <Image src={post.url} width='350px' height='100%' />
               ) : (
                 <p>NO IMAGE</p>
               )}
             </div>
           </Col>
+          <Col></Col>
 
           <Col lg={9}>
             <Row className='w-100 m-auto'>
@@ -167,7 +159,7 @@ function Home() {
 
     return announcement.map((item) => {
       return (
-        <Alert variant='info' key={item.id}>
+        <Alert variant='primary' key={item.id}>
           <Alert.Heading>{item.title}</Alert.Heading>
           <p>{item.content}</p>
           <p>{item.dateUploaded}</p>
@@ -180,12 +172,10 @@ function Home() {
     <>
       <Col>
         <Row style={{ marginTop: 150, marginBottom: 50 }}>
-          <h1 className='title'>Latest Post</h1>
-        </Row>
-        <Row>
-          <Col lg={9} className='border'>
+          <Col className='border'>
             <Row>
               <Jumbotron className='w-100'>
+                <h1 className='title'>Latest Post</h1>
                 <Container>
                   {loading ? (
                     <Spinner animation='border' className='m-auto' />
@@ -224,6 +214,7 @@ function Home() {
 
           <Col lg={3} className='border'>
             <Jumbotron>
+              <h1>Announcements</h1>
               <RenderAnnouncements />
             </Jumbotron>
           </Col>

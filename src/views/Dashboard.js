@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
-import { Button, Alert, Navbar, Form, Row, Col } from 'react-bootstrap';
+import { Button, Alert, Navbar, Form, Row, Col, Modal } from 'react-bootstrap';
 import Sidebar from '../components/Sidebar';
 import DashboardMain from '../components/dashboard components/DashboardMain';
 import AddNewPost from '../components/dashboard components/AddNewPost';
@@ -22,6 +22,7 @@ export default function Dashboard() {
   const [error, setError] = useState();
   const history = useHistory();
   const { path } = useRouteMatch();
+  const [showModal, setShowModal] = useState(false);
   async function handleLogout() {
     setError('');
     try {
@@ -31,6 +32,7 @@ export default function Dashboard() {
     } catch {
       setError('Failed to Log out');
     }
+    setShowModal(false);
   }
 
   ///routes for sidebar
@@ -100,15 +102,28 @@ export default function Dashboard() {
 
   return (
     <>
-      <Navbar className='bg-light mb-3'>
+      <Navbar className='bg-dark mb-3'>
+        <Navbar.Brand style={{ color: 'white' }}>Admin Dashboard</Navbar.Brand>
+        <Navbar.Collapse className='justify-content-end'>
+          <Navbar.Text>
+            {currentUser && (
+              <p style={{ fontSize: 11, color: 'white' }}>
+                Logged in as: {currentUser.email}
+              </p>
+            )}
+          </Navbar.Text>
+        </Navbar.Collapse>
         <Form inline className='ml-3'>
-          <Button onClick={handleLogout} variant='danger'>
+          <Button
+            onClick={() => {
+              setShowModal(true);
+            }}
+            variant='danger'
+            size='sm'
+          >
             Logout
           </Button>
         </Form>
-        {currentUser && (
-          <p className='align-middle ml-2'>{currentUser.email}</p>
-        )}
       </Navbar>
 
       <Row>
@@ -122,7 +137,34 @@ export default function Dashboard() {
           </Row>
         </Col>
       </Row>
+
       {error && <Alert variant='danger'>{error}</Alert>}
+      <Modal
+        show={showModal}
+        onHide={() => {
+          setShowModal(false);
+        }}
+        backdrop='static'
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Action</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Do you want to log out?</Modal.Body>
+        <Modal.Footer>
+          <Button variant='danger' onClick={handleLogout}>
+            Log out
+          </Button>
+          <Button
+            variant='primary'
+            onClick={() => {
+              setShowModal(false);
+            }}
+          >
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

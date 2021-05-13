@@ -8,9 +8,11 @@ import {
   Spinner,
   Pagination,
   Button,
+  Breadcrumb,
 } from 'react-bootstrap';
 import { firestore } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
+import { pageView } from '../utils/firebaseUtils';
 
 export default function Events() {
   const db = firestore.collection('posts');
@@ -21,6 +23,7 @@ export default function Events() {
   const [pageNumbers, setPageNumbers] = useState();
 
   useEffect(() => {
+    pageView('events');
     async function getData() {
       setLoading(true);
       let tempArray = [];
@@ -127,31 +130,41 @@ export default function Events() {
   return (
     <>
       <Row style={{ marginTop: 150, marginBottom: 50 }}>
-        <h1 className='title'>Events</h1>
-      </Row>
-
-      <Row>
         <Jumbotron className='w-100 mt-2'>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <Link to='/news-and-events'> News and Events</Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item active>Events</Breadcrumb.Item>
+          </Breadcrumb>
+          <h1>Events</h1>
           <Container>
-            <Container>
-              {loading ? <Spinner animation='border' /> : <RenderPosts />}
-            </Container>
-            {pageNumbers && (
-              <Pagination size='lg m-auto'>
-                {pageNumbers.map((num, index) => {
-                  return (
-                    <Pagination.Item
-                      onClick={() => {
-                        paginate(num);
-                      }}
-                      key={index}
-                    >
-                      {num}
-                    </Pagination.Item>
-                  );
-                })}
-              </Pagination>
-            )}
+            {loading ? <Spinner animation='border' /> : <RenderPosts />}
+
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: 20,
+              }}
+            >
+              {pageNumbers && (
+                <Pagination size='lg m-auto'>
+                  {pageNumbers.map((num, index) => {
+                    return (
+                      <Pagination.Item
+                        onClick={() => {
+                          paginate(num);
+                        }}
+                        key={index}
+                      >
+                        {num}
+                      </Pagination.Item>
+                    );
+                  })}
+                </Pagination>
+              )}
+            </div>
           </Container>
         </Jumbotron>
       </Row>

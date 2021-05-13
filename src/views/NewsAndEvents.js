@@ -66,8 +66,8 @@ function NewsAndEvents() {
 
     return types.map((type, index) => {
       return (
-        <Row key={type.value} className='w-100 border mt-5'>
-          <Col lg={10} className='w-100 border'>
+        <Row key={type.value} className='w-100 mt-5'>
+          <Col lg={10} className='w-100'>
             <Row lg={4} className='w-100'>
               <h3
                 style={{
@@ -109,8 +109,8 @@ function NewsAndEvents() {
     let filtered = posts.filter((post) => {
       return post.type.value === type.value;
     });
-    return filtered.map((post) => {
-      return (
+    return filtered.map((post, index) => {
+      return index === 0 || index === 1 || index === 2 ? (
         <Col md={6} lg={4} xs={12} key={post.id}>
           <Link to={`/news-and-events/${post.id}`}>
             <Image src={post.url} style={{ width: '100%' }} />
@@ -127,16 +127,10 @@ function NewsAndEvents() {
               >
                 <p style={{ color: 'white', fontSize: 9 }}>{post.date}</p>
               </Row>
-              <Row
-                lg={12}
-                style={{ display: 'flex', justifyContent: 'center' }}
-              >
-                <p style={{ color: 'white', fontSize: 10 }}>{post.subtitle}</p>
-              </Row>
             </div>
           </Link>
         </Col>
-      );
+      ) : null;
     });
   }
 
@@ -144,15 +138,14 @@ function NewsAndEvents() {
     <>
       <Col>
         <Row style={{ marginTop: 150, marginBottom: 50 }}>
-          <h1 className='title'>News and Events</h1>
-        </Row>
-
-        <Row>
-          <Jumbotron className='w-100 mt-2'>
+          <Jumbotron className='w-100'>
+            <h1 className='title'>News and Events</h1>
             <Row className='w-100'>
-              <Container>
+              <Col></Col>
+              <Col lg={10}>
                 {loading ? <Spinner animation='border' /> : <RenderTypes />}
-              </Container>
+              </Col>
+              <Col></Col>
             </Row>
           </Jumbotron>
         </Row>

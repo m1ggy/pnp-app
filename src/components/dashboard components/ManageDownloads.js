@@ -10,11 +10,11 @@ import {
   ButtonGroup,
 } from 'react-bootstrap';
 import { firestore, storage } from '../../firebase/firebase';
-
+import { useAuth } from '../../contexts/AuthContext';
 export default function ManageDownloads() {
   const db = firestore.collection('downloads');
   const storageRef = storage.ref('downloads');
-
+  const { currentUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [downloads, setDownloads] = useState();
   const [selectedDownload, setSelectedDownload] = useState();
@@ -24,18 +24,21 @@ export default function ManageDownloads() {
 
   async function getDownloads() {
     setLoading(true);
-    await db.get().then((querySnapshot) => {
-      if (querySnapshot.empty) {
-        setDownloads();
-        return;
-      }
-      let tempArray = [];
-      querySnapshot.forEach((doc) => {
-        tempArray.push({ id: doc.data().type.value, data: doc.data() });
+    await db
+      .where('author', '==', currentUser.email)
+      .get()
+      .then((querySnapshot) => {
+        if (querySnapshot.empty) {
+          setDownloads();
+          return;
+        }
+        let tempArray = [];
+        querySnapshot.forEach((doc) => {
+          tempArray.push({ id: doc.data().type.value, data: doc.data() });
+        });
+        console.log(tempArray);
+        setDownloads(tempArray);
       });
-      console.log(tempArray);
-      setDownloads(tempArray);
-    });
     setLoading(false);
   }
 

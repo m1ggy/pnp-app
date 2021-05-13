@@ -1,9 +1,17 @@
 import { useParams, Link } from 'react-router-dom';
-import { Jumbotron, Col, Row, Spinner, Container } from 'react-bootstrap';
+import {
+  Jumbotron,
+  Col,
+  Row,
+  Spinner,
+  Container,
+  Breadcrumb,
+} from 'react-bootstrap';
 import { firestore, firebase } from '../firebase/firebase';
 import { useEffect, useState } from 'react';
 import Carousel from 'react-gallery-carousel';
 import 'react-gallery-carousel/dist/index.css';
+import { pageView } from '../utils/firebaseUtils';
 export default function GalleryEntry() {
   const { id } = useParams();
   const db = firestore.collection('galleries');
@@ -33,63 +41,46 @@ export default function GalleryEntry() {
 
       return;
     }
-    function sendData() {
-      const date = new Date();
-      analytics.doc(id).set(
-        {
-          pageview: firebase.firestore.FieldValue.arrayUnion(date),
-        },
-        { merge: true }
-      );
-    }
 
     getGalleries();
-    sendData();
+    pageView(id);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
       <Col>
-        <Row style={{ marginTop: 100 }}>
-          <Row className='w-100'>
-            <Jumbotron className='mt-2 w-100'>
-              <Link to='/gallery'>
-                <p style={{ fontSize: 15 }}>Go Back</p>
-              </Link>
-              <h1 className='title'>Gallery</h1>
-            </Jumbotron>
-          </Row>
+        <Row style={{ marginTop: 150, marginBottom: 50 }}>
+          <Jumbotron className='w-100'>
+            {images && (
+              <>
+                <Breadcrumb>
+                  <Breadcrumb.Item>
+                    <Link to='/gallery'>Gallery</Link>
+                  </Breadcrumb.Item>
+                  <Breadcrumb.Item active>{images.title}</Breadcrumb.Item>
+                </Breadcrumb>
+                <h1>{images.title}</h1>
+                <p>{images.subtitle}</p>
+                <p style={{ fontSize: 14 }}>{images.dateUploaded}</p>
+              </>
+            )}
 
-          <Row className='w-100'>
-            <Jumbotron
-              className='mt-2 w-100'
+            <Row
+              className='w-100'
               style={{ display: 'flex', justifyContent: 'center' }}
             >
+              {loading ? <Spinner animation='border' /> : null}
               <Row
                 className='w-100'
                 style={{ display: 'flex', justifyContent: 'center' }}
-              >
-                {loading ? <Spinner animation='border' /> : null}
-                <Row
-                  className='w-100'
-                  style={{ display: 'flex', justifyContent: 'center' }}
-                >
-                  {images && (
-                    <div>
-                      <h3>{images.title}</h3>
-                      <p>{images.subtitle}</p>
-                      <p style={{ fontSize: 14 }}>{images.dateUploaded}</p>
-                    </div>
-                  )}
-                </Row>
-                <Row className='w-100'>
-                  <Container style={{ height: 650, width: '100%' }}>
-                    {carouselImages && <Carousel images={carouselImages} />}
-                  </Container>
-                </Row>
+              ></Row>
+              <Row className='w-100'>
+                <Container style={{ height: 650, width: '100%' }}>
+                  {carouselImages && <Carousel images={carouselImages} />}
+                </Container>
               </Row>
-            </Jumbotron>
-          </Row>
+            </Row>
+          </Jumbotron>
         </Row>
       </Col>
     </>

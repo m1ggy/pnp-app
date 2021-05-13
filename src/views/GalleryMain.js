@@ -3,6 +3,7 @@ import { Jumbotron, Row, Col, Spinner, Image } from 'react-bootstrap';
 import { firestore } from '../firebase/firebase';
 import { Link, useRouteMatch } from 'react-router-dom';
 import '../styles/gallery.css';
+import { pageView } from '../utils/firebaseUtils';
 
 function GalleryMain() {
   const [gallery, setGallery] = useState();
@@ -25,13 +26,21 @@ function GalleryMain() {
         setGallery(tempArray);
       });
     }
-
+    pageView('gallery');
     getGalleries();
     setLoading(false);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function RenderGalleries() {
-    if (gallery === null || typeof gallery === 'undefined') return;
+    if (gallery === null || typeof gallery === 'undefined') return null;
+
+    if (gallery.length === 0) {
+      return (
+        <div>
+          <p>No Galleries.</p>
+        </div>
+      );
+    }
 
     return gallery.map((gallery) => {
       return (
@@ -47,7 +56,7 @@ function GalleryMain() {
           }}
         >
           <Link to={`${url}/${gallery.id}`}>
-            <Image src={gallery.data.imagesURL[0]} id='imageHover' />
+            <Image src={gallery.data.imagesURL[1]} id='imageHover' />
             <div id='galleryDesc'>
               <h3 style={{ color: 'white' }}>{gallery.data.title}</h3>
               <p style={{ color: 'white' }}>{gallery.data.subtitle}</p>
@@ -65,25 +74,12 @@ function GalleryMain() {
     <>
       <Col>
         <Row style={{ marginTop: 150, marginBottom: 50 }}>
-          <h1 className='title'>Gallery</h1>
-        </Row>
-        <Row className='w-100'>
-          <Jumbotron
-            className='w-100'
-            style={{ display: 'flex', justifyContent: 'center' }}
-          >
+          <Jumbotron className='w-100'>
             <Row
               className='w-100'
               style={{ display: 'flex', justifyContent: 'center' }}
             >
-              {loading ? <Spinner animation='border' /> : null}
-              {gallery ? (
-                <RenderGalleries />
-              ) : (
-                <div>
-                  <p>No Galleries</p>
-                </div>
-              )}
+              {loading ? <Spinner animation='border' /> : <RenderGalleries />}
             </Row>
           </Jumbotron>
         </Row>

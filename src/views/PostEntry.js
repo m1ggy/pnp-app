@@ -15,7 +15,7 @@ export default function PostEntry() {
   const [loading, setLoading] = useState(false);
   const [post, setPost] = useState([]);
   const { id } = useParams();
-
+  const [type, setType] = useState(undefined);
   useEffect(() => {
     const db = firestore.collection('posts').doc(id);
     const analytics = firestore.collection('analytics');
@@ -68,26 +68,13 @@ export default function PostEntry() {
     }
 
     return post.map((item) => {
+      setType(item);
       return (
         <Row
           style={{ display: 'flex', justifyContent: 'center' }}
           key={item.id}
           className='w-100'
         >
-          <Row className='w-100'>
-            <Breadcrumb>
-              <Breadcrumb.Item>
-                <Link to={`/news-and-events`}>News and Events</Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                <Link to={`/news-and-events/${item.type.value}`}>
-                  {item.type.label}
-                </Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item active>{item.title}</Breadcrumb.Item>
-            </Breadcrumb>
-          </Row>
-
           <Row className='w-100'>
             <h2>{item.title}</h2>
           </Row>
@@ -98,7 +85,11 @@ export default function PostEntry() {
           </Row>
 
           <Row className='w-100'>
-            <Image src={item.url} height='500px' className='m-auto' />
+            <Image
+              src={item.url}
+              style={{ height: '100%', width: 1000 }}
+              className='m-auto'
+            />
           </Row>
 
           <Row className='w-100 pr-5 pl-5'>
@@ -106,6 +97,7 @@ export default function PostEntry() {
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(item.content),
               }}
+              style={{ textAlign: 'justify' }}
             ></div>
           </Row>
           <Row className='w-100'>
@@ -121,18 +113,44 @@ export default function PostEntry() {
   return (
     <>
       <Col>
-        <Row style={{ marginTop: 100 }}>
+        <Row style={{ marginTop: 150 }}>
           <Row className='w-100'>
             <Jumbotron
               className='mt-2 w-100'
               style={{ display: 'flex', justifyContent: 'center' }}
             >
-              <Row
-                className='w-100'
-                style={{ display: 'flex', justifyContent: 'center' }}
-              >
-                {loading ? <Spinner animation='border' /> : <RenderPost />}
-              </Row>
+              <Col>
+                <Row className='w-100'>
+                  {type && (
+                    <Breadcrumb>
+                      <Breadcrumb.Item>
+                        <Link to={`/news-and-events`}>News and Events</Link>
+                      </Breadcrumb.Item>
+                      <Breadcrumb.Item>
+                        <Link to={`/news-and-events/${type.type.value}`}>
+                          {type.type.label}
+                        </Link>
+                      </Breadcrumb.Item>
+                      <Breadcrumb.Item active>{type.title}</Breadcrumb.Item>
+                    </Breadcrumb>
+                  )}
+                </Row>
+                <Row className='w-100'>
+                  <Col lg={1}></Col>
+                  <Col lg={10}>
+                    {loading ? (
+                      <div
+                        style={{ display: 'flex', justifyContent: 'center' }}
+                      >
+                        <Spinner animation='border' />{' '}
+                      </div>
+                    ) : (
+                      <RenderPost />
+                    )}
+                  </Col>
+                  <Col lg={1}></Col>
+                </Row>
+              </Col>
             </Jumbotron>
           </Row>
         </Row>

@@ -30,6 +30,7 @@ function Login() {
 
   ///prevent the user from visiting the login page when currently logged in
   useEffect(() => {
+    setMsg('');
     if (location) {
       setMsg(location.message);
     }

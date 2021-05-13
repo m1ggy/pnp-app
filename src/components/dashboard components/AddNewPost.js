@@ -24,7 +24,7 @@ export default function AddNewPost() {
   const [status, setStatus] = useState();
   const [showNote, setShowNote] = useState(true);
   const [content, setContent] = useState(RichTextEditor.createEmptyValue());
-
+  const [disabled, setdisabled] = useState(false);
   const { currentUser } = useAuth();
 
   const special = ['<', '>'];
@@ -83,12 +83,13 @@ export default function AddNewPost() {
         { merge: true }
       );
     }
+    setdisabled(false);
     setContent(RichTextEditor.createEmptyValue());
   }
 
   async function pushData(e) {
     e.preventDefault();
-
+    setdisabled(true);
     setStatus();
     ///create unique id for matching the image in storage
     const tempID = uniqid();
@@ -197,6 +198,7 @@ export default function AddNewPost() {
                       type='submit'
                       className='mt-5 w-25 m-auto'
                       size='md'
+                      disabled={disabled}
                     >
                       Submit
                     </Button>
