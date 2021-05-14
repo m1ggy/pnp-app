@@ -1,11 +1,21 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Jumbotron, Col, Row, Spinner, ListGroup } from 'react-bootstrap';
+import {
+  Jumbotron,
+  Col,
+  Row,
+  Spinner,
+  ListGroup,
+  Container,
+} from 'react-bootstrap';
 import { firestore } from '../../firebase/firebase';
 import { formatDate } from '../../dashboard utils/utils';
 import { useAuth } from '../../contexts/AuthContext';
 import RenderChart from '../dashboard components/RenderChart';
 import RenderTopOfTheWeek from '../dashboard components/RenderTopOfTheWeek';
-
+import {
+  getDataFromDocument,
+  getDataWhereQuery,
+} from '../../utils/firebaseUtils';
 export default function DashboardMain() {
   const [postChart, setPostChart] = useState([]);
 
@@ -14,7 +24,9 @@ export default function DashboardMain() {
   const analytics = firestore.collection('analytics');
   const [downloadChart, setDownloadChart] = useState([]);
   const [galleryChart, setGalleryChart] = useState([]);
+  const [generalChart, setGeneralChart] = useState([]);
   const dateRef = useRef();
+  const [generalTop, setGeneralTop] = useState([]);
   const [top, setTop] = useState([]);
   const [downloadTop, setDownloadTop] = useState([]);
   const [galleryTop, setGalleryTop] = useState([]);
@@ -44,57 +56,67 @@ export default function DashboardMain() {
       setLoading(true);
 
       dateRef.current = formatDate(dateRange[0].value);
-      db.collection('posts')
-        .where('author', '==', currentUser.email)
-        .get()
-        .then((q) => {
-          if (q.empty) {
-            return;
-          }
-          let temp = [];
-          q.forEach((post) => {
-            temp.push({ value: post.id, label: post.data().title });
-          });
 
-          getAllData(temp, formatDatasets, setPostChart, setTop);
+      getDataWhereQuery('posts', 'author', '==', currentUser.email, (data) => {
+        let temp = [];
+        data.forEach((post) => {
+          temp.push({ value: post.id, label: post.title });
         });
 
-      db.collection('downloads')
-        .where('author', '==', currentUser.email)
-        .get()
-        .then((q) => {
-          if (q.empty) {
-            return;
-          }
-          let temp = [];
-          q.forEach((post) => {
-            temp.push({ value: post.id, label: post.data().title });
-          });
+        getAllData(temp, formatDatasets, setPostChart, setTop);
+      });
 
+      getDataWhereQuery(
+        'downloads',
+        'author',
+        '==',
+        currentUser.email,
+        (data) => {
+          let temp = [];
+          data.forEach((post) => {
+            temp.push({ value: post.id, label: post.title });
+          });
           getAllData(temp, formatDatasets, setDownloadChart, setDownloadTop);
-        });
+        }
+      );
 
-      db.collection('galleries')
-        .where('author', '==', currentUser.email)
-        .get()
-        .then((q) => {
-          if (q.empty) {
-            return;
-          }
+      getDataWhereQuery(
+        'galleries',
+        'author',
+        '==',
+        currentUser.email,
+        (data) => {
           let temp = [];
-          q.forEach((post) => {
-            temp.push({ value: post.id, label: post.data().title });
+          data.forEach((post) => {
+            temp.push({ value: post.id, label: post.title });
           });
+          console.log(temp);
 
           getAllData(temp, formatDatasets, setGalleryChart, setGalleryTop);
+        }
+      );
+      getDataFromDocument('analytics', 'home', (doc) => {
+        let temp = [];
+        let data = [];
+        doc.pageview.forEach((date) => {
+          temp.push(date.toDate().toDateString());
         });
+        data.push({ id: { label: 'Web App Visits' }, data: temp });
+        formatDatasets(
+          data,
+          formatDate(dateRange[0].value),
+          setGeneralChart,
+          undefined,
+          setGeneralTop
+        );
+      });
 
       setLoading(false);
     }
     getData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function getAllData(arrayOfIds, callback, setData, setTop) {
+  function getAllData(arrayOfIds, callback, setData, setTop, setTotal) {
     let temp = [];
     arrayOfIds.forEach((id) => {
       analytics
@@ -113,7 +135,13 @@ export default function DashboardMain() {
     });
   }
 
-  function formatDatasets(unformattedDataset, dates, setData, setTop) {
+  function formatDatasets(
+    unformattedDataset,
+    dates,
+    setData,
+    setTop,
+    setTotal
+  ) {
     let tempData = [];
     let logs = [];
 
@@ -158,8 +186,16 @@ export default function DashboardMain() {
         return 0;
       }
 
-      maxArray.sort(compare);
-      setTop(maxArray.slice(0, 5));
+      if (setTop) {
+        maxArray.sort(compare);
+        setTop(maxArray.slice(0, 5));
+      } else {
+        let temp = 0;
+        maxArray.forEach((item) => {
+          temp += item.count;
+        });
+        setTotal(temp);
+      }
     });
 
     setData(formattedDatasets);
@@ -184,7 +220,32 @@ export default function DashboardMain() {
           style={{ display: 'flex', justifyContent: 'center' }}
         >
           <Col>
+            <Row>
+              <Row>
+                <h2>General Statistics</h2>
+              </Row>
+              <Row>
+                {generalChart && loading ? (
+                  <Spinner animation='border' />
+                ) : (
+                  <>
+                    <RenderChart
+                      data={generalChart}
+                      options={options}
+                      header='Web App Visits this Week'
+                    />
+                  </>
+                )}
+              </Row>
+            </Row>
             <Row className='w-100'>
+              {generalTop && (
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <h4>Web Visits Over the past week:{generalTop}</h4>
+                </div>
+              )}
+            </Row>
+            <Row className='w-100 mt-5'>
               <Col>
                 <h2>Charts</h2>
                 {loading && postChart ? (

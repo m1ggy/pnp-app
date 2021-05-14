@@ -21,8 +21,6 @@ export default function RenderTopOfTheWeek({ data, header }) {
     );
   }
 
-  console.log(data);
-
   return data.map((item) => {
     return (
       <ListGroup.Item key={item.label}>

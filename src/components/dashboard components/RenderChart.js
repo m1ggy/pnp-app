@@ -1,5 +1,5 @@
 import React from 'react';
-import { Line } from 'react-chartjs-2';
+import { Line, Bar } from 'react-chartjs-2';
 import { Col, Container } from 'react-bootstrap';
 
 export default function RenderChart({ data, header, options }) {
@@ -10,7 +10,7 @@ export default function RenderChart({ data, header, options }) {
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <h4>{header}</h4>
           </div>
-          <Line data={data} options={options} />
+          <Bar data={data} options={options} />
         </Col>
       </Container>
     </>

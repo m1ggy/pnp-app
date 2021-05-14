@@ -40,7 +40,11 @@ export default function ManageAnnouncement() {
         tempArray.push(doc.data());
       });
 
-      setAnnouncement(tempArray);
+      let filtered = tempArray.filter(
+        (item) => item.author === currentUser.email
+      );
+
+      setAnnouncement(filtered);
     });
 
     setLoading(false);
@@ -148,11 +152,7 @@ export default function ManageAnnouncement() {
         </div>
       );
 
-    let filtered = announcement.filter(
-      (item) => item.author === currentUser.email
-    );
-
-    return filtered.map((item) => {
+    return announcement.map((item) => {
       return (
         <Row key={item.id} className='border w-100 p-3'>
           <Col>

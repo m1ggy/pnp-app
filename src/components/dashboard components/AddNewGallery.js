@@ -99,6 +99,7 @@ export default function AddNewGallery() {
         timeUploaded: date.toTimeString(),
         timestamp,
         names: tempArray,
+        id: tempID,
       },
       { merge: true }
     );

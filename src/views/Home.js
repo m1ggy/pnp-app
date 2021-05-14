@@ -9,7 +9,6 @@ import {
   Button,
   Pagination,
   Alert,
-  Form,
 } from 'react-bootstrap';
 import { firestore } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
@@ -172,52 +171,57 @@ function Home() {
     <>
       <Col>
         <Row style={{ marginTop: 150, marginBottom: 50 }}>
-          <Col className='border'>
-            <Row>
-              <Jumbotron className='w-100'>
-                <h1 className='title'>Latest Post</h1>
-                <Container>
-                  {loading ? (
-                    <Spinner animation='border' className='m-auto' />
-                  ) : (
-                    <RenderPosts />
-                  )}
-                </Container>
+          <Row>
+            <Col className='border'>
+              <Row>
+                <Jumbotron className='w-100'>
+                  <h1 className='title'>Latest Post</h1>
+                  <Col lg={1}></Col>
+                  <Col>
+                    <Container>
+                      {loading ? (
+                        <Spinner animation='border' className='m-auto' />
+                      ) : (
+                        <RenderPosts />
+                      )}
+                    </Container>
 
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    marginTop: 20,
-                  }}
-                >
-                  {pageNumbers && (
-                    <Pagination size='lg'>
-                      {pageNumbers.map((num, index) => {
-                        return (
-                          <Pagination.Item
-                            onClick={() => {
-                              paginate(num);
-                            }}
-                            key={index}
-                          >
-                            {num}
-                          </Pagination.Item>
-                        );
-                      })}
-                    </Pagination>
-                  )}
-                </div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        marginTop: 20,
+                      }}
+                    >
+                      {pageNumbers && (
+                        <Pagination size='lg'>
+                          {pageNumbers.map((num, index) => {
+                            return (
+                              <Pagination.Item
+                                onClick={() => {
+                                  paginate(num);
+                                }}
+                                key={index}
+                              >
+                                {num}
+                              </Pagination.Item>
+                            );
+                          })}
+                        </Pagination>
+                      )}
+                    </div>
+                  </Col>
+                </Jumbotron>
+              </Row>
+            </Col>
+
+            <Col lg={3} className='border'>
+              <Jumbotron>
+                <h1>Announcements</h1>
+                <RenderAnnouncements />
               </Jumbotron>
-            </Row>
-          </Col>
-
-          <Col lg={3} className='border'>
-            <Jumbotron>
-              <h1>Announcements</h1>
-              <RenderAnnouncements />
-            </Jumbotron>
-          </Col>
+            </Col>
+          </Row>
         </Row>
       </Col>
     </>

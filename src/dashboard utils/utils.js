@@ -11,7 +11,7 @@ export function formatData(id, dates, title, callback) {
         arr = q.data().pageview;
         return callback(arr, dates, title);
       }
-      callback([], dates, title);
+      return callback([], dates, title);
     })
     .catch((e) => {
       console.log(e);

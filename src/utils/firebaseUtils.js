@@ -11,3 +11,54 @@ export function pageView(id) {
     { merge: true }
   );
 }
+
+export function getDataFromDocument(collection, document, callback) {
+  const db = firestore.collection(collection).doc(document);
+
+  db.get().then((doc) => {
+    if (doc.exists) {
+      return callback(doc.data());
+    }
+    return callback([]);
+  });
+}
+
+export function getDataFromCollection(collection, callback) {
+  const db = firestore.collection(collection);
+
+  db.get().then((docs) => {
+    let temp = [];
+    if (docs.empty) {
+      return callback([]);
+    }
+
+    docs.forEach((doc) => {
+      temp.push(doc.data());
+    });
+
+    return callback(temp);
+  });
+}
+
+export function getDataWhereQuery(
+  collection,
+  criteria,
+  operator,
+  value,
+  callback
+) {
+  const db = firestore.collection(collection);
+  db.where(criteria, operator, value)
+    .get()
+    .then((docs) => {
+      if (docs.empty) {
+        return callback([]);
+      }
+      let temp = [];
+      docs.forEach((doc) => {
+        temp.push(doc.data());
+      });
+
+      return callback(temp);
+    });
+}

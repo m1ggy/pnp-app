@@ -91,15 +91,13 @@ export default function PostEntry() {
               className='m-auto'
             />
           </Row>
-
-          <Row className='w-100 pr-5 pl-5'>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(item.content),
-              }}
-              style={{ textAlign: 'justify' }}
-            ></div>
-          </Row>
+          <Row
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(item.content),
+            }}
+            style={{ textAlign: 'justify' }}
+            className='w-100'
+          ></Row>
           <Row className='w-100'>
             <p style={{ textAlign: 'justify' }} className='m-auto'>
               {item.date} {item.time}
