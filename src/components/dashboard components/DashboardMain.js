@@ -269,7 +269,7 @@ export default function DashboardMain() {
           style={{ display: 'flex', justifyContent: 'center' }}
         >
           <Col>
-            <Row className='w-100 border'>
+            <Row className='w-100'>
               <h2>General Statistics</h2>
 
               <Row className='w-100'>

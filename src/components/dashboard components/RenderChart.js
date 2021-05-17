@@ -23,7 +23,10 @@ export default function RenderChart({ data, header, options, percentage }) {
 
   return (
     <>
-      <Container className='mt-5 border'>
+      <Container
+        className='mt-5 p-3'
+        style={{ boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px' }}
+      >
         <Col>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <h4>{header}</h4>
