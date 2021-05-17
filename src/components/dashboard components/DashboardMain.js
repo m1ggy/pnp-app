@@ -5,10 +5,10 @@ import {
   Row,
   Spinner,
   ListGroup,
-  Container,
+  Alert,
 } from 'react-bootstrap';
 import { firestore } from '../../firebase/firebase';
-import { formatDate } from '../../dashboard utils/utils';
+import { formatData, formatDate } from '../../dashboard utils/utils';
 import { useAuth } from '../../contexts/AuthContext';
 import RenderChart from '../dashboard components/RenderChart';
 import RenderTopOfTheWeek from '../dashboard components/RenderTopOfTheWeek';
@@ -20,7 +20,7 @@ export default function DashboardMain() {
   const [postChart, setPostChart] = useState([]);
 
   const [loading, setLoading] = useState(false);
-  const db = firestore;
+  const [percentage, setPercentage] = useState(undefined);
   const analytics = firestore.collection('analytics');
   const [downloadChart, setDownloadChart] = useState([]);
   const [galleryChart, setGalleryChart] = useState([]);
@@ -167,6 +167,55 @@ export default function DashboardMain() {
       datasets: tempData,
     };
 
+    if (typeof setTop === 'undefined') {
+      let percent;
+      if (
+        formattedDatasets.datasets[0].data[
+          formattedDatasets.datasets[0].data.length - 1
+        ] >
+        formattedDatasets.datasets[0].data[
+          formattedDatasets.datasets[0].data.length - 2
+        ]
+      ) {
+        let increase =
+          formattedDatasets.datasets[0].data[
+            formattedDatasets.datasets[0].data.length - 1
+          ] -
+          formattedDatasets.datasets[0].data[
+            formattedDatasets.datasets[0].data.length - 2
+          ];
+
+        console.log(
+          formattedDatasets.datasets[0].data[
+            formattedDatasets.datasets[0].data.length - 1
+          ]
+        );
+        percent =
+          (increase / formattedDatasets.datasets[0].data.length - 2) * 100;
+
+        setPercentage({ label: 'green', data: percent.toFixed(2) });
+      } else if (
+        formattedDatasets.datasets[0].data[
+          formattedDatasets.datasets[0].data.length - 2
+        ] >
+        formattedDatasets.datasets[0].data[
+          formattedDatasets.datasets[0].data.length - 1
+        ]
+      ) {
+        let decrease =
+          formattedDatasets.datasets[0].data[
+            formattedDatasets.datasets[0].data.length - 2
+          ] -
+          formattedDatasets.datasets[0].data[
+            formattedDatasets.datasets[0].data.length - 1
+          ];
+        percent =
+          (decrease / formattedDatasets.datasets[0].data.length - 2) * 100;
+
+        setPercentage({ label: 'red', data: percent.toFixed(2) });
+      }
+    }
+
     let maxArray = [];
     let num = 0;
     tempData.forEach((data) => {
@@ -232,6 +281,7 @@ export default function DashboardMain() {
                       data={generalChart}
                       options={options}
                       header='Web App Visits this Week'
+                      percentage={percentage}
                     />
                   </>
                 )}
@@ -248,7 +298,7 @@ export default function DashboardMain() {
               )}
             </Row>
             <Row className='w-100 mt-5'>
-              <Col>
+              <Col lg={8}>
                 <h2>Charts</h2>
                 {loading && postChart ? (
                   <Spinner animation='border' />
@@ -279,7 +329,7 @@ export default function DashboardMain() {
               </Col>
             </Row>
             <Row className='w-100 mt-5'>
-              <Col>
+              <Col lg={8}>
                 {loading && downloadChart ? (
                   <Spinner animation='border' />
                 ) : (
@@ -309,7 +359,7 @@ export default function DashboardMain() {
               </Col>
             </Row>
             <Row className='w-100 mt-5'>
-              <Col>
+              <Col lg={8}>
                 {loading && galleryChart ? (
                   <Spinner animation='border' />
                 ) : (

@@ -81,9 +81,6 @@ export default function Sidebar() {
             </NavDropdown>
           </Row>
           <Row className='mt-3'>
-            <Link to='/dashboard/map'>Map</Link>
-          </Row>
-          <Row className='mt-3'>
             <Link to='/dashboard/charts'>Charts</Link>
           </Row>
           <Row className='mt-3'>

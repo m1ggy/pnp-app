@@ -8,7 +8,6 @@ import AddNewPost from '../components/dashboard components/AddNewPost';
 import Drafts from '../components/dashboard components/Drafts';
 import ManagePost from '../components/dashboard components/ManagePost';
 import ManageDownloads from '../components/dashboard components/ManageDownloads';
-import MapsMain from '../components/dashboard components/MapsMain';
 import ChartsMain from '../components/dashboard components/ChartsMain';
 import AccountsMain from '../components/dashboard components/AccountsMain';
 import ManageGalleries from '../components/dashboard components/ManageGalleries';
@@ -47,11 +46,6 @@ export default function Dashboard() {
       path={`${path}/charts`}
       key={`${path}/charts`}
       render={() => <ChartsMain />}
-    />,
-    <Route
-      path={`${path}/map`}
-      key={`${path}/map`}
-      render={() => <MapsMain />}
     />,
     <Route
       path={`${path}/downloads/add-new-download`}

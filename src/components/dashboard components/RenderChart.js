@@ -1,10 +1,16 @@
 import React from 'react';
-import { Line, Bar } from 'react-chartjs-2';
-import { Col, Container } from 'react-bootstrap';
+import { Bar } from 'react-chartjs-2';
+import { Col, Container, Spinner } from 'react-bootstrap';
 
-export default function RenderChart({ data, header, options }) {
+export default function RenderChart({ data, header, options, percentage }) {
   if (data) {
-    if (data.length === 0) {
+    if (data.length === 0 && typeof header === 'undefined') {
+      return (
+        <div>
+          <Spinner animation='grow' />
+        </div>
+      );
+    } else if (data.length === 0) {
       return (
         <>
           <Container className='mt-5 border'>
@@ -14,6 +20,7 @@ export default function RenderChart({ data, header, options }) {
       );
     }
   }
+
   return (
     <>
       <Container className='mt-5 border'>
@@ -26,6 +33,26 @@ export default function RenderChart({ data, header, options }) {
             options={options}
             style={{ width: 350, height: 350 }}
           />
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            {percentage && (
+              <>
+                {percentage.label === 'red' ? (
+                  <p>Down by</p>
+                ) : percentage.label === 'green' ? (
+                  <p>Up by </p>
+                ) : null}
+                <p
+                  style={{
+                    color: `${percentage.label}`,
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {percentage.data}%
+                </p>
+              </>
+            )}
+          </div>
         </Col>
       </Container>
     </>

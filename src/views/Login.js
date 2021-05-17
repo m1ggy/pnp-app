@@ -51,8 +51,6 @@ function Login() {
       <Card style={{ width: '400px' }} className='mx-auto'>
         <Card.Body>
           <h2>Login</h2>
-          {error && <Alert variant='danger'>{error}</Alert>}
-          {msg && <Alert variant='danger'>{msg}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group id='Email'>
               <Form.Label>Email</Form.Label>
@@ -76,10 +74,14 @@ function Login() {
             </Container>
           </Form>
         </Card.Body>
+        <Card.Footer>
+          {error && <Alert variant='danger'>{error}</Alert>}
+          {msg && <Alert variant='danger'>{msg}</Alert>}
+          <div className='w-100 text-center mt-2'>
+            <NavLink to='/home'>Go back</NavLink>
+          </div>
+        </Card.Footer>
       </Card>
-      <div className='w-100 text-center mt-2'>
-        <NavLink to='/home'>Go back</NavLink>
-      </div>
     </Container>
   );
 }

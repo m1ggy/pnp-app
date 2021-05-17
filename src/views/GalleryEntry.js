@@ -7,7 +7,7 @@ import {
   Container,
   Breadcrumb,
 } from 'react-bootstrap';
-import { firestore, firebase } from '../firebase/firebase';
+import { firestore } from '../firebase/firebase';
 import { useEffect, useState } from 'react';
 import Carousel from 'react-gallery-carousel';
 import 'react-gallery-carousel/dist/index.css';
@@ -15,7 +15,6 @@ import { pageView } from '../utils/firebaseUtils';
 export default function GalleryEntry() {
   const { id } = useParams();
   const db = firestore.collection('galleries');
-  const analytics = firestore.collection('analytics');
   const [images, setImages] = useState();
   const [loading, setLoading] = useState(false);
   const [carouselImages, setCarouselImages] = useState();

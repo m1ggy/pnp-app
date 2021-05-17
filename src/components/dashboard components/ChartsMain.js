@@ -9,7 +9,7 @@ import {
   Spinner,
 } from 'react-bootstrap';
 import { formatData, formatDate } from '../../dashboard utils/utils';
-import { Line } from 'react-chartjs-2';
+import RenderChart from '../dashboard components/RenderChart';
 import { useAuth } from '../../contexts/AuthContext';
 import Select from 'react-select';
 import { firestore } from '../../firebase/firebase';
@@ -121,28 +121,6 @@ export default function ChartsMain() {
     setChartValues(formattedDatasets);
   }
 
-  function RenderChart() {
-    if (chartValues === null || typeof chartValues === undefined) {
-      return null;
-    }
-
-    return (
-      <Col>
-        <Row>
-          <Col>
-            <h5 className='mt-3 mb-3'>Total Interactions: {total.current}</h5>
-          </Col>
-          <Col>
-            <h5 className='mt-3 mb-3'>
-              Average Interactions: {average.current}
-            </h5>
-          </Col>
-        </Row>
-        <Line data={chartValues} options={options} />
-      </Col>
-    );
-  }
-
   return (
     <Col>
       <Row className='w-100'>
@@ -224,7 +202,31 @@ export default function ChartsMain() {
               </Container>
             </Row>
             <Row className='w-100'>
-              {loading ? <Spinner animation='border' /> : <RenderChart />}
+              {loading ? (
+                <Spinner animation='border' />
+              ) : (
+                <Col>
+                  <Row>
+                    <Container>
+                      <Row>
+                        <Col>
+                          <h5 className='mt-3 mb-3'>
+                            Total Interactions: {total.current}
+                          </h5>
+                        </Col>
+                        <Col>
+                          <h5 className='mt-3 mb-3'>
+                            Average Interactions: {average.current}/ Day
+                          </h5>
+                        </Col>
+                      </Row>
+                    </Container>
+                  </Row>
+                  <Row style={{ display: 'flex', justifyContent: 'center' }}>
+                    <RenderChart data={chartValues} options={options} />
+                  </Row>
+                </Col>
+              )}
             </Row>
           </Col>
         </Jumbotron>
