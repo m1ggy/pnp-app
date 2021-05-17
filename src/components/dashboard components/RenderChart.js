@@ -44,6 +44,7 @@ export default function RenderChart({ data, header, options, percentage }) {
                 ) : percentage.label === 'green' ? (
                   <p>Up by </p>
                 ) : null}
+
                 <p
                   style={{
                     color: `${percentage.label}`,
@@ -51,7 +52,7 @@ export default function RenderChart({ data, header, options, percentage }) {
                     fontWeight: 'bold',
                   }}
                 >
-                  {percentage.data}%
+                  &nbsp;{percentage.data}%
                 </p>
               </>
             )}

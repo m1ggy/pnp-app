@@ -56,7 +56,16 @@ function GalleryMain() {
           }}
         >
           <Link to={`${url}/${gallery.id}`}>
-            <Image src={gallery.data.imagesURL[1]} id='imageHover' />
+            <Image
+              src={gallery.data.imagesURL[1]}
+              id='imageHover'
+              style={{
+                boxShadow:
+                  'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
+                padding: 0,
+                margin: 0,
+              }}
+            />
             <div id='galleryDesc'>
               <h3 style={{ color: 'white' }}>{gallery.data.title}</h3>
               <p style={{ color: 'white' }}>{gallery.data.subtitle}</p>

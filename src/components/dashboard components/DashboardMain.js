@@ -313,11 +313,15 @@ export default function DashboardMain() {
               <Col>
                 <h2>Top this week</h2>
                 {top && (
-                  <div className='mt-5 border'>
+                  <div className='mt-5 '>
                     <h4 style={{ display: 'flex', justifyContent: 'center' }}>
                       Top Posts this Week
                     </h4>
-                    <ListGroup>
+                    <ListGroup
+                      style={{
+                        boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+                      }}
+                    >
                       {loading ? (
                         <Spinner animation='border' />
                       ) : (
@@ -341,11 +345,15 @@ export default function DashboardMain() {
                 )}
               </Col>
               <Col>
-                <div className='mt-5 border'>
+                <div className='mt-5'>
                   <h4 style={{ display: 'flex', justifyContent: 'center' }}>
                     Top Downloads this Week
                   </h4>
-                  <ListGroup>
+                  <ListGroup
+                    style={{
+                      boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+                    }}
+                  >
                     {loading && downloadTop ? (
                       <Spinner animation='border' />
                     ) : (
@@ -372,11 +380,15 @@ export default function DashboardMain() {
               </Col>
               <Col>
                 {galleryTop && (
-                  <div className='mt-5 border'>
+                  <div className='mt-5'>
                     <h4 style={{ display: 'flex', justifyContent: 'center' }}>
                       Top Galleries this Week
                     </h4>
-                    <ListGroup>
+                    <ListGroup
+                      style={{
+                        boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+                      }}
+                    >
                       {loading ? (
                         <Spinner animation='border' />
                       ) : (

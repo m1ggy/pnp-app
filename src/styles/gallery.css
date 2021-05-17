@@ -8,9 +8,9 @@
 }
 
 #imageHover {
-  object-fit: contain;
+  object-fit: cover;
   width: 100%;
-  height: 350px;
+  height: 450px;
   position: relative;
   z-index: 1;
   align-self: center;
