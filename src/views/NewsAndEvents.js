@@ -115,8 +115,21 @@ function NewsAndEvents() {
       return index === 0 || index === 1 || index === 2 ? (
         <Col md={6} lg={4} xs={12} key={post.id}>
           <Link to={`/news-and-events/${post.id}`}>
-            <Image src={post.url} style={{ width: '100%' }} />
-            <div id='postDesc'>
+            <Image
+              src={post.url}
+              style={{
+                width: '100%',
+                boxShadow:
+                  'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
+              }}
+            />
+            <div
+              id='postDesc'
+              style={{
+                boxShadow:
+                  'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
+              }}
+            >
               <Row
                 lg={12}
                 style={{ display: 'flex', justifyContent: 'center' }}
