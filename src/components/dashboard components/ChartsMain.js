@@ -17,8 +17,12 @@ import { firestore } from '../../firebase/firebase';
 export default function ChartsMain() {
   const [chartValues, setChartValues] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const db = firestore.collection('posts');
+  const [selectLoading, setSelectLoading] = useState(true);
+  const [category, setCategory] = useState([
+    { label: 'Posts', value: 'posts' },
+    { label: 'Galleries', value: 'galleries' },
+    { label: 'Downloads', value: 'downloads' },
+  ]);
   const [selectValues, setSelectValues] = useState();
   const dateRef = useRef();
   const idRef = useRef();
@@ -45,29 +49,28 @@ export default function ChartsMain() {
 
   const { currentUser } = useAuth();
 
-  useEffect(() => {
-    async function getData() {
-      setLoading(true);
-      dateRef.current = formatDate(dateRange[0].value);
+  // eslint-disable-line react-hooks/exhaustive-deps
 
-      db.where('author', '==', currentUser.email)
-        .get()
-        .then((q) => {
-          if (q.empty) {
-            return;
-          }
-          let temp = [];
-          q.forEach((post) => {
-            temp.push({ value: post.id, label: post.data().title });
-          });
-
-          setSelectValues(temp);
+  async function getData(id) {
+    setSelectLoading(true);
+    dateRef.current = formatDate(dateRange[0].value);
+    const db = firestore.collection(id);
+    db.where('author', '==', currentUser.email)
+      .get()
+      .then((q) => {
+        if (q.empty) {
+          return;
+        }
+        let temp = [];
+        q.forEach((post) => {
+          temp.push({ value: post.id, label: post.data().title });
         });
 
-      setLoading(false);
-    }
-    getData();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+        setSelectValues(temp);
+      });
+
+    setLoading(false);
+  }
 
   function submit(e) {
     setChartValues(null);
@@ -127,10 +130,12 @@ export default function ChartsMain() {
       <Col>
         <Row>
           <Col>
-            <h5 className='mt-3 mb-3'>Total Page Views: {total.current}</h5>
+            <h5 className='mt-3 mb-3'>Total Interactions: {total.current}</h5>
           </Col>
           <Col>
-            <h5 className='mt-3 mb-3'>Average Page Views: {average.current}</h5>
+            <h5 className='mt-3 mb-3'>
+              Average Interactions: {average.current}
+            </h5>
           </Col>
         </Row>
         <Line data={chartValues} options={options} />
@@ -155,7 +160,7 @@ export default function ChartsMain() {
               <Container>
                 <Form onSubmit={submit}>
                   <Row>
-                    <Col lg={6}>
+                    <Col lg={4}>
                       <Form.Group>
                         {' '}
                         <h3>Date Range</h3>
@@ -168,23 +173,39 @@ export default function ChartsMain() {
                         />
                       </Form.Group>
                     </Col>
-                    <Col lg={6}>
+                    <Col lg={4}>
                       <Form.Group>
-                        <h3>Post</h3>
+                        <h3>Category</h3>
+
+                        <Select
+                          options={category}
+                          onChange={(entry) => {
+                            getData(entry.value);
+                          }}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col lg={4}>
+                      <Form.Group>
+                        <h3>Entry</h3>
                         {selectValues ? (
                           <Select
                             options={selectValues}
                             onChange={(value) => {
                               idRef.current = value;
+                              setSelectLoading(false);
                             }}
                           />
                         ) : (
                           <Select
-                            options={{ label: 'loading.....', value: null }}
+                            isLoading={selectLoading}
+                            loadingMessage={'Loading ....'}
+                            isDisabled={selectLoading}
                           />
                         )}
                       </Form.Group>
                     </Col>
+
                     <div
                       className='m-auto'
                       style={{ display: 'flex', justifyContent: 'center' }}
@@ -193,6 +214,7 @@ export default function ChartsMain() {
                         type='submit'
                         variant='primary'
                         className='mt-3 mb-5'
+                        disabled={selectLoading}
                       >
                         View
                       </Button>

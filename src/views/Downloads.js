@@ -79,7 +79,7 @@ function Downloads() {
   useEffect(() => {
     setLoading(true);
 
-    pageView('downloads');
+    pageView('webapp');
 
     async function getData() {
       let tempArray = [];

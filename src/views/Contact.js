@@ -4,7 +4,7 @@ import { pageView } from '../utils/firebaseUtils';
 
 function Contact() {
   useEffect(() => {
-    pageView('contact');
+    pageView('webapp');
   }, []);
   return (
     <Col>

@@ -8,7 +8,7 @@ import { Row, Col, Jumbotron } from 'react-bootstrap';
 import { pageView } from '../utils/firebaseUtils';
 function Maps() {
   useEffect(() => {
-    pageView('map');
+    pageView('webapp');
   }, []);
 
   return (

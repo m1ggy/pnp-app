@@ -1,12 +1,12 @@
 import React from 'react';
-import { Col, Row, NavDropdown, Jumbotron, Nav } from 'react-bootstrap';
+import { Container, Row, NavDropdown, Jumbotron, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import '../styles/sidebar.css';
 
 export default function Sidebar() {
   return (
-    <Col>
-      <Jumbotron className='border pt-3 pl-5'>
+    <div>
+      <Jumbotron className='border p-5 ' style={{ zIndex: 999 }}>
         <h5>Navigation</h5>
         <Nav className='flex-column'>
           <Row className='mt-3'>
@@ -91,6 +91,6 @@ export default function Sidebar() {
           </Row>
         </Nav>
       </Jumbotron>
-    </Col>
+    </div>
   );
 }

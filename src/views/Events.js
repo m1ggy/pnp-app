@@ -23,7 +23,7 @@ export default function Events() {
   const [pageNumbers, setPageNumbers] = useState();
 
   useEffect(() => {
-    pageView('events');
+    pageView('webapp');
     async function getData() {
       setLoading(true);
       let tempArray = [];

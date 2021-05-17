@@ -10,11 +10,13 @@ function Login() {
   const { login, currentUser } = useAuth();
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
+  const [disable, setDisable] = useState(false);
   const history = useHistory();
   const location = useLocation();
   const [msg, setMsg] = useState();
 
   async function handleSubmit(e) {
+    setDisable(true);
     e.preventDefault();
     try {
       setMsg('');
@@ -26,6 +28,7 @@ function Login() {
       setError('Failed to Login. email or password is incorrect.');
     }
     setLoading(false);
+    setDisable(false);
   }
 
   ///prevent the user from visiting the login page when currently logged in
@@ -65,7 +68,7 @@ function Login() {
                 <Button
                   onClick={handleSubmit}
                   variant='primary'
-                  disabled={loading}
+                  disabled={disable}
                 >
                   Login
                 </Button>

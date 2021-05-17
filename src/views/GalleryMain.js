@@ -26,7 +26,7 @@ function GalleryMain() {
         setGallery(tempArray);
       });
     }
-    pageView('gallery');
+    pageView('webapp');
     getGalleries();
     setLoading(false);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

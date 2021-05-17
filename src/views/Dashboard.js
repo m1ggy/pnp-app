@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
 import { Button, Alert, Navbar, Form, Row, Col, Modal } from 'react-bootstrap';
@@ -23,6 +23,7 @@ export default function Dashboard() {
   const history = useHistory();
   const { path } = useRouteMatch();
   const [showModal, setShowModal] = useState(false);
+  const scrollRef = useRef();
   async function handleLogout() {
     setError('');
     try {
@@ -101,7 +102,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <>
+    <div>
       <Navbar className='bg-dark mb-3'>
         <Navbar.Brand style={{ color: 'white' }}>Admin Dashboard</Navbar.Brand>
         <Navbar.Collapse className='justify-content-end'>
@@ -127,7 +128,7 @@ export default function Dashboard() {
       </Navbar>
 
       <Row>
-        <Col md='auto'>
+        <Col lg={2} sm={12} md={12}>
           <Sidebar />
         </Col>
 
@@ -165,6 +166,6 @@ export default function Dashboard() {
           </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </div>
   );
 }

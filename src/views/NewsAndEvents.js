@@ -10,6 +10,7 @@ import {
 import { firestore } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
 import '../styles/posts.css';
+import { pageView } from '../utils/firebaseUtils';
 
 function NewsAndEvents() {
   const db = firestore.collection('posts');
@@ -46,6 +47,7 @@ function NewsAndEvents() {
         });
       setLoading(false);
     }
+    pageView('webapp');
 
     getData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

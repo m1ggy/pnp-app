@@ -95,7 +95,7 @@ export default function DashboardMain() {
           getAllData(temp, formatDatasets, setGalleryChart, setGalleryTop);
         }
       );
-      getDataFromDocument('analytics', 'home', (doc) => {
+      getDataFromDocument('analytics', 'webapp', (doc) => {
         let temp = [];
         let data = [];
         doc.pageview.forEach((date) => {
@@ -146,18 +146,18 @@ export default function DashboardMain() {
     let logs = [];
 
     unformattedDataset.forEach((dataset) => {
+      const color = makeRandomColor();
       dates.forEach((date) => {
         logs.push(
           dataset.data.reduce((pre, cur) => (cur === date ? ++pre : pre), 0)
         );
       });
-      let color = makeRandomColor();
+
       tempData.push({
         label: dataset.id.label,
         data: logs,
         fill: false,
-        backgroundColor: color,
-        borderColor: color,
+        backgroundColor: makeRandomColor(),
       });
       logs = [];
     });
@@ -220,11 +220,10 @@ export default function DashboardMain() {
           style={{ display: 'flex', justifyContent: 'center' }}
         >
           <Col>
-            <Row>
-              <Row>
-                <h2>General Statistics</h2>
-              </Row>
-              <Row>
+            <Row className='w-100 border'>
+              <h2>General Statistics</h2>
+
+              <Row className='w-100'>
                 {generalChart && loading ? (
                   <Spinner animation='border' />
                 ) : (
@@ -240,7 +239,10 @@ export default function DashboardMain() {
             </Row>
             <Row className='w-100'>
               {generalTop && (
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <div
+                  style={{ display: 'flex', justifyContent: 'center' }}
+                  className='mt-5'
+                >
                   <h4>Web Visits Over the past week:{generalTop}</h4>
                 </div>
               )}
@@ -261,7 +263,7 @@ export default function DashboardMain() {
               <Col>
                 <h2>Top this week</h2>
                 {top && (
-                  <div className='mt-5'>
+                  <div className='mt-5 border'>
                     <h4 style={{ display: 'flex', justifyContent: 'center' }}>
                       Top Posts this Week
                     </h4>
@@ -289,7 +291,7 @@ export default function DashboardMain() {
                 )}
               </Col>
               <Col>
-                <div className='mt-5'>
+                <div className='mt-5 border'>
                   <h4 style={{ display: 'flex', justifyContent: 'center' }}>
                     Top Downloads this Week
                   </h4>
@@ -320,7 +322,7 @@ export default function DashboardMain() {
               </Col>
               <Col>
                 {galleryTop && (
-                  <div className='mt-5'>
+                  <div className='mt-5 border'>
                     <h4 style={{ display: 'flex', justifyContent: 'center' }}>
                       Top Galleries this Week
                     </h4>

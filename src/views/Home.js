@@ -24,7 +24,7 @@ function Home() {
   const [pageNumbers, setPageNumbers] = useState();
 
   useEffect(() => {
-    pageView('home');
+    pageView('webapp');
 
     async function getData() {
       let tempArray = [];

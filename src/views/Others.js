@@ -12,6 +12,7 @@ import {
 } from 'react-bootstrap';
 import { firestore } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
+import { pageView } from '../utils/firebaseUtils';
 
 export default function Others() {
   const db = firestore.collection('posts');
@@ -59,6 +60,7 @@ export default function Others() {
       }
       setPageNumbers(temp);
     }
+    pageView('webapp');
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function paginate(num) {
