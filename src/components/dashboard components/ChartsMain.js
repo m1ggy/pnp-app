@@ -18,7 +18,7 @@ export default function ChartsMain() {
   const [chartValues, setChartValues] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectLoading, setSelectLoading] = useState(true);
-  const [category, setCategory] = useState([
+  const [category] = useState([
     { label: 'Posts', value: 'posts' },
     { label: 'Galleries', value: 'galleries' },
     { label: 'Downloads', value: 'downloads' },
@@ -83,7 +83,6 @@ export default function ChartsMain() {
       idRef.current.label,
       formatDataCallback
     );
-    // setChartValues(formatted);
     setLoading(false);
   }
 
