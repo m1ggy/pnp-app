@@ -27,6 +27,7 @@ export default function Drafts() {
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [publishModal, setPublishModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
+  //eslint-disable-next-line
   const [content, setContent] = useState(RichTextEditor.createEmptyValue());
   const getContent = useRef('');
   const { currentUser } = useAuth();

@@ -1,12 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  Col,
-  Container,
-  Image,
-  Jumbotron,
-  Row,
-  Spinner,
-} from 'react-bootstrap';
+import { Col, Image, Jumbotron, Row, Spinner } from 'react-bootstrap';
 import { firestore } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
 import '../styles/posts.css';

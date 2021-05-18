@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../styles/login.css';
 import { useAuth } from '../contexts/AuthContext';
-import { Alert, Card, Form, Container, Button } from 'react-bootstrap';
+import { Alert, Card, Form, Container, Button, Spinner } from 'react-bootstrap';
 import { useHistory, NavLink, useLocation } from 'react-router-dom';
 
 function Login() {
@@ -9,7 +9,6 @@ function Login() {
   const passwordRef = useRef();
   const { login, currentUser } = useAuth();
   const [error, setError] = useState();
-  const [loading, setLoading] = useState(false);
   const [disable, setDisable] = useState(false);
   const history = useHistory();
   const location = useLocation();
@@ -21,13 +20,12 @@ function Login() {
     try {
       setMsg('');
       setError('');
-      setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
       history.push('/dashboard');
     } catch {
       setError('Failed to Login. email or password is incorrect.');
     }
-    setLoading(false);
+
     setDisable(false);
   }
 
@@ -68,7 +66,7 @@ function Login() {
                   variant='primary'
                   disabled={disable}
                 >
-                  Login
+                  {disable ? <Spinner animation='border' /> : 'Login'}
                 </Button>
               </div>
             </Container>

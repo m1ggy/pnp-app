@@ -76,18 +76,30 @@ export default function PostEntry() {
           className='w-100'
         >
           <Row className='w-100'>
-            <h2>{item.title}</h2>
+            <h1>{item.title}</h1>
           </Row>
           <Row className='w-100'>
             <p style={{ textAlign: 'justify' }} className='m-auto'>
               {item.subtitle}
             </p>
           </Row>
-
           <Row className='w-100'>
+            <p
+              style={{ textAlign: 'justify', fontWeight: 'bold', fontSize: 10 }}
+              className='m-auto'
+            >
+              {item.date}
+            </p>
+          </Row>
+
+          <Row className='w-100 m-5'>
             <Image
               src={item.url}
-              style={{ height: '100%', width: 1000 }}
+              style={{
+                height: '100%',
+                width: 1000,
+                boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+              }}
               className='m-auto'
             />
           </Row>
@@ -95,14 +107,9 @@ export default function PostEntry() {
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(item.content),
             }}
-            style={{ textAlign: 'justify' }}
+            style={{ textAlign: 'justify', fontSize: 20 }}
             className='w-100'
           ></Row>
-          <Row className='w-100'>
-            <p style={{ textAlign: 'justify' }} className='m-auto'>
-              {item.date} {item.time}
-            </p>
-          </Row>
         </Row>
       );
     });
@@ -113,43 +120,48 @@ export default function PostEntry() {
       <Col>
         <Row style={{ marginTop: 150 }}>
           <Row className='w-100'>
-            <Jumbotron
-              className='mt-2 w-100'
-              style={{ display: 'flex', justifyContent: 'center' }}
-            >
-              <Col>
-                <Row className='w-100'>
-                  {type && (
-                    <Breadcrumb>
-                      <Breadcrumb.Item>
-                        <Link to={`/news-and-events`}>News and Events</Link>
-                      </Breadcrumb.Item>
-                      <Breadcrumb.Item>
-                        <Link to={`/news-and-events/${type.type.value}`}>
-                          {type.type.label}
-                        </Link>
-                      </Breadcrumb.Item>
-                      <Breadcrumb.Item active>{type.title}</Breadcrumb.Item>
-                    </Breadcrumb>
-                  )}
-                </Row>
-                <Row className='w-100'>
-                  <Col lg={1}></Col>
-                  <Col lg={10}>
+            <Jumbotron className='w-100' style={{ padding: 0 }}>
+              {type && (
+                <Breadcrumb style={{ margin: 20 }}>
+                  <Breadcrumb.Item>
+                    <Link to={`/news-and-events`}>News and Events</Link>
+                  </Breadcrumb.Item>
+                  <Breadcrumb.Item>
+                    <Link to={`/news-and-events/${type.type.value}`}>
+                      {type.type.label}
+                    </Link>
+                  </Breadcrumb.Item>
+                  <Breadcrumb.Item active>{type.title}</Breadcrumb.Item>
+                </Breadcrumb>
+              )}
+            </Jumbotron>
+          </Row>
+          <Row>
+            <Col lg={2}></Col>
+            <Col>
+              <Row className='w-100'>
+                <Col lg={1}></Col>
+                <Col lg={10}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
                     {loading ? (
-                      <div
-                        style={{ display: 'flex', justifyContent: 'center' }}
-                      >
-                        <Spinner animation='border' />{' '}
+                      <div style={{ maxWidth: '50%' }}>
+                        <Spinner animation='border' />
                       </div>
                     ) : (
                       <RenderPost />
                     )}
-                  </Col>
-                  <Col lg={1}></Col>
-                </Row>
-              </Col>
-            </Jumbotron>
+                  </div>
+                </Col>
+                <Col lg={1}></Col>
+              </Row>
+            </Col>
+            <Col lg={2}></Col>
           </Row>
         </Row>
       </Col>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
 import { Button, Alert, Navbar, Form, Row, Col, Modal } from 'react-bootstrap';
@@ -22,7 +22,6 @@ export default function Dashboard() {
   const history = useHistory();
   const { path } = useRouteMatch();
   const [showModal, setShowModal] = useState(false);
-  const scrollRef = useRef();
   async function handleLogout() {
     setError('');
     try {
@@ -131,6 +130,7 @@ export default function Dashboard() {
             <Switch>{routes()}</Switch>
           </Row>
         </Col>
+        <Col lg={2}></Col>
       </Row>
 
       {error && <Alert variant='danger'>{error}</Alert>}

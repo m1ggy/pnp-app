@@ -9,14 +9,6 @@ function NavBarMain() {
       <Navbar expand='lg' fixed='top' className='navBorder'>
         <NavLink to='/'>
           <Navbar.Brand>
-            <img
-              width='35px'
-              height='45px'
-              src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Philippine_National_Police_seal.svg/1200px-Philippine_National_Police_seal.svg.png'
-              alt='PNP Logo'
-              className='d-inline-block align-top'
-              style={{ display: 'block' }}
-            />{' '}
             <Navbar.Text style={{ color: 'black' }}>
               Philippine National Police
             </Navbar.Text>

@@ -1,13 +1,13 @@
 .footer {
-    position:relative;
-    left:0;
-    bottom:0;
-    right:0;
-    margin:auto;
-    display:flex;
-    margin-bottom: 40px;
-    margin-top: 40px;
+  position: relative;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .footerContent {
-    margin: auto;
+  max-width: 50%;
 }
