@@ -261,7 +261,9 @@ function Home() {
                       news and events at your fingertips.
                     </Card.Text>
                   </Card.Body>
-                  <Card.Footer>
+                  <Card.Footer
+                    style={{ display: 'flex', justifyContent: 'center' }}
+                  >
                     <Link to='/news-and-events'>
                       <Button>Go to Posts</Button>
                     </Link>
@@ -300,7 +302,10 @@ function Home() {
                     </Card.Text>
                   </Card.Body>
                   <Card.Footer>
-                    <Link to='/maps'>
+                    <Link
+                      to='/maps'
+                      style={{ display: 'flex', justifyContent: 'center' }}
+                    >
                       <Button>Go to Map</Button>
                     </Link>
                   </Card.Footer>
@@ -336,7 +341,10 @@ function Home() {
                     </Card.Text>
                   </Card.Body>
                   <Card.Footer>
-                    <Link to='/gallery'>
+                    <Link
+                      to='/gallery'
+                      style={{ display: 'flex', justifyContent: 'center' }}
+                    >
                       <Button>Go to Galleries</Button>
                     </Link>
                   </Card.Footer>
@@ -372,7 +380,10 @@ function Home() {
                       covered.
                     </Card.Text>
                   </Card.Body>
-                  <Card.Footer ref={scrollRef}>
+                  <Card.Footer
+                    ref={scrollRef}
+                    style={{ display: 'flex', justifyContent: 'center' }}
+                  >
                     <Link to='/downloads'>
                       <Button>Go to Downloads</Button>
                     </Link>
