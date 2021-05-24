@@ -2,9 +2,9 @@
   "name": "functions",
   "version": "1.0.0",
   "description": "server functions for pnp web app",
-  "scripts": {
-    "run": "cd functions/ && npm install"
-  },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "firebase-admin": "^9.8.0"
+}
 }
