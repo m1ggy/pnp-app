@@ -2,9 +2,6 @@
   "name": "functions",
   "version": "1.0.0",
   "description": "server functions for pnp web app",
-  "scripts": {
-    "run": "npm install"
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {
