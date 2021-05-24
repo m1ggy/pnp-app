@@ -1,20 +1,30 @@
 import { useState, useEffect } from 'react';
-import { Jumbotron, Row, Col, Spinner, Button, Table } from 'react-bootstrap';
+import {
+  Jumbotron,
+  Row,
+  Col,
+  Spinner,
+  Button,
+  Table,
+  Form,
+} from 'react-bootstrap';
 import { getDataWhereQuery } from '../../utils/firebaseUtils';
 import AccountCreationModal from './AccountCreationModal';
 import RenderAccounts from './RenderAccounts';
-import { useAuth } from '../../contexts/AuthContext';
+
 export default function AccountsMain() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
-  const { currentUser } = useAuth();
+  const [selector, setSelector] = useState(false);
   async function getData() {
-    console.log(currentUser);
     setLoading(true);
     getDataWhereQuery('users', 'role', '==', 'A', (users) => {
-      console.log(users);
-      setData(users);
+      let temp = [];
+      users.forEach((user) => {
+        temp.push({ user: user, checked: false });
+      });
+      setData(temp);
     });
     setLoading(false);
   }
@@ -26,6 +36,21 @@ export default function AccountsMain() {
   function handleShow() {
     setShow(!show);
     getData();
+  }
+
+  function selectAllHandle(e) {
+    let temp = data;
+    temp.forEach((account) => {
+      account.checked = e.target.checked;
+    });
+    setData(temp);
+    setSelector(e.target.checked);
+  }
+
+  function handleCheck(e) {
+    let temp = data;
+
+    setData(temp);
   }
 
   return (
@@ -67,12 +92,16 @@ export default function AccountsMain() {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
-                        <th>✔</th>
+                        <th>
+                          <Form.Check
+                            onChange={selectAllHandle}
+                            checked={selector}
+                          />
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {' '}
-                      <RenderAccounts data={data} />
+                      <RenderAccounts data={data} handle={handleCheck} />
                     </tbody>
                   </Table>
                 </>

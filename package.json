@@ -39,7 +39,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build && cd functions && npm install ",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "devServer":"netlify dev"
   },
   "eslintConfig": {
     "extends": [

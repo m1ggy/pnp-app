@@ -16,16 +16,17 @@ export default function AccountCreationModal({ show, handler }) {
     if (confirmPassword !== password) {
       return setMessage('Password does not match!.');
     }
-
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(password, salt, (err, hash) => {
         axios
-          .post('/.netlify/functions/createUser/', {
+          .post('/.netlify/functions/createUser', {
             email,
-            hash,
+            password: hash,
+            name,
+            verified: true,
           })
           .then((res) => {
-            console.log(res.message);
+            console.log(res);
           });
       });
     });

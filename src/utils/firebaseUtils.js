@@ -1,4 +1,4 @@
-import { firestore, firebase, firebaseAuth } from '../firebase/firebase';
+import { firestore, firebase } from '../firebase/firebase';
 export function pageView(id) {
   const analytics = firestore.collection('analytics');
   const date = new Date();
@@ -60,21 +60,4 @@ export function getDataWhereQuery(
 
       return callback(temp);
     });
-}
-
-export function signUp(email, password, name, role) {
-  const users = firestore.collection('users');
-  firebaseAuth.createUserWithEmailAndPassword(email, password).then((q) => {
-    users.doc(q.user.uid).set(
-      {
-        name,
-        email,
-        password,
-        id: q.user.uid,
-        role,
-        timestamp: new Date(),
-      },
-      { merge: true }
-    );
-  });
 }
