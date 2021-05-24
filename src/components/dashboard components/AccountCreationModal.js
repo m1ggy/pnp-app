@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
-import { createUser } from '../../server/functions';
 import './accountsModal.css';
 export default function AccountCreationModal({ show, handler }) {
   const [name, setName] = useState({ first: '', last: '' });
