@@ -1,7 +1,7 @@
 {
-  "name": "createuser",
+  "name": "functions",
   "version": "1.0.0",
-  "description": "create users",
+  "description": "netlify functions",
   "main": "functions.js",
   "author": "",
   "license": "ISC",
