@@ -1,8 +1,0 @@
-todos
-
-implement context for authentication
-replace styling with react bootstrap
-implement database structure
-setup analytics
-setup storage bucket
-chart analytics
