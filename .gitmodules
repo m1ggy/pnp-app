@@ -1,0 +1,3 @@
+[submodule "pnp-app-server"]
+	path = pnp-app-server
+	url = https://github.com/m1ggy/pnp-app-server
