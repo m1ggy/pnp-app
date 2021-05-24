@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
+import axios from 'axios';
+import bcrypt from 'bcryptjs';
 import './accountsModal.css';
 export default function AccountCreationModal({ show, handler }) {
   const [name, setName] = useState({ first: '', last: '' });
@@ -14,6 +16,19 @@ export default function AccountCreationModal({ show, handler }) {
     if (confirmPassword !== password) {
       return setMessage('Password does not match!.');
     }
+
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(password, salt, (err, hash) => {
+        axios
+          .post('/.netlify/functions/createUser/', {
+            email,
+            hash,
+          })
+          .then((res) => {
+            console.log(res.message);
+          });
+      });
+    });
 
     handler();
     setName({ first: '', last: '' });
