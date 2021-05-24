@@ -11,14 +11,14 @@ import {
 import uniqid from 'uniqid';
 import { firestore, firebase } from '../../firebase/firebase';
 import { useAuth } from '../../contexts/AuthContext';
+import RichTextEditor from 'react-rte';
 
 export default function AddNewAnnouncement() {
   const [message, setMessage] = useState();
   const [disable, setDisable] = useState(false);
   const db = firestore.collection('announcements');
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-
+  const [content, setContent] = useState(RichTextEditor.createEmptyValue());
   const { currentUser } = useAuth();
 
   async function pushData() {
@@ -34,7 +34,7 @@ export default function AddNewAnnouncement() {
         {
           author: currentUser.email,
           title: title,
-          content: content,
+          content: content.toString('html'),
           timestamp,
           dateUploaded: date.toDateString(),
           timeUploaded: date.toTimeString(),
@@ -44,7 +44,7 @@ export default function AddNewAnnouncement() {
       )
       .then(() => {
         setTitle('');
-        setContent('');
+        setContent(RichTextEditor.createEmptyValue());
         setMessage({ type: 'success', msg: 'Announcement has been added!' });
       })
       .catch((e) => {
@@ -61,7 +61,9 @@ export default function AddNewAnnouncement() {
   }, [disable]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleClick = (e) => setDisable(true);
-
+  function onChangeContent(value) {
+    setContent(value);
+  }
   return (
     <>
       <Col>
@@ -91,17 +93,10 @@ export default function AddNewAnnouncement() {
 
                 <Form.Group>
                   <Form.Label>Announcement Content</Form.Label>
-                  <Form.Control
-                    as='textarea'
-                    placeholder='Content'
-                    required
-                    rows={15}
-                    style={{ resize: 'none', width: '100%' }}
+                  <RichTextEditor
                     value={content}
-                    className='border'
-                    onChange={(event) => {
-                      setContent(event.target.value);
-                    }}
+                    onChange={onChangeContent}
+                    required
                   />
                 </Form.Group>
 

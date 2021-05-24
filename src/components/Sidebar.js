@@ -1,9 +1,12 @@
 import React from 'react';
-import { Container, Row, NavDropdown, Jumbotron, Nav } from 'react-bootstrap';
+import { Row, NavDropdown, Jumbotron, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import '../styles/sidebar.css';
 
 export default function Sidebar() {
+  const user = useSelector((state) => state.userReducer.user);
+
   return (
     <div>
       <Jumbotron className='border p-5 ' style={{ zIndex: 999 }}>
@@ -83,9 +86,11 @@ export default function Sidebar() {
           <Row className='mt-3'>
             <Link to='/dashboard/charts'>Charts</Link>
           </Row>
-          <Row className='mt-3'>
-            <Link to='/dashboard/account'>Account</Link>
-          </Row>
+          {user.role === 'SA' ? (
+            <Row className='mt-3'>
+              <Link to='/dashboard/account'>Accounts</Link>
+            </Row>
+          ) : null}
         </Nav>
       </Jumbotron>
     </div>

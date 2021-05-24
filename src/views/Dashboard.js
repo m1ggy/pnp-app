@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
 import { Button, Alert, Navbar, Form, Row, Col, Modal } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import Sidebar from '../components/Sidebar';
 import DashboardMain from '../components/dashboard components/DashboardMain';
 import AddNewPost from '../components/dashboard components/AddNewPost';
@@ -17,30 +18,37 @@ import ManageAnnouncement from '../components/dashboard components/ManageAnnounc
 import AddNewAnnouncement from '../components/dashboard components/AddNewAnnouncement';
 
 export default function Dashboard() {
-  const { logout, currentUser } = useAuth();
+  const { logout } = useAuth();
   const [error, setError] = useState();
   const history = useHistory();
   const { path } = useRouteMatch();
   const [showModal, setShowModal] = useState(false);
+  const user = useSelector((state) => state.userReducer.user);
+
   async function handleLogout() {
     setError('');
-    try {
-      await logout();
-      window.gapi.auth2.getAuthInstance().disconnect();
-      history.push('/login');
-    } catch {
-      setError('Failed to Log out');
-    }
+
+    logout()
+      .then(() => {
+        history.push({
+          pathname: '/login',
+        });
+      })
+      .catch(() => {
+        setError('Failed to Log out');
+      });
     setShowModal(false);
   }
 
   ///routes for sidebar
   const routes = () => [
-    <Route
-      path={`${path}/account`}
-      key={`${path}/account`}
-      render={() => <AccountsMain />}
-    />,
+    user.role === 'SA' ? (
+      <Route
+        path={`${path}/account`}
+        key={`${path}/account`}
+        render={() => <AccountsMain />}
+      />
+    ) : null,
     <Route
       path={`${path}/charts`}
       key={`${path}/charts`}
@@ -93,16 +101,15 @@ export default function Dashboard() {
     />,
     <Route path={`${path}`} key={`${path}`} render={() => <DashboardMain />} />,
   ];
-
   return (
     <div>
       <Navbar className='bg-dark mb-3'>
         <Navbar.Brand style={{ color: 'white' }}>Admin Dashboard</Navbar.Brand>
         <Navbar.Collapse className='justify-content-end'>
           <Navbar.Text>
-            {currentUser && (
+            {user && (
               <p style={{ fontSize: 11, color: 'white' }}>
-                Logged in as: {currentUser.email}
+                Logged in as: {user.name.first} {user.name.last}
               </p>
             )}
           </Navbar.Text>

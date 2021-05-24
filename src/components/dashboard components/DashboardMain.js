@@ -1,14 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {
-  Jumbotron,
-  Col,
-  Row,
-  Spinner,
-  ListGroup,
-  Alert,
-} from 'react-bootstrap';
+import { Jumbotron, Col, Row, Spinner, ListGroup } from 'react-bootstrap';
 import { firestore } from '../../firebase/firebase';
-import { formatData, formatDate } from '../../dashboard utils/utils';
+import { formatDate } from '../../dashboard utils/utils';
 import { useAuth } from '../../contexts/AuthContext';
 import RenderChart from '../dashboard components/RenderChart';
 import RenderTopOfTheWeek from '../dashboard components/RenderTopOfTheWeek';
@@ -146,7 +139,6 @@ export default function DashboardMain() {
     let logs = [];
 
     unformattedDataset.forEach((dataset) => {
-      const color = makeRandomColor();
       dates.forEach((date) => {
         logs.push(
           dataset.data.reduce((pre, cur) => (cur === date ? ++pre : pre), 0)

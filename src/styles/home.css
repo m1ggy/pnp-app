@@ -1,0 +1,30 @@
+.cards {
+  width: 20rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  border-radius: 15;
+  margin: 20px;
+  opacity: 0;
+  animation: fade-in ease-out 3s forwards;
+}
+
+.cards-icon {
+  width: 75px;
+  height: 100%;
+  color: black;
+  margin: 20px;
+}
+
+.wrapper {
+  opacity: 0;
+  animation: fade-in ease-in-out 1s forwards;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

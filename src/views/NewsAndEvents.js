@@ -104,6 +104,7 @@ function NewsAndEvents() {
     let filtered = posts.filter((post) => {
       return post.type.value === type.value;
     });
+
     return filtered.map((post, index) => {
       return index === 0 || index === 1 || index === 2 ? (
         <Col md={6} lg={4} xs={12} key={post.id}>
@@ -144,7 +145,7 @@ function NewsAndEvents() {
 
   return (
     <>
-      <Col>
+      <Col className='wrapper'>
         <Row style={{ marginTop: 150, marginBottom: 50 }}>
           <Jumbotron className='w-100'>
             <h1 className='title'>News and Events</h1>

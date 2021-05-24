@@ -57,7 +57,7 @@ function GalleryMain() {
         >
           <Link to={`${url}/${gallery.id}`}>
             <Image
-              src={gallery.data.imagesURL[1]}
+              src={gallery.data.imagesURL[0]}
               id='imageHover'
               style={{
                 boxShadow:

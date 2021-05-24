@@ -184,7 +184,7 @@ export default function AddNewPost() {
                   />
 
                   <Form.Group>
-                    <Form.Label>Select File Category</Form.Label>
+                    <Form.Label>Select Post Category</Form.Label>
                     <Select
                       options={types}
                       onChange={setType}

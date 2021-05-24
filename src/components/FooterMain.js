@@ -1,24 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/footer.css';
-import { Col, Row, Jumbotron } from 'react-bootstrap';
+import { Row, Jumbotron } from 'react-bootstrap';
+import { DiGithubBadge } from 'react-icons/di';
 
 function FooterMain() {
   return (
-    <Jumbotron className='w-100' style={{ margin: 0 }}>
-      <Row className='w-100' className='footer'>
-        <p>Copyright 2021 Miguel Buising</p>
-      </Row>
+    <Jumbotron className='w-100 ' style={{ margin: 0 }}>
       <Row
-        className='w-100'
+        className='w-100 '
         style={{
           display: 'flex',
           justifyContent: 'center',
-          marginBottom: 25,
+          marginBottom: 10,
         }}
       >
-        <Link to='/login'>{'Login'} </Link> {' / '}{' '}
-        <a href='https://github.com/m1ggy'>Github</a>
+        <Link to='/login'>{'Login'} </Link> {' | | '}{' '}
+        <a href='https://github.com/m1ggy'>
+          <DiGithubBadge style={{ height: '100%', width: 20 }} />
+          Github
+        </a>
+      </Row>
+      <Row
+        className='w-100'
+        style={{ display: 'flex', justifyContent: 'center' }}
+      >
+        <p style={{ fontSize: 10 }}>Copyright 2021 Miguel Buising</p>
       </Row>
     </Jumbotron>
   );

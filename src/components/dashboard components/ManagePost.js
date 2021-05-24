@@ -246,7 +246,7 @@ export default function ManagePost() {
         centered
         dialogClassName='edit-modal'
       >
-        <Modal.Header>
+        <Modal.Header closeButton>
           <h3>Edit Post</h3>
         </Modal.Header>
         <Modal.Body>
@@ -301,7 +301,10 @@ export default function ManagePost() {
               <EditRTE post={selectedItem} sendData={setContentToRef} />
             </Form.Group>
 
-            <Container className='mt-5'>
+            <div
+              className='mt-5'
+              style={{ display: 'flex', justifyContent: 'center' }}
+            >
               <Button
                 variant='primary'
                 type='submit'
@@ -310,7 +313,7 @@ export default function ManagePost() {
               >
                 Submit
               </Button>
-            </Container>
+            </div>
           </Form>
         </Modal.Body>
         <Modal.Footer>

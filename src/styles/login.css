@@ -1,45 +1,18 @@
-.container {
-    display: flex;
-}
-.loginTab {
-    width:30%;
-    height: 350px;
-    border: 1px solid black;
-    margin:auto;
-    margin-top:10vh;
-    margin-bottom: 5vh;
-    display: flex;
-    
-}
-.content {
-    display:flex;
-    margin: auto;
-    flex-direction: column;
-    margin-top: 25%;
-}
-.button {
-   margin: auto;
-   margin-top: 10px;
-   padding: 10px;
-   background-color: #135DD8;
-   color: white;
-   box-shadow: none;
-   border:none;
-
-}
-.inputs{
-    margin: auto;
-    margin-bottom:10px;
-    display: flex;
-}
-.logintitle {
-
-    margin: auto;
-}
-.username, .password{
-    margin: auto;
+.centered-div {
+  transform: translate(-50%, -85%);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  animation: slide 1s cubic-bezier(0.42, 0, 0, 1.42) forwards;
 }
 
-.btn {
-    display:flex;
+@keyframes slide {
+  0% {
+    transform: translate(-50%, -85%);
+  }
+
+  100% {
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
