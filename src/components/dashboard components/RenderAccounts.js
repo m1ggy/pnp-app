@@ -1,23 +1,22 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 
-export default function RenderAccounts({ data, handle }) {
-  return data.map((account) => {
+export default function RenderAccounts({ data, handle, check }) {
+  return data.map((account, index) => {
     return (
-      <tr key={account.user.id}>
+      <tr key={account.id}>
         <td>
-          {account.user.name.first} {account.user.name.last}
+          {account.name.first} {account.name.last}
         </td>
-        <td>{account.user.email}</td>
-        <td>{account.user.role === 'A' ? 'Administrator' : null}</td>
+        <td>{account.email}</td>
+        <td>{account.role === 'A' ? 'Administrator' : null}</td>
         <td>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Form.Check
-              id={account.user.id}
-              checked={account.checked}
-              onChange={handle}
-            />
-          </div>
+          <Form.Check
+            id={account.id}
+            onChange={handle}
+            checked={check[index]}
+            value={index}
+          />
         </td>
       </tr>
     );

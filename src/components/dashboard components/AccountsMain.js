@@ -11,20 +11,26 @@ import {
 import { getDataWhereQuery } from '../../utils/firebaseUtils';
 import AccountCreationModal from './AccountCreationModal';
 import RenderAccounts from './RenderAccounts';
+import AccountDeletionModal from './AccountDeletionModal';
 
 export default function AccountsMain() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   const [selector, setSelector] = useState(false);
+  const [checkArray, setCheckArray] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
+
   async function getData() {
     setLoading(true);
     getDataWhereQuery('users', 'role', '==', 'A', (users) => {
       let temp = [];
-      users.forEach((user) => {
-        temp.push({ user: user, checked: false });
+      users.forEach(() => {
+        temp.push(false);
       });
-      setData(temp);
+      setCheckArray(temp);
+      setData(users);
     });
     setLoading(false);
   }
@@ -33,25 +39,59 @@ export default function AccountsMain() {
     getData();
   }, []);
 
+  useEffect(() => {
+    console.log(selectedItems);
+  }, [selectedItems]);
+
   function handleShow() {
     setShow(!show);
     getData();
   }
 
   function selectAllHandle(e) {
-    let temp = data;
-    temp.forEach((account) => {
-      account.checked = e.target.checked;
-    });
-    setData(temp);
+    let temp = [...checkArray];
+
+    for (let i = 0; i < temp.length; i++) {
+      temp[i] = e.target.checked;
+      setCheckArray(temp);
+
+      if (e.target.checked) {
+        let arr = [];
+        data.forEach((user) => {
+          arr.push(user.id);
+        });
+        setSelectedItems(arr);
+      } else if (e.target.checked === false) {
+        setSelectedItems([]);
+      }
+    }
+    console.log(temp);
     setSelector(e.target.checked);
   }
 
   function handleCheck(e) {
-    let temp = data;
+    let temp = [...checkArray];
+    temp[e.target.value] = e.target.checked;
+    if (e.target.checked === true) {
+      setSelectedItems([...selectedItems, data[e.target.value].id]);
+    } else {
+      let arr = [...selectedItems];
+      for (let i = 0; i < selectedItems.length; i++) {
+        if (arr[i] === e.target.id) {
+          arr.splice(i, 1);
+          setSelectedItems(arr);
+        }
+      }
+    }
 
-    setData(temp);
+    setCheckArray(temp);
+    console.log(temp);
   }
+
+  const handleShowDelete = () => {
+    setShowDelete(!showDelete);
+    getData();
+  };
 
   return (
     <Col>
@@ -76,6 +116,13 @@ export default function AccountsMain() {
               >
                 New Account
               </Button>
+              <Button
+                variant='danger'
+                style={{ marginBottom: 15, marginLeft: 15 }}
+                onClick={handleShowDelete}
+              >
+                Delete Account
+              </Button>
             </Row>
             <Row
               style={{
@@ -94,14 +141,19 @@ export default function AccountsMain() {
                         <th>Role</th>
                         <th>
                           <Form.Check
-                            onChange={selectAllHandle}
+                            id={'selector'}
                             checked={selector}
+                            onChange={selectAllHandle}
                           />
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <RenderAccounts data={data} handle={handleCheck} />
+                      <RenderAccounts
+                        data={data}
+                        handle={handleCheck}
+                        check={checkArray}
+                      />
                     </tbody>
                   </Table>
                 </>
@@ -113,6 +165,12 @@ export default function AccountsMain() {
         </Jumbotron>
       </Row>
       <AccountCreationModal show={show} handler={handleShow} />
+      <AccountDeletionModal
+        show={showDelete}
+        handle={handleShowDelete}
+        data={selectedItems}
+        setData={setSelectedItems}
+      />
     </Col>
   );
 }

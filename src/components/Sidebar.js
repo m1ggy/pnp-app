@@ -91,6 +91,18 @@ export default function Sidebar() {
               <Link to='/dashboard/account'>Accounts</Link>
             </Row>
           ) : null}
+          {user.role === 'SA' ? (
+            <Row className='mt-3'>
+              <Link to='/dashboard/reports'>Crime Reports</Link>
+            </Row>
+          ) : null}
+          {user.role === 'A' ? (
+            <Row className='mt-3'>
+              <Link to='/dashboard/reports/add-new-report'>
+                Add new Crime Report
+              </Link>
+            </Row>
+          ) : null}
         </Nav>
       </Jumbotron>
     </div>

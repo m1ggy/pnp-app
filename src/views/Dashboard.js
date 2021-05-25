@@ -16,7 +16,8 @@ import AddNewGallery from '../components/dashboard components/AddNewGallery';
 import AddNewDownload from '../components/dashboard components/AddNewDownload';
 import ManageAnnouncement from '../components/dashboard components/ManageAnnouncement';
 import AddNewAnnouncement from '../components/dashboard components/AddNewAnnouncement';
-
+import ReportsMain from '../components/dashboard components/ReportsMain';
+import AddNewReport from '../components/dashboard components/AddNewReport';
 export default function Dashboard() {
   const { logout } = useAuth();
   const [error, setError] = useState();
@@ -47,6 +48,18 @@ export default function Dashboard() {
         path={`${path}/account`}
         key={`${path}/account`}
         render={() => <AccountsMain />}
+      />
+    ) : null,
+    <Route
+      path={`${path}/reports/add-new-report`}
+      key={`${path}/reports/add-new-report`}
+      render={() => <AddNewReport />}
+    />,
+    user.role === 'SA' ? (
+      <Route
+        path={`${path}/reports`}
+        key={`${path}/reports`}
+        render={() => <ReportsMain />}
       />
     ) : null,
     <Route

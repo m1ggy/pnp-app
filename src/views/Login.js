@@ -5,8 +5,10 @@ import { Alert, Card, Form, Container, Button, Spinner } from 'react-bootstrap';
 import { useHistory, NavLink } from 'react-router-dom';
 import { IoReturnDownBackSharp } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../redux/usersSlice';
+import { setMessage, setUser } from '../redux/usersSlice';
 import { firestore } from '../firebase/firebase';
+import bcrypt from 'bcryptjs';
+import { getDataWhereQuery } from '../utils/firebaseUtils';
 function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -17,30 +19,45 @@ function Login() {
   const [msg, setMsg] = useState();
   const dispatch = useDispatch();
   const users = firestore.collection('users');
+
   async function handleSubmit(e) {
-    setDisable(true);
     e.preventDefault();
     setMsg('');
     setError('');
 
-    try {
-      await login(emailRef.current.value, passwordRef.current.value).then(
-        (user) => {
-          users
-            .doc(user.user.uid)
-            .get()
-            .then((doc) => {
-              if (doc.exists) {
-                dispatch(setUser(doc.data()));
-              }
-            });
-        }
-      );
-      history.push('/dashboard');
-    } catch {
-      setDisable(false);
-      setError('Failed to Login. email or password is incorrect.');
-    }
+    getDataWhereQuery(
+      'users',
+      'email',
+      '==',
+      emailRef.current.value,
+      (data) => {
+        setDisable(true);
+        bcrypt.compare(
+          passwordRef.current.value,
+          data[0].password,
+          (err, success) => {
+            if (success) {
+              login(emailRef.current.value, data[0].password).then((user) => {
+                users
+                  .doc(user.user.uid)
+                  .get()
+                  .then((doc) => {
+                    if (doc.exists) {
+                      dispatch(setUser(doc.data()));
+                    }
+                  })
+                  .then(() => {
+                    history.push('/dashboard');
+                  });
+              });
+            } else {
+              setError('Failed to Login. email or password is incorrect.');
+            }
+          }
+        );
+        setDisable(false);
+      }
+    );
   }
 
   useEffect(() => {

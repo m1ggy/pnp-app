@@ -1,10 +1,13 @@
 let adminKey = require('../adminKey.json');
-let admin = require('firebase-admin').initializeApp({
-  credential: require('firebase-admin').credential.cert(adminKey),
-});
+let admin = require('firebase-admin');
+
+if (admin.apps.length === 0) {
+  admin.initializeApp({
+    credential: admin.credential.cert(adminKey),
+  });
+}
 
 async function createUser(email, password, verified, name) {
-  console.log(email, password);
   return await admin
     .auth()
     .createUser({
@@ -25,12 +28,26 @@ async function createUser(email, password, verified, name) {
     })
     .then(() => {
       return new Promise((resolve) => {
-        resolve(JSON.stringify({ message: 'successfully created account' }));
+        resolve({
+          statusCode: 200,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({ message: 'successfully created account' }),
+        });
       });
     })
     .catch((err) => {
       return new Promise((resolve) => {
-        resolve(err);
+        resolve({
+          statusCode: 200,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify(err),
+        });
       });
     });
 }
@@ -42,14 +59,7 @@ exports.handler = function (event, context, callback) {
     let body = JSON.parse(event.body);
     let { email, password, verified, name } = body;
     createUser(email, password, verified, name).then((res) => {
-      callback(null, {
-        statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'content-type': 'application/json',
-        },
-        body: res,
-      });
+      callback(null, res);
     });
   } else if (event.httpMethod === 'GET') {
     return {
