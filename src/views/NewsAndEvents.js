@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Image, Jumbotron, Row, Spinner } from 'react-bootstrap';
 import { firestore } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
@@ -144,7 +144,7 @@ function NewsAndEvents() {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Col className='wrapper'>
         <Row style={{ marginTop: 150, marginBottom: 50 }}>
           <Jumbotron className='w-100'>
@@ -159,7 +159,7 @@ function NewsAndEvents() {
           </Jumbotron>
         </Row>
       </Col>
-    </>
+    </React.Fragment>
   );
 }
 export default NewsAndEvents;

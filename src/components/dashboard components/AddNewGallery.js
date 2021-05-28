@@ -8,7 +8,7 @@ import {
   Spinner,
   Alert,
 } from 'react-bootstrap';
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import uniqid from 'uniqid';
 import { storage, firestore, firebase } from '../../firebase/firebase';
 import { useAuth } from '../../contexts/AuthContext';

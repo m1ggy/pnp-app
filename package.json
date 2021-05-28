@@ -19,6 +19,7 @@
     "firebase-admin": "^9.8.0",
     "leaflet": "^1.7.1",
     "leaflet-defaulticon-compatibility": "^0.1.1",
+    "quill": "^1.3.7",
     "react": "^17.0.2",
     "react-bootstrap": "^1.5.2",
     "react-chartjs-2": "^3.0.3",
@@ -40,7 +41,7 @@
     "build": "react-scripts build && cd functions && npm install ",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "devServer":"netlify dev"
+    "devServer": "netlify dev"
   },
   "eslintConfig": {
     "extends": [

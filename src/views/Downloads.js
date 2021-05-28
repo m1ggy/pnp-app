@@ -99,7 +99,7 @@ function Downloads() {
     setLoading(false);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
-    <>
+    <React.Fragment>
       <Col>
         <Row style={{ marginTop: 150, marginBottom: 50 }}>
           <Jumbotron className='w-100'>
@@ -117,7 +117,7 @@ function Downloads() {
           </Jumbotron>
         </Row>
       </Col>
-    </>
+    </React.Fragment>
   );
 }
 export default Downloads;

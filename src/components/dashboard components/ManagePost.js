@@ -440,7 +440,7 @@ export default function ManagePost() {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Col>
         <Row>
           <Jumbotron className='w-100'>
@@ -463,6 +463,6 @@ export default function ManagePost() {
           </Jumbotron>
         </Row>
       </Col>
-    </>
+    </React.Fragment>
   );
 }

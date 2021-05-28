@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import Carousel from 'react-gallery-carousel';
 import 'react-gallery-carousel/dist/index.css';
 import { pageView } from '../utils/firebaseUtils';
+import React from 'react';
 export default function GalleryEntry() {
   const { id } = useParams();
   const db = firestore.collection('galleries');
@@ -46,12 +47,12 @@ export default function GalleryEntry() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <>
+    <React.Fragment>
       <Col>
         <Row style={{ marginTop: 150, marginBottom: 50 }}>
           <Jumbotron className='w-100'>
             {images && (
-              <>
+              <React.Fragment>
                 <Breadcrumb>
                   <Breadcrumb.Item>
                     <Link to='/gallery'>Gallery</Link>
@@ -61,7 +62,7 @@ export default function GalleryEntry() {
                 <h1>{images.title}</h1>
                 <p>{images.subtitle}</p>
                 <p style={{ fontSize: 14 }}>{images.dateUploaded}</p>
-              </>
+              </React.Fragment>
             )}
 
             <Row
@@ -82,6 +83,6 @@ export default function GalleryEntry() {
           </Jumbotron>
         </Row>
       </Col>
-    </>
+    </React.Fragment>
   );
 }

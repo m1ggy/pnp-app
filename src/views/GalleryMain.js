@@ -80,7 +80,7 @@ function GalleryMain() {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Col>
         <Row style={{ marginTop: 150, marginBottom: 50 }}>
           <Jumbotron className='w-100'>
@@ -93,7 +93,7 @@ function GalleryMain() {
           </Jumbotron>
         </Row>
       </Col>
-    </>
+    </React.Fragment>
   );
 }
 

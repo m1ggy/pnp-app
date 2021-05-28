@@ -268,14 +268,14 @@ export default function DashboardMain() {
                 {generalChart && loading ? (
                   <Spinner animation='border' />
                 ) : (
-                  <>
+                  <React.Fragment>
                     <RenderChart
                       data={generalChart}
                       options={options}
                       header='Web App Visits this Week'
                       percentage={percentage}
                     />
-                  </>
+                  </React.Fragment>
                 )}
               </Row>
             </Row>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row, Jumbotron, Form, Button, Card } from 'react-bootstrap';
 import { pageView } from '../utils/firebaseUtils';
 

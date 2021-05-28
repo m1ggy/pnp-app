@@ -1,6 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row, Jumbotron } from 'react-bootstrap';
+import { getDataFromCollection } from '../../utils/firebaseUtils';
+import RenderReports from '../RenderReports';
 export default function ReportsMain() {
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    getDataFromCollection('reports', (res) => {
+      console.log(res);
+      setData(res);
+    });
+  }, []);
+
   return (
     <Col>
       <Row>
@@ -9,7 +20,9 @@ export default function ReportsMain() {
         </Jumbotron>
       </Row>
       <Row>
-        <Jumbotron className='w-100'></Jumbotron>
+        <Jumbotron className='w-100'>
+          <RenderReports data={data} />
+        </Jumbotron>
       </Row>
     </Col>
   );

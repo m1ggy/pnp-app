@@ -96,6 +96,9 @@ export default function AddNewDownload() {
     e.preventDefault();
     const id = uniqid();
 
+    if (typeof file === 'undefined')
+      return setMessage({ msg: 'Please Select a File', type: 'danger' });
+
     setLoading(true);
     uploadFiles(id, file);
     e.target.reset();
@@ -103,7 +106,7 @@ export default function AddNewDownload() {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Col>
         <Row>
           <Jumbotron className='w-100'>
@@ -126,35 +129,48 @@ export default function AddNewDownload() {
                   <Select options={types} onChange={setType} />
                 </Form.Group>
 
-                <Container className='mt-5'>
-                  <div className='m-auto mt-5'>
-                    {loading ? (
-                      <Spinner animation='border' />
-                    ) : (
-                      <Button variant='primary' type='submit'>
-                        Submit
-                      </Button>
+                <Col>
+                  <Row>
+                    <div
+                      className='m-auto mt-5'
+                      style={{ display: 'flex', justifyContent: 'center' }}
+                    >
+                      {loading ? (
+                        <Spinner animation='border' />
+                      ) : (
+                        <Button variant='primary' type='submit'>
+                          Submit
+                        </Button>
+                      )}
+                    </div>
+                  </Row>
+                  <Row style={{ display: 'flex', justifyContent: 'center' }}>
+                    {progress && (
+                      <ProgressBar
+                        variant='success'
+                        now={progress}
+                        label={`${progress}%`}
+                        className='mt-5 w-100'
+                      />
                     )}
-                  </div>
-                  {progress && (
-                    <ProgressBar
-                      variant='success'
-                      now={progress}
-                      label={`${progress}%`}
-                      className='mt-5'
-                    />
-                  )}
-                  {message && (
-                    <Alert variant={message.type} className='mt-5'>
-                      {message.msg}
-                    </Alert>
-                  )}
-                </Container>
+                  </Row>
+                  <Row style={{ display: 'flex', justifyContent: 'center' }}>
+                    {message && (
+                      <Alert
+                        variant={message.type}
+                        className='mt-5'
+                        style={{ textAlign: 'center' }}
+                      >
+                        {message.msg}
+                      </Alert>
+                    )}
+                  </Row>
+                </Col>
               </Form>
             </Container>
           </Jumbotron>
         </Row>
       </Col>
-    </>
+    </React.Fragment>
   );
 }

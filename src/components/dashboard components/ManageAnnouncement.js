@@ -183,7 +183,7 @@ export default function ManageAnnouncement() {
     });
   }
   return (
-    <>
+    <React.Fragment>
       <Col>
         <Row>
           <Jumbotron className='w-100'>
@@ -204,6 +204,6 @@ export default function ManageAnnouncement() {
           </Jumbotron>
         </Row>
       </Col>
-    </>
+    </React.Fragment>
   );
 }

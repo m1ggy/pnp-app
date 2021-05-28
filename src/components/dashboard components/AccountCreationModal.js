@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
@@ -58,7 +58,7 @@ export default function AccountCreationModal({ show, handler }) {
       </Modal.Header>
       <Modal.Body>
         {jobDone ? (
-          <>{message && <Alert>{message.message}</Alert>}</>
+          message && <Alert>{message.message}</Alert>
         ) : (
           <Form onSubmit={handleSubmit}>
             <div className='center'>

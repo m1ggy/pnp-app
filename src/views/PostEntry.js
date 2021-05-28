@@ -8,7 +8,7 @@ import {
   Image,
 } from 'react-bootstrap';
 import { firestore, firebase } from '../firebase/firebase';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DOMPurify from 'dompurify';
 
 export default function PostEntry() {
@@ -116,7 +116,7 @@ export default function PostEntry() {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Col>
         <Row style={{ marginTop: 150 }}>
           <Row className='w-100'>
@@ -165,6 +165,6 @@ export default function PostEntry() {
           </Row>
         </Row>
       </Col>
-    </>
+    </React.Fragment>
   );
 }

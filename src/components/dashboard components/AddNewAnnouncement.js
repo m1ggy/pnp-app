@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Jumbotron,
   Row,
@@ -11,30 +11,46 @@ import {
 import uniqid from 'uniqid';
 import { firestore, firebase } from '../../firebase/firebase';
 import { useAuth } from '../../contexts/AuthContext';
-import RichTextEditor from 'react-rte';
 
 export default function AddNewAnnouncement() {
   const [message, setMessage] = useState();
   const [disable, setDisable] = useState(false);
   const db = firestore.collection('announcements');
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState(RichTextEditor.createEmptyValue());
+  const [title, setTitle] = useState();
+  const [content, setContent] = useState();
   const { currentUser } = useAuth();
 
-  async function pushData() {
+  async function pushData(e) {
+    setDisable(true);
+    e.preventDefault();
     setMessage();
 
     const date = new Date();
     const tempID = uniqid();
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
-    return await db
+    if (title === '') {
+      return setMessage({ msg: 'please fill the title field', type: 'danger' });
+    }
+
+    if (title === null) {
+      return setMessage({ msg: 'please fill the title field', type: 'danger' });
+    }
+
+    if (content === '') {
+      return setMessage({
+        msg: 'please fill the content field',
+        type: 'danger',
+      });
+    }
+
+    await db
       .doc(tempID)
       .set(
         {
           author: currentUser.email,
           title: title,
-          content: content.toString('html'),
+          content,
           timestamp,
           dateUploaded: date.toDateString(),
           timeUploaded: date.toTimeString(),
@@ -43,85 +59,85 @@ export default function AddNewAnnouncement() {
         { merge: true }
       )
       .then(() => {
-        setTitle('');
-        setContent(RichTextEditor.createEmptyValue());
         setMessage({ type: 'success', msg: 'Announcement has been added!' });
       })
       .catch((e) => {
         setMessage({ type: 'danger', msg: `Error: ${e}` });
       });
+
+    setTitle('');
+    setContent('');
+
+    setDisable(false);
   }
 
-  useEffect(() => {
-    if (disable) {
-      pushData().then(() => {
-        setDisable(false);
-      });
-    }
-  }, [disable]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleClick = (e) => setDisable(true);
   function onChangeContent(value) {
     setContent(value);
   }
   return (
-    <>
-      <Col>
-        <Row>
-          <Jumbotron className='w-100'>
-            <h1>Add New Announcement</h1>
-          </Jumbotron>
-        </Row>
-        <Row>
-          <Jumbotron className='w-100'>
-            <Container>
-              <Form>
-                <Form.Group>
-                  <Form.Label>Announcement Title</Form.Label>
-                  <Form.Control
-                    type='text'
-                    placeholder='Title'
-                    required
-                    style={{ width: '75%' }}
-                    className='border'
-                    value={title}
-                    onChange={(event) => {
-                      setTitle(event.target.value);
-                    }}
-                  />
-                </Form.Group>
+    <Col>
+      <Row>
+        <Jumbotron className='w-100'>
+          <h1>Add New Announcement</h1>
+        </Jumbotron>
+      </Row>
+      <Row>
+        <Jumbotron className='w-100'>
+          <Container>
+            <Form onSubmit={pushData}>
+              <Form.Group>
+                <Form.Label>Announcement Title</Form.Label>
+                <Form.Control
+                  type='text'
+                  placeholder='Title'
+                  style={{ width: '75%' }}
+                  className='border'
+                  value={title}
+                  onChange={(event) => {
+                    setTitle(event.target.value);
+                  }}
+                  required
+                />
+              </Form.Group>
 
-                <Form.Group>
-                  <Form.Label>Announcement Content</Form.Label>
-                  <RichTextEditor
-                    value={content}
-                    onChange={onChangeContent}
-                    required
-                  />
-                </Form.Group>
+              <Form.Group>
+                <Form.Label>Announcement Content</Form.Label>
+                <Form.Control
+                  as='textarea'
+                  rows={10}
+                  value={content}
+                  onChange={(e) => {
+                    setContent(e.target.value);
+                  }}
+                  className='border'
+                  required
+                />
+              </Form.Group>
 
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <Button
-                    variant='primary'
-                    type='submit'
-                    className='m-auto'
-                    size='md'
-                    disabled={disable}
-                    onClick={!disable ? handleClick : null}
-                  >
-                    Submit
-                  </Button>
-                </div>
-              </Form>
-              {message && (
-                <Alert variant={message.type} className='mt-5'>
-                  {message.msg}
-                </Alert>
-              )}
-            </Container>
-          </Jumbotron>
-        </Row>
-      </Col>
-    </>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Button
+                  variant='primary'
+                  type='submit'
+                  className='m-auto'
+                  size='md'
+                  disabled={disable}
+                >
+                  Submit
+                </Button>
+              </div>
+            </Form>
+            {message && (
+              <Alert
+                variant={message.type}
+                className='mt-5'
+                style={{ textAlign: 'center' }}
+              >
+                {message.msg}
+              </Alert>
+            )}
+          </Container>
+        </Jumbotron>
+      </Row>
+    </Col>
   );
 }

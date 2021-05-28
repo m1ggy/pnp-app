@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Col,
   Container,
@@ -128,7 +128,7 @@ export default function Others() {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Row style={{ marginTop: 150, marginBottom: 50 }}>
         <Jumbotron className='w-100 mt-2'>
           <Breadcrumb>
@@ -168,6 +168,6 @@ export default function Others() {
           </Container>
         </Jumbotron>
       </Row>
-    </>
+    </React.Fragment>
   );
 }

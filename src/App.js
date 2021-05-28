@@ -10,6 +10,7 @@ import 'bootswatch/dist/lux/bootstrap.min.css';
 import { store, persistor } from './redux/store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import React from 'react';
 
 import Home from './views/Home';
 import Maps from './views/Maps';

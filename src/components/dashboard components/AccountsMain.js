@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Jumbotron,
   Row,
@@ -132,33 +132,31 @@ export default function AccountsMain() {
             >
               {loading && <Spinner animation='border' />}
               {data.length > 0 ? (
-                <>
-                  <Table bordered hover>
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>
-                          <Form.Check
-                            id={'selector'}
-                            checked={selector}
-                            onChange={selectAllHandle}
-                          />
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <RenderAccounts
-                        data={data}
-                        handle={handleCheck}
-                        check={checkArray}
-                      />
-                    </tbody>
-                  </Table>
-                </>
+                <Table bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>
+                        <Form.Check
+                          id={'selector'}
+                          checked={selector}
+                          onChange={selectAllHandle}
+                        />
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <RenderAccounts
+                      data={data}
+                      handle={handleCheck}
+                      check={checkArray}
+                    />
+                  </tbody>
+                </Table>
               ) : (
-                <>No active Accounts.</>
+                <p>No active Accounts.</p>
               )}
             </Row>
           </Col>

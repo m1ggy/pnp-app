@@ -13,6 +13,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import uniqid from 'uniqid';
 import Select from 'react-select';
 import RichTextEditor from 'react-rte';
+import { setMessage } from '../../redux/usersSlice';
 
 export default function AddNewPost() {
   const titleRef = useRef();
@@ -91,6 +92,7 @@ export default function AddNewPost() {
     e.preventDefault();
     setdisabled(true);
     setStatus();
+
     ///create unique id for matching the image in storage
     const tempID = uniqid();
 
@@ -106,7 +108,11 @@ export default function AddNewPost() {
             e.target.reset();
           })
           .catch((e) => {
-            console.log('firebase: ' + e);
+            setMessage({
+              msg: 'Please make sure to fillout all forms and select a category',
+              type: 'info',
+            });
+            setdisabled(false);
           });
       })
       .catch((e) => {
@@ -114,7 +120,7 @@ export default function AddNewPost() {
       });
   }
   return (
-    <>
+    <React.Fragment>
       <Col>
         <Row>
           <Jumbotron className='w-100'>
@@ -192,7 +198,7 @@ export default function AddNewPost() {
                     />
                   </Form.Group>
 
-                  <Container className='mt-5'>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Button
                       variant='primary'
                       type='submit'
@@ -202,7 +208,7 @@ export default function AddNewPost() {
                     >
                       Submit
                     </Button>
-                  </Container>
+                  </div>
                 </Form>
                 <div className='mt-5'>
                   {status ? (
@@ -254,6 +260,6 @@ export default function AddNewPost() {
           </Col>
         </Row>
       </Col>
-    </>
+    </React.Fragment>
   );
 }

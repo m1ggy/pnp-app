@@ -241,7 +241,7 @@ export default function ManageDownloads() {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Col>
         <Row>
           <Jumbotron className='w-100'>
@@ -268,6 +268,6 @@ export default function ManageDownloads() {
           </Jumbotron>
         </Row>
       </Col>
-    </>
+    </React.Fragment>
   );
 }

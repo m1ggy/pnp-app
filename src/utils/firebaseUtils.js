@@ -61,3 +61,16 @@ export function getDataWhereQuery(
       return callback(temp);
     });
 }
+
+export async function setDataDoc(id, data, collection, callback) {
+  await firestore
+    .collection(collection)
+    .doc(id)
+    .set(data, { merge: true })
+    .then(() => {
+      return callback({ message: 'report has been filed' });
+    })
+    .catch((e) => {
+      return callback({ message: 'report has not been filed. see error: ', e });
+    });
+}

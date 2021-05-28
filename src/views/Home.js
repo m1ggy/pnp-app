@@ -201,7 +201,7 @@ function Home() {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Col className='wrapper'>
         <Row style={{ marginTop: 100 }}>
           <Jumbotron
@@ -209,13 +209,14 @@ function Home() {
             style={{ boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px' }}
           >
             <Row className='w-100'>
-              <h2 style={{ marginLeft: '20' }}>Announcements</h2>
+              <h2 style={{ marginLeft: '20px' }}>Announcements</h2>
 
               <Row
                 style={{
                   display: 'flex',
                   justifyContent: 'center',
                 }}
+                className='w-100'
               >
                 {' '}
                 {announcement && <RenderAnnouncements />}
@@ -372,7 +373,7 @@ function Home() {
           <Col lg={1}></Col>
         </Row>
       </Col>
-    </>
+    </React.Fragment>
   );
 }
 export default Home;

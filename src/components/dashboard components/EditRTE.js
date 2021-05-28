@@ -12,10 +12,10 @@ export default function EditRTE({ post, sendData }) {
   }
 
   return (
-    <>
+    <React.Fragment>
       <div>
         <RichTextEditor value={content} onChange={onChangeContent} />
       </div>
-    </>
+    </React.Fragment>
   );
 }

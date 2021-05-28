@@ -11,7 +11,6 @@ function NavBarMain() {
         fixed='top'
         className='navBorder'
         style={{
-          height: '70px',
           boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px',
         }}
       >
