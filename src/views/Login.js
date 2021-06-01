@@ -32,6 +32,10 @@ function Login() {
       emailRef.current.value,
       (data) => {
         setDisable(true);
+        if (data.length === 0) {
+          setDisable(false);
+          return setError('User does not exist.');
+        }
         bcrypt.compare(
           passwordRef.current.value,
           data[0].password,

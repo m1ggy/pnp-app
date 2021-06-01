@@ -16,12 +16,14 @@ export default function RenderReports({ data }) {
       <Table bordered hover>
         <thead>
           <tr>
-            <td>Report ID</td>
-            <td>Name</td>
-            <td>Violation</td>
-            <td>Status</td>
-            <td>Action Taken</td>
-            <td>Remarks</td>
+            <th>Report Filed on</th>
+            <th>Report ID</th>
+            <th>Name</th>
+            <th>Violation</th>
+            <th>Status</th>
+            <th>Action Taken</th>
+            <th>Remarks</th>
+            <th>Incident Happened on</th>
           </tr>
         </thead>
         <tbody>
@@ -29,12 +31,20 @@ export default function RenderReports({ data }) {
             data.map((report) => {
               return (
                 <tr key={report.id}>
+                  <td>
+                    {report.timestamp.toDate().toLocaleTimeString('en-US')}{' '}
+                    {report.timestamp.toDate().toDateString()}
+                  </td>
                   <td>{report.id}</td>
                   <td>{report.profile.first + ' ' + report.profile.last}</td>
                   <td>{report.description.violation}</td>
                   <td>{report.description.status.label}</td>
                   <td>{report.description.actionTaken}</td>
                   <td>{report.description.remarks}</td>
+                  <td>
+                    {report.dateOccurred.toDate().toLocaleTimeString('en-US')}{' '}
+                    {report.dateOccurred.toDate().toDateString()}
+                  </td>
                 </tr>
               );
             })}

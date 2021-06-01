@@ -1,13 +1,6 @@
 import React, { useEffect } from 'react';
 import '../styles/map.css';
-import {
-  MapContainer,
-  TileLayer,
-  GeoJSON,
-  Tooltip,
-  Popup,
-  Marker,
-} from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
 import 'leaflet-defaulticon-compatibility';
@@ -19,6 +12,12 @@ function Maps() {
   useEffect(() => {
     pageView('webapp');
   }, []);
+
+  function onEachProvince(province, layer) {
+    const municipality = province.properties.MUNICIPALI;
+
+    layer.bindPopup(municipality);
+  }
 
   return (
     <Col>
@@ -35,7 +34,11 @@ function Maps() {
               style={{ height: '500px', width: '800px', margin: 'auto' }}
               doubleClickZoom={false}
             >
-              <GeoJSON data={laguna} pathOptions={{ color: 'blue' }} />
+              <GeoJSON
+                data={laguna}
+                pathOptions={{ color: 'blue' }}
+                onEachFeature={onEachProvince}
+              />
 
               <TileLayer
                 url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'

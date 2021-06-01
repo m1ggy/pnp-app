@@ -965,7 +965,7 @@
       "properties": {
         "OBJECTID": 231,
         "FIRST_RURB": "RP043403",
-        "MUNICIPALI": "CITY OF BIAN",
+        "MUNICIPALI": "CITY OF BINAN",
         "REGION": "IV-A",
         "ZIPCODE": 4024,
         "PROVINCE": "LAGUNA",
@@ -2031,7 +2031,7 @@
       "properties": {
         "OBJECTID": 497,
         "FIRST_RURB": "RP043411",
-        "MUNICIPALI": "LOS BAOS",
+        "MUNICIPALI": "LOS BANOS",
         "REGION": "IV-A",
         "ZIPCODE": 4030,
         "PROVINCE": "LAGUNA",
@@ -4862,7 +4862,7 @@
       "properties": {
         "OBJECTID": 797,
         "FIRST_RURB": "RP043425",
-        "MUNICIPALI": "SAN PEDRO",
+        "MUNICIPALI": "SAN PEDRO CITY",
         "REGION": "IV-A",
         "ZIPCODE": 4023,
         "PROVINCE": "LAGUNA",

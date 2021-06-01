@@ -2,7 +2,7 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Col, Container, Spinner } from 'react-bootstrap';
 
-export default function RenderChart({ data, header, options, percentage }) {
+export default function RenderChart({ data, header, options }) {
   if (data) {
     if (data.length === 0 && typeof header === 'undefined') {
       return (
@@ -36,33 +36,6 @@ export default function RenderChart({ data, header, options, percentage }) {
             options={options}
             style={{ width: 350, height: 350 }}
           />
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            {percentage && (
-              <React.Fragment>
-                {percentage.label === 'red' ? (
-                  <p>
-                    Down by{' '}
-                    <span style={{ color: `${percentage.label}` }}>-</span>
-                  </p>
-                ) : percentage.label === 'green' ? (
-                  <p>
-                    Up by{' '}
-                    <span style={{ color: `${percentage.label}` }}>+</span>
-                  </p>
-                ) : null}
-
-                <p
-                  style={{
-                    color: `${percentage.label}`,
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {percentage.data}%
-                </p>
-              </React.Fragment>
-            )}
-          </div>
         </Col>
       </Container>
     </React.Fragment>

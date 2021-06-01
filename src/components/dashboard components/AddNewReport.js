@@ -2,26 +2,38 @@ import React, { useState } from 'react';
 import { Col, Row, Jumbotron, Form, Button, Alert } from 'react-bootstrap';
 import Select from 'react-select';
 import '../../styles/addnewreport.css';
-import { sexes, statuses } from '../../dashboard utils/constants';
-import { setDataDoc, setdataDoc } from '../../utils/firebaseUtils';
+import {
+  municipalities,
+  sexes,
+  statuses,
+} from '../../dashboard utils/constants';
+import { setDataDoc } from '../../utils/firebaseUtils';
 import { useSelector } from 'react-redux';
 import uniqid from 'uniqid';
+import DateTimePicker from 'react-datetime-picker';
+import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
 export default function AddNewReport() {
   const descriptionInitialState = {
     status: '',
     violation: '',
     actionTaken: '',
     remarks: '',
+    address: '',
   };
   const profileInitialState = {
     first: '',
     last: '',
     sex: '',
+    age: '',
   };
+
   const [profile, setProfile] = useState(profileInitialState);
   const author = useSelector((state) => state.userReducer.user);
   const [description, setDescription] = useState(descriptionInitialState);
   const [message, setMessage] = useState();
+  const [dateOccurred, setDateOccurred] = useState(new Date());
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -44,6 +56,7 @@ export default function AddNewReport() {
       author: author.email,
       timestamp: new Date(),
       id,
+      dateOccurred,
     };
 
     setDataDoc(id, data, 'reports', (res) => {
@@ -119,6 +132,21 @@ export default function AddNewReport() {
                   />
                 </Form.Group>
               </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Label>Enter Age</Form.Label>
+                  <Form.Control
+                    type='number'
+                    className='input'
+                    value={profile.age}
+                    onChange={(e) => {
+                      setProfile({ ...profile, age: e.target.value });
+                    }}
+                    min='18'
+                    required
+                  />
+                </Form.Group>
+              </Col>
             </Row>
             <Row>
               <Col>
@@ -176,10 +204,37 @@ export default function AddNewReport() {
                 </Form.Group>
               </Col>
             </Row>
+            <Row>
+              <Col>
+                <Form.Group>
+                  <Form.Label>Municipality / City</Form.Label>
+                  <Select
+                    options={municipalities}
+                    onChange={(selection) =>
+                      setDescription({ ...description, address: selection })
+                    }
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col style={{ display: 'flex', justifyContent: 'center' }}>
+                <Form.Group>
+                  <Form.Label>Select the date the crime occurred</Form.Label>
+                  <br></br>
+                  <DateTimePicker
+                    value={dateOccurred}
+                    onChange={setDateOccurred}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
             <Row style={{ display: 'flex', justifyContent: 'center' }}>
               <Button
-                onClick={() => console.log(description, profile)}
                 type='submit'
+                onClick={() => {
+                  console.log(description, profile, dateOccurred);
+                }}
               >
                 Submit
               </Button>

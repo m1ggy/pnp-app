@@ -11,7 +11,9 @@ export default function AccountCreationModal({ show, handler }) {
   const [message, setMessage] = useState(null);
   const [validation, setValidation] = useState();
   const [jobDone, setJobDone] = useState(false);
-  function handleSubmit(e) {
+  const [disableButton, setDisableButton] = useState(false);
+  async function handleSubmit(e) {
+    setDisableButton(true);
     e.preventDefault();
 
     if (confirmPassword !== password) {
@@ -23,32 +25,37 @@ export default function AccountCreationModal({ show, handler }) {
         'Password is short. Please make it atleast 8 characters.'
       );
     }
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(password, salt, (err, hash) => {
-        axios
-          .post('/.netlify/functions/createUser', {
-            email,
-            password: hash,
-            name,
-            verified: true,
-          })
-          .then((res) => {
-            setJobDone(true);
-            setMessage(res.data);
-          })
-          .catch((res) => {
-            setJobDone(true);
-            console.log(res);
-            setMessage(res.data);
-          });
+    try {
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
+          axios
+            .post('/.netlify/functions/createUser', {
+              email,
+              password: hash,
+              name,
+              verified: true,
+            })
+            .then((res) => {
+              setJobDone(true);
+              setMessage(res.data.message);
+            })
+            .catch((res) => {
+              setJobDone(true);
+              setMessage(res.data.message);
+            });
+        });
       });
-    });
+    } catch (e) {
+      console.log(e);
+    }
+
     setValidation();
     setName({ first: '', last: '' });
     setEmail('');
     setPassword('');
     setConfirmPassword('');
     setMessage('');
+    setDisableButton(false);
   }
 
   return (
@@ -58,7 +65,7 @@ export default function AccountCreationModal({ show, handler }) {
       </Modal.Header>
       <Modal.Body>
         {jobDone ? (
-          message && <Alert>{message.message}</Alert>
+          message && <Alert>{message}</Alert>
         ) : (
           <Form onSubmit={handleSubmit}>
             <div className='center'>
@@ -128,7 +135,12 @@ export default function AccountCreationModal({ show, handler }) {
             </div>
             <div className='center' style={{ marginBottom: 15 }}>
               {' '}
-              <Button type='submit' variant='success' onClick={handleSubmit}>
+              <Button
+                type='submit'
+                variant='success'
+                onClick={handleSubmit}
+                disabled={disableButton}
+              >
                 Submit
               </Button>
             </div>
@@ -147,6 +159,7 @@ export default function AccountCreationModal({ show, handler }) {
             Close
           </Button>
         )}
+
         {validation && <Alert variant='danger'>{validation}</Alert>}
       </Modal.Footer>
     </Modal>
