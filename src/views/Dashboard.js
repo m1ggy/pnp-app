@@ -42,28 +42,30 @@ export default function Dashboard() {
     setShowModal(false);
   }
 
-  ///routes for sidebar
+  ///routes for dashboard
   const routes = () => [
-    user.role === 'SA' ? (
+    user.role === 'SA' && (
       <Route
         path={`${path}/account`}
         key={`${path}/account`}
         render={() => <AccountsMain />}
       />
-    ) : null,
+    ),
     <Route
       path={`${path}/reports/add-new-report`}
       key={`${path}/reports/add-new-report`}
       render={() => <AddNewReport />}
     />,
-    user.role === 'SA' ? (
+    user.role === 'SA' && (
       <Route
         path={`${path}/reports`}
         key={`${path}/reports`}
         render={() => <ReportsMain />}
       />
-    ) : null,
-    <Route path={`${path}/map`} key={`${path}/map`} render={() => <Map />} />,
+    ),
+    user.role === 'SA' && (
+      <Route path={`${path}/map`} key={`${path}/map`} render={() => <Map />} />
+    ),
     <Route
       path={`${path}/charts`}
       key={`${path}/charts`}

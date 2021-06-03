@@ -96,6 +96,11 @@ export default function Sidebar() {
               <Link to='/dashboard/reports'>Crime Reports</Link>
             </Row>
           ) : null}
+          {user.role === 'SA' ? (
+            <Row className='mt-3'>
+              <Link to='/dashboard/map'>Map</Link>
+            </Row>
+          ) : null}
           {user.role === 'A' ? (
             <Row className='mt-3'>
               <Link to='/dashboard/reports/add-new-report'>
