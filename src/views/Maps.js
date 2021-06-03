@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import '../styles/map.css';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
 import 'leaflet-defaulticon-compatibility';
@@ -16,7 +17,16 @@ function Maps() {
   function onEachProvince(province, layer) {
     const municipality = province.properties.MUNICIPALI;
 
-    layer.bindPopup(municipality);
+    layer.bindPopup(municipality, {
+      closeButton: false,
+      offset: L.point(0, 5),
+    });
+    layer.on('mouseover', function () {
+      layer.openPopup();
+    });
+    layer.on('mouseout', function () {
+      layer.closePopup();
+    });
   }
 
   return (

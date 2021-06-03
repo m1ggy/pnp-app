@@ -28,3 +28,24 @@
     opacity: 1;
   }
 }
+
+.jumbotrons {
+  background-color: #f6f6f6;
+}
+
+.posts {
+  background-color: #f6f6f6;
+}
+/* .button {
+  /* background-color: green;
+  color: white; */
+/* } */
+
+.carousel-container {
+  width: 100%;
+  height: 100%;
+}
+
+.item {
+  margin: 0;
+}

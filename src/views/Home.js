@@ -18,6 +18,9 @@ import { FaMapMarkedAlt, FaDownload } from 'react-icons/fa';
 import { GrGallery } from 'react-icons/gr';
 import '../styles/home.css';
 import DOMPurify from 'dompurify';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+
 function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -27,6 +30,26 @@ function Home() {
   const [postsPerPage] = useState(5);
   const [pageNumbers, setPageNumbers] = useState();
   const scrollRef = useRef(null);
+
+  const responsive = {
+    superLargeDesktop: {
+      // the naming can be any, depends on you.
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
 
   useEffect(() => {
     pageView('webapp');
@@ -109,7 +132,7 @@ function Home() {
     return currentPosts.map((post, index) => {
       return (
         <Row
-          className='p-3 mb-3 w-100'
+          className='p-3 mb-3 w-100 posts'
           key={index}
           style={{
             boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px',
@@ -144,7 +167,7 @@ function Home() {
             <Row className='w-100 m-auto'>
               <div className='m-auto'>
                 <Link to={`news-and-events/${post.id}`}>
-                  <Button>Read</Button>
+                  <Button className='button'>Read</Button>
                 </Link>
               </div>
             </Row>
@@ -154,73 +177,109 @@ function Home() {
     });
   }
 
-  function RenderAnnouncements() {
-    if (announcement === null || typeof announcement === undefined) return null;
+  // function RenderAnnouncements() {
+  //   if (announcement === null || typeof announcement === undefined) return null;
 
-    if (announcement) {
-      if (announcement.length === 0) {
-        return (
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <p>No Published Announcements</p>
-          </div>
-        );
-      }
-    }
+  //   if (announcement) {
+  //     if (announcement.length === 0) {
+  //       return (
+  //         <div style={{ display: 'flex', justifyContent: 'center' }}>
+  //           <p>No Published Announcements</p>
+  //         </div>
+  //       );
+  //     }
+  //   }
 
-    return announcement.map((item) => {
-      return (
-        <Card
-          key={item.id}
-          className='text-center'
-          style={{
-            boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-            width: '25rem',
-            margin: 10,
-          }}
-        >
-          <Card.Body style={{ padding: 35 }}>
-            <Card.Title>
-              <h3>{item.title}</h3>
-            </Card.Title>
-            <Card.Text style={{ textAlign: 'center' }}>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(item.content),
-                }}
-                style={{ textAlign: 'justify', fontSize: 20 }}
-                className='w-100'
-              ></div>
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer muted>
-            {item.timestamp.toDate().toDateString()}
-          </Card.Footer>
-        </Card>
-      );
-    });
-  }
+  //   return announcement.map((item) => {
+  //     return (
+  //       <Col key={item.id}>
+  //         <Card
+  //           className='text-center'
+  //           style={{
+  //             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
+  //             width: '30rem',
+  //           }}
+  //         >
+  //           <Card.Body style={{ padding: 35 }}>
+  //             <Card.Title>
+  //               <h3>{item.title}</h3>
+  //             </Card.Title>
+  //             <Card.Text style={{ textAlign: 'center' }}>
+  //               <div
+  //                 dangerouslySetInnerHTML={{
+  //                   __html: DOMPurify.sanitize(item.content),
+  //                 }}
+  //                 style={{ textAlign: 'justify', fontSize: 20 }}
+  //                 className='w-100'
+  //               ></div>
+  //             </Card.Text>
+  //           </Card.Body>
+  //           <Card.Footer muted>
+  //             {item.timestamp.toDate().toDateString()}
+  //           </Card.Footer>
+  //         </Card>
+  //       </Col>
+  //     );
+  //   });
+  // }
 
   return (
     <React.Fragment>
       <Col className='wrapper'>
         <Row style={{ marginTop: 100 }}>
           <Jumbotron
-            className='w-100'
-            style={{ boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px' }}
+            className='w-100 jumbotrons'
+            style={{
+              boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px',
+            }}
           >
             <Row className='w-100'>
               <h2 style={{ marginLeft: '20px' }}>Announcements</h2>
-
-              <Row
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}
-                className='w-100'
+              <Carousel
+                swipeable={true}
+                draggable={true}
+                showDots={false}
+                arrows={true}
+                responsive={responsive}
+                ssr={false} // means to render carousel on server-side.
+                infinite={true}
+                containerClass='carousel-container'
+                removeArrowOnDeviceType={['tablet', 'mobile']}
+                itemClass={'carousel-item-padding-0-px'}
               >
-                {' '}
-                {announcement && <RenderAnnouncements />}
-              </Row>
+                {announcement &&
+                  announcement.map((item) => {
+                    return (
+                      <Col key={item.id} style={{ margin: '50' }}>
+                        <Card
+                          className='text-center'
+                          style={{
+                            boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
+                            width: '30rem',
+                          }}
+                        >
+                          <Card.Body>
+                            <Card.Title>
+                              <h3>{item.title}</h3>
+                            </Card.Title>
+                            <Card.Text style={{ textAlign: 'center' }}>
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: DOMPurify.sanitize(item.content),
+                                }}
+                                style={{ textAlign: 'justify', fontSize: 20 }}
+                                className='w-100'
+                              ></div>
+                            </Card.Text>
+                          </Card.Body>
+                          <Card.Footer muted>
+                            {item.timestamp.toDate().toDateString()}
+                          </Card.Footer>
+                        </Card>
+                      </Col>
+                    );
+                  })}
+              </Carousel>
             </Row>
           </Jumbotron>
         </Row>
@@ -329,7 +388,9 @@ function Home() {
           <Col ref={scrollRef}>
             <Jumbotron
               className='w-100'
-              style={{ boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px' }}
+              style={{
+                boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px',
+              }}
             >
               <h1 className='title'>Latest Post</h1>
               <Col lg={1}></Col>

@@ -24,6 +24,7 @@ export default function ManageDownloads() {
 
   async function getDownloads() {
     setLoading(true);
+
     await db
       .where('author', '==', currentUser.email)
       .get()

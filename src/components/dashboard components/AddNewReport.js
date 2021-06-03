@@ -21,6 +21,7 @@ export default function AddNewReport() {
     actionTaken: '',
     remarks: '',
     address: '',
+    municipality: '',
   };
   const profileInitialState = {
     first: '',
@@ -46,6 +47,8 @@ export default function AddNewReport() {
       return setMessage('Please select a sex');
     } else if (description.status === '' && profile.sex === '') {
       return setMessage('Please select a status and sex');
+    } else if (description.municipality === '') {
+      return setMessage('Please select a municipality');
     }
 
     const id = uniqid();
@@ -211,8 +214,28 @@ export default function AddNewReport() {
                   <Select
                     options={municipalities}
                     onChange={(selection) =>
-                      setDescription({ ...description, address: selection })
+                      setDescription({
+                        ...description,
+                        municipality: selection,
+                      })
                     }
+                  />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Label>Address</Form.Label>
+                  <Form.Control
+                    type='text'
+                    className='input'
+                    value={description.address}
+                    onChange={(e) => {
+                      setDescription({
+                        ...description,
+                        address: e.target.value,
+                      });
+                    }}
+                    required
                   />
                 </Form.Group>
               </Col>
@@ -225,6 +248,7 @@ export default function AddNewReport() {
                   <DateTimePicker
                     value={dateOccurred}
                     onChange={setDateOccurred}
+                    required
                   />
                 </Form.Group>
               </Col>

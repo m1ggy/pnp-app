@@ -26,122 +26,122 @@ export const sexes = [
 export const municipalities = [
   {
     label: 'Pakil',
-    value: 'pakil',
+    value: 'PAKIL',
   },
   {
     label: 'Pangil',
-    value: 'pangil',
+    value: 'PANGIL',
   },
   {
     label: 'Mabitac',
-    value: 'mabitac',
+    value: 'MABITAC',
   },
   {
     label: 'Siniloan',
-    value: 'siniloan',
+    value: 'SINILOAN',
   },
   {
     label: 'Sta. Maria',
-    value: 'stamaria',
+    value: 'SANTA MARIA',
   },
   {
     label: 'Famy',
-    value: 'famy',
+    value: 'FAMY',
   },
   {
     label: 'Paete',
-    value: 'paete',
+    value: 'PAETE',
   },
   {
     label: 'Kalayaan',
-    value: 'kalayaan',
+    value: 'KALAYAAN',
   },
   {
     label: 'Lumban',
-    value: 'lumban',
+    value: 'LUMBAN',
   },
   {
     label: 'Pagsanjan',
-    value: 'pagsanjan',
+    value: 'PAGSANJAN',
   },
   {
     label: 'Cavinti',
-    value: 'cavinti',
+    value: 'CAVINTI',
   },
   {
     label: 'Sta. Cruz',
-    value: 'stacruz',
+    value: 'SANTA CRUZ',
   },
   {
     label: 'Pila',
-    value: 'pila',
+    value: 'PILA',
   },
   {
     label: 'Luisiana',
-    value: 'luisiana',
+    value: 'LUISIANA',
   },
   {
     label: 'Magdalena',
-    value: 'magdalena',
+    value: 'MAGDALENA',
   },
   {
     label: 'Majayjay',
-    value: 'majayjay',
+    value: 'MAJAYJAY',
   },
   {
     label: 'Liliw',
-    value: 'liliw',
+    value: 'LILIW',
   },
   {
     label: 'Nagcarlan',
-    value: 'nagcarlan',
+    value: 'NAGCARLAN',
   },
   {
     label: 'Victoria',
-    value: 'victoria',
+    value: 'VICTORIA',
   },
   {
     label: 'Rizal',
-    value: 'rizal',
+    value: 'RIZAL',
   },
   {
     label: 'Calauan',
-    value: 'calauan',
+    value: 'CALAUAN',
   },
   {
     label: 'Bay',
-    value: 'bay',
+    value: 'BAY',
   },
   {
     label: 'San Pablo City',
-    value: 'sanpablocity',
+    value: 'SAN PABLO CITY',
   },
   {
     label: 'Alaminos',
-    value: 'alaminos',
+    value: 'ALAMINOS',
   },
   {
     label: 'Los Banos',
-    value: 'losbanos',
+    value: 'LOS BANOS',
   },
   {
     label: 'City of Calamba',
-    value: 'cityofcalamba',
+    value: 'CITY OF CALAMBA',
   },
   {
     label: 'Cabuyao City',
-    value: 'cabuyaocity',
+    value: 'CABUYAO CITY',
   },
   {
     label: 'City of Sta. Rosa',
-    value: 'cityofstarosa',
+    value: 'CITY OF SANTA ROSA',
   },
   {
     label: 'City of Binan',
-    value: 'cityofbinan',
+    value: 'CITY OF BINAN',
   },
   {
     label: 'San Pedro City',
-    value: 'sanpedrocity',
+    value: 'SAN PEDRO CITY',
   },
 ];

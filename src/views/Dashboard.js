@@ -18,6 +18,7 @@ import ManageAnnouncement from '../components/dashboard components/ManageAnnounc
 import AddNewAnnouncement from '../components/dashboard components/AddNewAnnouncement';
 import ReportsMain from '../components/dashboard components/ReportsMain';
 import AddNewReport from '../components/dashboard components/AddNewReport';
+import Map from '../components/Map';
 export default function Dashboard() {
   const { logout } = useAuth();
   const [error, setError] = useState();
@@ -62,6 +63,7 @@ export default function Dashboard() {
         render={() => <ReportsMain />}
       />
     ) : null,
+    <Route path={`${path}/map`} key={`${path}/map`} render={() => <Map />} />,
     <Route
       path={`${path}/charts`}
       key={`${path}/charts`}

@@ -6,12 +6,11 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import 'bootswatch/dist/lux/bootstrap.min.css';
+import 'bootswatch/dist/cerulean/bootstrap.min.css';
 import { store, persistor } from './redux/store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import React from 'react';
-
 import Home from './views/Home';
 import Maps from './views/Maps';
 import NewsAndEvents from './views/NewsAndEvents';
