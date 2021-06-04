@@ -15,7 +15,7 @@ function Maps() {
   }, []);
 
   function onEachProvince(province, layer) {
-    const municipality = province.properties.MUNICIPALI;
+    const municipality = `<h6>${province.properties.MUNICIPALI}</h6>`;
 
     layer.bindPopup(municipality, {
       closeButton: false,
@@ -41,17 +41,17 @@ function Maps() {
               scrollWheelZoom={false}
               zoomControl={false}
               dragging={false}
-              style={{ height: '500px', width: '800px', margin: 'auto' }}
+              style={{ height: '1000px', width: '100%', margin: 'auto' }}
               doubleClickZoom={false}
             >
               <GeoJSON
                 data={laguna}
-                pathOptions={{ color: 'blue' }}
+                pathOptions={{ color: 'green', weight: 1 }}
                 onEachFeature={onEachProvince}
               />
 
               <TileLayer
-                url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                url='https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png'
                 draggable={false}
               />
             </MapContainer>

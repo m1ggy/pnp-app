@@ -49,3 +49,7 @@
 .item {
   margin: 0;
 }
+
+.dark-header {
+  color: black;
+}

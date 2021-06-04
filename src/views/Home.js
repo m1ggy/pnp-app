@@ -228,7 +228,7 @@ function Home() {
       <Col className='wrapper'>
         <Row style={{ marginTop: 100 }}>
           <Jumbotron
-            className='w-100 jumbotrons'
+            className='w-100 jumbotrons bg-light'
             style={{
               boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px',
             }}
@@ -284,7 +284,7 @@ function Home() {
           </Jumbotron>
         </Row>
         <Row>
-          <Jumbotron className='w-100 bg-light' style={{ border: 'none' }}>
+          <Jumbotron className='w-100 bg-dark' style={{ border: 'none' }}>
             <Row
               className='w-100'
               style={{ display: 'flex', justifyContent: 'center' }}
@@ -295,7 +295,7 @@ function Home() {
                 </div>
                 <Card.Body>
                   <Card.Title>
-                    <h3>Posts</h3>
+                    <h3 className='dark-header'>Posts</h3>
                   </Card.Title>
                   <Card.Text>
                     Catch up with the latest news from the PNP. The latest news
@@ -411,7 +411,7 @@ function Home() {
                   }}
                 >
                   {pageNumbers && (
-                    <Pagination size='lg'>
+                    <Pagination size='md'>
                       {pageNumbers.map((num, index) => {
                         return (
                           <Pagination.Item

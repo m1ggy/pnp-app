@@ -15,17 +15,18 @@ function FooterMain() {
           marginBottom: 10,
         }}
       >
-        <Link to='/login'>{'Login'} </Link> {' | | '}{' '}
-        <a href='https://github.com/m1ggy'>
-          <DiGithubBadge style={{ height: '100%', width: 20 }} />
-          Github
-        </a>
+        <Link to='/login'>{'Login'} </Link>
       </Row>
       <Row
         className='w-100'
         style={{ display: 'flex', justifyContent: 'center' }}
       >
-        <p style={{ fontSize: 10 }}>Copyright 2021 Miguel Buising</p>
+        <p style={{ fontSize: 10 }}>
+          Copyright 2021 Miguel Buising{' '}
+          <a href='https://github.com/m1ggy'>
+            <DiGithubBadge style={{ height: '100%', width: 20 }} />
+          </a>
+        </p>
       </Row>
     </Jumbotron>
   );

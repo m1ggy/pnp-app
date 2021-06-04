@@ -24,7 +24,7 @@ export default function RenderReports({ data, currentPage, postsPerPage }) {
       <thead>
         <tr>
           <th>Incident Happened on</th>
-          <th>Report ID</th>
+          <th>Municipality / City</th>
           <th>Name</th>
           <th>Violation</th>
           <th>Status</th>
@@ -41,7 +41,7 @@ export default function RenderReports({ data, currentPage, postsPerPage }) {
                   {report.dateOccurred.toDate().toLocaleTimeString('en-US')}{' '}
                   {report.dateOccurred.toDate().toDateString()}
                 </td>
-                <td>{report.id}</td>
+                <td>{report.description.municipality.label}</td>
                 <td>{report.profile.first + ' ' + report.profile.last}</td>
                 <td>{report.description.violation}</td>
                 <td>{report.description.status.label}</td>
