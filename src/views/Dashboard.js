@@ -120,7 +120,7 @@ export default function Dashboard() {
   ];
   return (
     <div>
-      <Navbar className='bg-dark mb-3'>
+      <Navbar className='bg-primary mb-3'>
         <Navbar.Brand style={{ color: 'white' }}>Admin Dashboard</Navbar.Brand>
         <Navbar.Collapse className='justify-content-end'>
           <Navbar.Text>
