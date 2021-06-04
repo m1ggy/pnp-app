@@ -295,7 +295,7 @@ function Home() {
                 </div>
                 <Card.Body>
                   <Card.Title>
-                    <h3 className='dark-header'>Posts</h3>
+                    <h3 className='cardHeader'>Posts</h3>
                   </Card.Title>
                   <Card.Text>
                     Catch up with the latest news from the PNP. The latest news
@@ -317,13 +317,10 @@ function Home() {
                 </div>
                 <Card.Body>
                   <Card.Title>
-                    <h3>Map</h3>
+                    <h3 className='cardHeader'>Map</h3>
                   </Card.Title>
                   <Card.Text>
-                    Become alert with your surroundings! see the crime frequency
-                    around your area through the use of the PNP Map. With the
-                    use of machine learning, the map predicts crime time and
-                    type.
+                    See the map of Laguna and its Municipalities and Cities.
                   </Card.Text>
                 </Card.Body>
                 <Card.Footer
@@ -341,7 +338,7 @@ function Home() {
                 </div>
                 <Card.Body>
                   <Card.Title>
-                    <h3>Gallery</h3>
+                    <h3 className='cardHeader'>Gallery</h3>
                   </Card.Title>
                   <Card.Text>
                     Browse the galleries of the PNP. Relive the latest events
@@ -363,7 +360,7 @@ function Home() {
                 </div>
                 <Card.Body>
                   <Card.Title>
-                    <h3>Downloads</h3>
+                    <h3 className='cardHeader'>Downloads</h3>
                   </Card.Title>
                   <Card.Text>
                     Get all the downloadables in one streamlined page. Whether

@@ -50,6 +50,6 @@
   margin: 0;
 }
 
-.dark-header {
-  color: black;
+.cardHeader {
+  color: black !important;
 }

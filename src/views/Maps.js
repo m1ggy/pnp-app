@@ -41,7 +41,7 @@ function Maps() {
               scrollWheelZoom={false}
               zoomControl={false}
               dragging={false}
-              style={{ height: '1000px', width: '100%', margin: 'auto' }}
+              style={{ height: '600px', width: '100%', margin: 'auto' }}
               doubleClickZoom={false}
             >
               <GeoJSON
