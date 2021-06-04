@@ -6,7 +6,7 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import 'bootswatch/dist/cerulean/bootstrap.min.css';
+import 'bootswatch/dist/lumen/bootstrap.min.css';
 import { store, persistor } from './redux/store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';

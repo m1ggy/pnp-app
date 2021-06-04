@@ -8,6 +8,7 @@ import 'leaflet-defaulticon-compatibility';
 import { Row, Col, Jumbotron } from 'react-bootstrap';
 import { pageView } from '../utils/firebaseUtils';
 import laguna from '../geoJSON/laguna.json';
+import { municipalities } from '../dashboard utils/constants';
 
 function Maps() {
   useEffect(() => {
@@ -15,7 +16,10 @@ function Maps() {
   }, []);
 
   function onEachProvince(province, layer) {
-    const municipality = `<h6>${province.properties.MUNICIPALI}</h6>`;
+    const currentMunicipality = municipalities.find(
+      (item) => item.value === province.properties.MUNICIPALI
+    );
+    const municipality = `<h6>${currentMunicipality.label}</h6>`;
 
     layer.bindPopup(municipality, {
       closeButton: false,
@@ -33,7 +37,7 @@ function Maps() {
     <Col>
       <Row style={{ marginTop: 150, marginBottom: 50 }}>
         <Jumbotron className='w-100'>
-          <h1 className='title'>Maps</h1>
+          <h1 className='title'>Map of Laguna</h1>
           <div id='mapid' style={{ display: 'flex' }}>
             <MapContainer
               center={[14.277, 121.35]}

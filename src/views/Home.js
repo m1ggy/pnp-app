@@ -284,7 +284,7 @@ function Home() {
           </Jumbotron>
         </Row>
         <Row>
-          <Jumbotron className='w-100 bg-dark' style={{ border: 'none' }}>
+          <Jumbotron className='w-100 bg-primary' style={{ border: 'none' }}>
             <Row
               className='w-100'
               style={{ display: 'flex', justifyContent: 'center' }}
