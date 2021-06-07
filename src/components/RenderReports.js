@@ -44,7 +44,18 @@ export default function RenderReports({ data, currentPage, postsPerPage }) {
                 <td>{report.description.municipality.label}</td>
                 <td>{report.profile.first + ' ' + report.profile.last}</td>
                 <td>{report.description.violation}</td>
-                <td>{report.description.status.label}</td>
+                <td
+                  style={{
+                    color:
+                      report.description.status.label === 'Arrested'
+                        ? 'blue'
+                        : report.description.status.label === 'Detained'
+                        ? 'green'
+                        : 'red',
+                  }}
+                >
+                  {report.description.status.label}
+                </td>
                 <td>{report.description.actionTaken}</td>
                 <td>{report.description.remarks}</td>
               </tr>

@@ -233,29 +233,26 @@ function Home() {
               boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px',
             }}
           >
-            <Row className='w-100'>
+            <Row className='w-100 m-auto'>
               <h2 style={{ marginLeft: '20px' }}>Announcements</h2>
               <Carousel
                 swipeable={true}
-                draggable={true}
                 showDots={false}
                 arrows={true}
                 responsive={responsive}
                 ssr={false} // means to render carousel on server-side.
-                infinite={true}
+                // infinite={true}
                 containerClass='carousel-container'
-                removeArrowOnDeviceType={['tablet', 'mobile']}
-                itemClass={'carousel-item-padding-0-px'}
+                itemClass={'carouselItem'}
               >
                 {announcement &&
                   announcement.map((item) => {
                     return (
-                      <Col key={item.id} style={{ margin: '50' }}>
+                      <Col key={item.id}>
                         <Card
-                          className='text-center'
+                          className='text-center carousel-card'
                           style={{
                             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-                            width: '30rem',
                           }}
                         >
                           <Card.Body>
@@ -286,7 +283,7 @@ function Home() {
         <Row>
           <Jumbotron className='w-100 bg-primary' style={{ border: 'none' }}>
             <Row
-              className='w-100'
+              className='w-100 m-auto'
               style={{ display: 'flex', justifyContent: 'center' }}
             >
               <Card className='text-center cards'>
@@ -384,7 +381,7 @@ function Home() {
           <Col lg={1}></Col>
           <Col ref={scrollRef}>
             <Jumbotron
-              className='w-100'
+              className='w-100 m-auto'
               style={{
                 boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px',
               }}
@@ -392,13 +389,13 @@ function Home() {
               <h1 className='title'>Latest Post</h1>
               <Col lg={1}></Col>
               <Col>
-                <Container>
+                <div className='m-auto'>
                   {loading ? (
                     <Spinner animation='border' className='m-auto' />
                   ) : (
                     <RenderPosts />
                   )}
-                </Container>
+                </div>
 
                 <div
                   style={{

@@ -13,7 +13,7 @@ export default function RenderChart({ data, header, options }) {
     } else if (data.length === 0) {
       return (
         <React.Fragment>
-          <Container className='mt-5 border'>
+          <Container className='mt-5'>
             <h4>{header} has no data.</h4>
           </Container>
         </React.Fragment>

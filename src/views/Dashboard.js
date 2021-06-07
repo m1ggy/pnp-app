@@ -144,17 +144,15 @@ export default function Dashboard() {
         </Form>
       </Navbar>
 
-      <Row>
-        <Col lg={2} sm={12} md={12}>
-          <Sidebar />
-        </Col>
+      <Row className='w-100'>
+        <Sidebar />
 
         <Col>
           <Row>
             <Switch>{routes()}</Switch>
           </Row>
         </Col>
-        <Col lg={2}></Col>
+        <Col lg={1}></Col>
       </Row>
 
       {error && <Alert variant='danger'>{error}</Alert>}

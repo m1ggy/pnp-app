@@ -73,7 +73,7 @@ export default function PostEntry() {
         <Row
           style={{ display: 'flex', justifyContent: 'center' }}
           key={item.id}
-          className='w-100'
+          className='w-100 m-auto'
         >
           <Row className='w-100'>
             <h1>{item.title}</h1>
@@ -97,7 +97,7 @@ export default function PostEntry() {
               src={item.url}
               style={{
                 height: '100%',
-                width: 1000,
+                width: '100%',
                 boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
               }}
               className='m-auto'
@@ -141,22 +141,15 @@ export default function PostEntry() {
             <Col>
               <Row className='w-100'>
                 <Col lg={1}></Col>
-                <Col lg={10}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    {loading ? (
-                      <div style={{ maxWidth: '50%' }}>
-                        <Spinner animation='border' />
-                      </div>
-                    ) : (
-                      <RenderPost />
-                    )}
-                  </div>
+                <Col
+                  lg={10}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  {loading ? <Spinner animation='border' /> : <RenderPost />}
                 </Col>
                 <Col lg={1}></Col>
               </Row>

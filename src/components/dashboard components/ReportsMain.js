@@ -5,7 +5,7 @@ import RenderReports from '../RenderReports';
 export default function ReportsMain() {
   const [data, setData] = useState();
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(7);
+  const [postsPerPage] = useState(10);
   const [pageNumbers, setPageNumbers] = useState();
 
   useEffect(() => {

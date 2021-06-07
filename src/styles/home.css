@@ -53,3 +53,11 @@
 .cardHeader {
   color: black !important;
 }
+
+/* .carouselItem {
+  margin-left: 100px;
+  margin-right: 100px;
+} */
+.carousel-card {
+  width: 100%;
+}
