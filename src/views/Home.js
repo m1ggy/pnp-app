@@ -231,6 +231,7 @@ function Home() {
             className='w-100 jumbotrons bg-light'
             style={{
               boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px',
+              border: 'none',
             }}
           >
             <Row className='w-100 m-auto'>
@@ -241,9 +242,11 @@ function Home() {
                 arrows={true}
                 responsive={responsive}
                 ssr={false} // means to render carousel on server-side.
-                // infinite={true}
+                infinite={true}
                 containerClass='carousel-container'
                 itemClass={'carouselItem'}
+                autoPlay={true}
+                autoPlaySpeed={2500}
               >
                 {announcement &&
                   announcement.map((item) => {

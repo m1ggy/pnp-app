@@ -17,14 +17,17 @@ function GalleryMain() {
 
     async function getGalleries() {
       let tempArray = [];
-      await db.get().then((snapshot) => {
-        if (snapshot.empty) return;
+      await db
+        .orderBy('timestamp', 'desc')
+        .get()
+        .then((snapshot) => {
+          if (snapshot.empty) return;
 
-        snapshot.forEach((doc) => {
-          tempArray.push({ id: doc.id, data: doc.data() });
+          snapshot.forEach((doc) => {
+            tempArray.push({ id: doc.id, data: doc.data() });
+          });
+          setGallery(tempArray);
         });
-        setGallery(tempArray);
-      });
     }
     pageView('webapp');
     getGalleries();

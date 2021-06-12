@@ -20,7 +20,10 @@ function Contact() {
             <Col lg={6}>
               <Card
                 className='text-center'
-                style={{ boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px' }}
+                style={{
+                  boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px',
+                  margin: 20,
+                }}
               >
                 <Card.Body>
                   <Card.Title>
@@ -81,7 +84,10 @@ function Contact() {
             <Col lg={6}>
               <Card
                 className='text-center'
-                style={{ boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px' }}
+                style={{
+                  boxShadow: ' rgba(0, 0, 0, 0.1) 0px 4px 12px',
+                  margin: 20,
+                }}
               >
                 <Card.Body>
                   <Card.Title>

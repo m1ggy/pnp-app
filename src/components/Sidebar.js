@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, NavDropdown, Jumbotron, Nav, Col } from 'react-bootstrap';
+import { Row, NavDropdown, Nav, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import '../styles/sidebar.css';
@@ -8,8 +8,15 @@ export default function Sidebar() {
   const user = useSelector((state) => state.userReducer.user);
 
   return (
-    <Col lg={2} sm={2} md={2}>
-      <Jumbotron className='border' style={{ padding: '25%' }}>
+    <Col lg={2} sm={12} md={2}>
+      <div
+        style={{
+          paddingLeft: 30,
+          paddingTop: 20,
+          paddingBottom: 20,
+        }}
+        className='bg-secondary border'
+      >
         <h5>Navigation</h5>
         <Nav className='flex-column'>
           <Row className='mt-3'>
@@ -109,7 +116,7 @@ export default function Sidebar() {
             </Row>
           ) : null}
         </Nav>
-      </Jumbotron>
+      </div>
     </Col>
   );
 }
