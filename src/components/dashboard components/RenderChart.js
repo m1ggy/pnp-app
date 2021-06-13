@@ -1,15 +1,11 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Col, Container, Spinner } from 'react-bootstrap';
+import { Col, Container } from 'react-bootstrap';
 
 export default function RenderChart({ data, header, options }) {
   if (data) {
     if (data.length === 0 && typeof header === 'undefined') {
-      return (
-        <div>
-          <Spinner animation='grow' />
-        </div>
-      );
+      return <div></div>;
     } else if (data.length === 0) {
       return (
         <React.Fragment>

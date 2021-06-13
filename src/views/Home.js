@@ -246,7 +246,7 @@ function Home() {
                 containerClass='carousel-container'
                 itemClass={'carouselItem'}
                 autoPlay={true}
-                autoPlaySpeed={2500}
+                autoPlaySpeed={10500}
               >
                 {announcement &&
                   announcement.map((item) => {

@@ -23,7 +23,6 @@ export function formatDate(range) {
   let newDate = new Date();
 
   newDate.setDate(newDate.getDate() - range);
-  console.log(newDate);
   let temp = [];
   for (
     newDate;
@@ -38,7 +37,38 @@ export function formatDate(range) {
   temp.forEach((date) => {
     dateString.push(date.toDateString());
   });
-  console.log(dateString);
 
   return dateString;
+}
+
+export function formatReportDataset(reports, dates, title) {
+  let reportDates = [];
+  let chartDates = [];
+  let formattedDataset;
+
+  reports.forEach((report) => {
+    reportDates.push(report.timestamp.toDate().toDateString());
+  });
+
+  if (dates)
+    dates.forEach((date) => {
+      chartDates.push(
+        reportDates.reduce((pre, cur) => (cur === date ? ++pre : pre), 0)
+      );
+    });
+
+  formattedDataset = {
+    labels: dates,
+    datasets: [
+      {
+        label: title,
+        fill: true,
+        borderColor: 'rgba(0, 0, 0, 1)',
+        backgroundColor: 'rgba(0, 0, 0, 1)',
+        data: chartDates,
+      },
+    ],
+  };
+
+  return formattedDataset;
 }

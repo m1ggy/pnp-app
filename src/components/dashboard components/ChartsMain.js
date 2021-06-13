@@ -1,21 +1,23 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Jumbotron, Row, Col, Container, Button, Form } from 'react-bootstrap';
 import {
-  Jumbotron,
-  Row,
-  Col,
-  Container,
-  Button,
-  Form,
-  Spinner,
-} from 'react-bootstrap';
-import { formatData, formatDate } from '../../dashboard utils/utils';
+  formatData,
+  formatDate,
+  formatReportDataset,
+} from '../../dashboard utils/utils';
+import { municipalities } from '../../dashboard utils/constants';
 import RenderChart from '../dashboard components/RenderChart';
 import { useAuth } from '../../contexts/AuthContext';
 import Select from 'react-select';
 import { firestore } from '../../firebase/firebase';
+import { getDataWhereQuery } from '../../utils/firebaseUtils';
 
 export default function ChartsMain() {
   const [chartValues, setChartValues] = useState([]);
+  const [reportChartValue, setReportChartValue] = useState({});
+  const [reports, setReports] = useState([]);
+  const [selectedCity, setSelectedCity] = useState('');
+  const [disableSubmit, setDisableSubmit] = useState(true);
   const [loading, setLoading] = useState(false);
   const [selectLoading, setSelectLoading] = useState(true);
   const [category] = useState([
@@ -28,6 +30,7 @@ export default function ChartsMain() {
   const idRef = useRef();
   const total = useRef();
   const average = useRef();
+  const reportDateRef = useRef();
   const [dateRange] = useState([
     { label: '1 Week Ago', value: 6 },
     { label: '1 Month Ago', value: 30.4167 },
@@ -55,7 +58,8 @@ export default function ChartsMain() {
     setSelectLoading(true);
     dateRef.current = formatDate(dateRange[0].value);
     const db = firestore.collection(id);
-    db.where('author', '==', currentUser.email)
+    await db
+      .where('author', '==', currentUser.email)
       .get()
       .then((q) => {
         if (q.empty) {
@@ -72,6 +76,18 @@ export default function ChartsMain() {
     setLoading(false);
   }
 
+  async function getReports(id) {
+    getDataWhereQuery(
+      'reports',
+      'description.municipality.value',
+      '==',
+      id,
+      (res) => {
+        setReports(res);
+      }
+    );
+  }
+
   function submit(e) {
     setChartValues(null);
     e.preventDefault();
@@ -84,6 +100,11 @@ export default function ChartsMain() {
       formatDataCallback
     );
     setLoading(false);
+  }
+
+  function reportSubmit(e) {
+    e.preventDefault();
+    getReports(selectedCity.value);
   }
 
   function formatDataCallback(array, dates, title) {
@@ -119,6 +140,12 @@ export default function ChartsMain() {
 
     setChartValues(formattedDatasets);
   }
+  useEffect(() => {
+    console.log(reports, reportDateRef.current);
+    setReportChartValue(
+      formatReportDataset(reports, reportDateRef.current, selectedCity.label)
+    );
+  }, [reports]);
 
   return (
     <Col>
@@ -133,8 +160,9 @@ export default function ChartsMain() {
           style={{ display: 'flex', justifyContent: 'center' }}
         >
           <Col>
-            <Row className='w-100'>
+            {/* <Row className='w-100'>
               <Container>
+                <h1>Content Chart</h1>
                 <Form onSubmit={submit}>
                   <Row>
                     <Col lg={4}>
@@ -202,7 +230,7 @@ export default function ChartsMain() {
             </Row>
             <Row className='w-100'>
               {loading ? (
-                <Spinner animation='border' />
+                <p>Please Select a Category and an Entry</p>
               ) : (
                 <Col>
                   <Row>
@@ -226,6 +254,62 @@ export default function ChartsMain() {
                   </Row>
                 </Col>
               )}
+            </Row>
+            */}
+            <Row className='w-100 mt-5'>
+              <Container>
+                <h1> Crime Report Chart</h1>
+                <Form onSubmit={reportSubmit}>
+                  <Row>
+                    <Col>
+                      <Form.Group>
+                        {' '}
+                        <h3>Date Range</h3>
+                        <Select
+                          options={dateRange}
+                          onChange={(value) => {
+                            reportDateRef.current = formatDate(value.value);
+                          }}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group>
+                        <h3>Municipality / City</h3>
+
+                        <Select
+                          options={municipalities}
+                          onChange={(entry) => {
+                            setSelectedCity(entry);
+                            if (reportDateRef.current) setDisableSubmit(false);
+                          }}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <div
+                      className='m-auto'
+                      style={{ display: 'flex', justifyContent: 'center' }}
+                    >
+                      <Button
+                        type='submit'
+                        variant='primary'
+                        className='mt-3 mb-5'
+                        disabled={disableSubmit}
+                      >
+                        View
+                      </Button>
+                    </div>
+                  </Row>
+
+                  <Row>
+                    {reportChartValue && (
+                      <RenderChart data={reportChartValue} options={options} />
+                    )}
+                  </Row>
+                </Form>
+              </Container>
             </Row>
           </Col>
         </Jumbotron>
