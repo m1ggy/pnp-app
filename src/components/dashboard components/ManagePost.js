@@ -451,7 +451,9 @@ export default function ManagePost() {
           <Jumbotron className='w-100'>
             <Container>
               {loading ? (
-                <Spinner animation='border' className='m-auto' />
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <Spinner animation='border' className='m-auto' />
+                </div>
               ) : (
                 <RenderPosts />
               )}

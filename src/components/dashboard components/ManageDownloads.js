@@ -254,14 +254,12 @@ export default function ManageDownloads() {
           <Jumbotron className='w-100'>
             <Container>
               <div className='m-auto'>
-                {loading ? <Spinner animation='border' /> : null}
-                {downloads ? (
-                  <RenderDownloads />
-                ) : (
+                {loading ? (
                   <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <p>You have no Downloads.</p>
+                    <Spinner animation='border' />
                   </div>
-                )}
+                ) : null}
+                {downloads && <RenderDownloads />}
                 <DeleteModal />
                 <MessageModal />
               </div>

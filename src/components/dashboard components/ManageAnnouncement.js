@@ -192,15 +192,18 @@ export default function ManageAnnouncement() {
         </Row>
         <Row>
           <Jumbotron className='w-100'>
-            <Container>
-              {loading ? (
+            {loading ? (
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Spinner animation='border m-auto' />
-              ) : (
+              </div>
+            ) : (
+              <div className='mx-auto'>
                 <RenderAnnouncements />
-              )}
-              <DeleteModal />
-              <MessageModal />
-            </Container>
+              </div>
+            )}
+
+            <DeleteModal />
+            <MessageModal />
           </Jumbotron>
         </Row>
       </Col>

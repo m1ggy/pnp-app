@@ -5,7 +5,6 @@ import {
   Col,
   Spinner,
   Image,
-  Container,
   Button,
   Pagination,
   Card,
@@ -151,7 +150,7 @@ function Home() {
               <p>NO IMAGE</p>
             )}
           </Col>
-          <Col lg={1}></Col>
+          <Col lg={2}></Col>
 
           <Col>
             <Row className='w-100 m-auto'>
@@ -225,7 +224,7 @@ function Home() {
 
   return (
     <React.Fragment>
-      <Col className='wrapper'>
+      <Col>
         <Row style={{ marginTop: 100 }}>
           <Jumbotron
             className='w-100 jumbotrons bg-light'
@@ -428,7 +427,7 @@ function Home() {
               </Col>
             </Jumbotron>
           </Col>
-          <Col lg={1}></Col>
+          <Col lg={2}></Col>
         </Row>
       </Col>
     </React.Fragment>
