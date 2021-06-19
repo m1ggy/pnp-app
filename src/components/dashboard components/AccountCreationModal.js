@@ -66,94 +66,96 @@ export default function AccountCreationModal({ show, handler }) {
         <Modal.Title>Create New Account</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {jobDone ? (
-          message && <Alert>{message}</Alert>
-        ) : (
-          <Form onSubmit={handleSubmit}>
-            <div className='center'>
-              <Form.Control
-                type='text'
-                aria-label='First Name'
-                placeholder='First Name'
-                required
-                className='field'
-                value={name.first}
-                onChange={(e) => {
-                  setName({ ...name, first: e.target.value });
-                }}
-              />
-            </div>
-            <div className='center'>
-              <Form.Control
-                type='text'
-                aria-label='Last Name'
-                placeholder='Last Name'
-                required
-                className='field'
-                value={name.last}
-                onChange={(e) => {
-                  setName({ ...name, last: e.target.value });
-                }}
-              />
-            </div>
-            <div className='center'>
-              <Form.Control
-                type='email'
-                aria-label='Email'
-                placeholder='Email'
-                required
-                className='field'
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-              />
-            </div>
-            <div className='center'>
-              <Form.Control
-                type='password'
-                aria-label='Password'
-                placeholder='Password'
-                required
-                className='field'
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
-            </div>
-            <div className='center'>
-              <Form.Control
-                type='password'
-                aria-label='Confirm Password'
-                placeholder='Confirm Password'
-                required
-                className='field'
-                value={confirmPassword}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                }}
-              />
-            </div>
-            <div className='center' style={{ marginBottom: 15 }}>
-              {' '}
-              <Button
-                type='submit'
-                variant='success'
-                onClick={handleSubmit}
-                disabled={disableButton}
-              >
-                Submit
-              </Button>
-            </div>
-          </Form>
-        )}
+        <Form onSubmit={handleSubmit}>
+          <div className='center'>
+            <Form.Control
+              type='text'
+              aria-label='First Name'
+              placeholder='First Name'
+              required
+              className='field'
+              value={name.first}
+              onChange={(e) => {
+                setName({ ...name, first: e.target.value });
+              }}
+            />
+          </div>
+          <div className='center'>
+            <Form.Control
+              type='text'
+              aria-label='Last Name'
+              placeholder='Last Name'
+              required
+              className='field'
+              value={name.last}
+              onChange={(e) => {
+                setName({ ...name, last: e.target.value });
+              }}
+            />
+          </div>
+          <div className='center'>
+            <Form.Control
+              type='email'
+              aria-label='Email'
+              placeholder='Email'
+              required
+              className='field'
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+          </div>
+          <div className='center'>
+            <Form.Control
+              type='password'
+              aria-label='Password'
+              placeholder='Password'
+              required
+              className='field'
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+          </div>
+          <div className='center'>
+            <Form.Control
+              type='password'
+              aria-label='Confirm Password'
+              placeholder='Confirm Password'
+              required
+              className='field'
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+              }}
+            />
+          </div>
+          <div className='center' style={{ marginBottom: 15 }}>
+            {' '}
+            <Button
+              type='submit'
+              variant='success'
+              onClick={handleSubmit}
+              disabled={disableButton}
+            >
+              Submit
+            </Button>
+          </div>
+        </Form>
       </Modal.Body>
       <Modal.Footer className='center'>
+        {message && (
+          <Alert style={{ color: 'black' }} variant='info'>
+            {message}
+          </Alert>
+        )}
         {jobDone && (
           <Button
             variant='secondary'
             onClick={() => {
+              setMessage('');
               handler();
               setJobDone(false);
             }}

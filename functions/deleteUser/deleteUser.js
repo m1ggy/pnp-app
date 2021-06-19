@@ -1,9 +1,9 @@
-let adminKey = require('../adminKey.json');
+const { keys } = require('../keys');
 let admin = require('firebase-admin');
 
 if (admin.apps.length === 0) {
   admin.initializeApp({
-    credential: admin.credential.cert(adminKey),
+    credential: admin.credential.cert(keys),
   });
 }
 
