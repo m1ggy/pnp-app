@@ -17,10 +17,12 @@ export default function AccountCreationModal({ show, handler }) {
     e.preventDefault();
 
     if (confirmPassword !== password) {
+      setDisableButton(false);
       return setValidation('Password does not match!.');
     }
 
     if (password.length < 8) {
+      setDisableButton(false);
       return setValidation(
         'Password is short. Please make it atleast 8 characters.'
       );

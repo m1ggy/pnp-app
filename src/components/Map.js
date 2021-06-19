@@ -33,7 +33,6 @@ export default function Map() {
             (prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev),
             {}
           );
-          console.log(frequency);
           setCount(frequency);
           //   setCount('test');
         }
@@ -46,15 +45,10 @@ export default function Map() {
   function onEachProvince(province, layer) {
     let municipality;
 
-    // count.forEach((municipality)=>{
-    //     if(province.properties.MUNICIPALI ===Object.keys(municipality))
-    // })
-
     const keys = Object.keys(count);
 
     keys.forEach((key) => {
       if (province.properties.MUNICIPALI === key) {
-        console.log(count[`${key}`]);
         layer.setStyle({
           color: colors(count[`${key}`]),
           fillColor: colors(count[`${key}`]),

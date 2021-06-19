@@ -176,52 +176,6 @@ function Home() {
     });
   }
 
-  // function RenderAnnouncements() {
-  //   if (announcement === null || typeof announcement === undefined) return null;
-
-  //   if (announcement) {
-  //     if (announcement.length === 0) {
-  //       return (
-  //         <div style={{ display: 'flex', justifyContent: 'center' }}>
-  //           <p>No Published Announcements</p>
-  //         </div>
-  //       );
-  //     }
-  //   }
-
-  //   return announcement.map((item) => {
-  //     return (
-  //       <Col key={item.id}>
-  //         <Card
-  //           className='text-center'
-  //           style={{
-  //             boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-  //             width: '30rem',
-  //           }}
-  //         >
-  //           <Card.Body style={{ padding: 35 }}>
-  //             <Card.Title>
-  //               <h3>{item.title}</h3>
-  //             </Card.Title>
-  //             <Card.Text style={{ textAlign: 'center' }}>
-  //               <div
-  //                 dangerouslySetInnerHTML={{
-  //                   __html: DOMPurify.sanitize(item.content),
-  //                 }}
-  //                 style={{ textAlign: 'justify', fontSize: 20 }}
-  //                 className='w-100'
-  //               ></div>
-  //             </Card.Text>
-  //           </Card.Body>
-  //           <Card.Footer muted>
-  //             {item.timestamp.toDate().toDateString()}
-  //           </Card.Footer>
-  //         </Card>
-  //       </Col>
-  //     );
-  //   });
-  // }
-
   return (
     <React.Fragment>
       <Col>
