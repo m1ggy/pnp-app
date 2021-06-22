@@ -1,8 +1,9 @@
 .field {
-  margin: 20px;
-  width: 75%;
+  width: 100%;
 }
 .center {
   display: flex;
   justify-content: center;
+  line-height: 1;
+  padding: 0;
 }

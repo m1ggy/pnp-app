@@ -34,7 +34,9 @@ export default function AccountDeletionModal({ show, handle, data, setData }) {
           <Modal.Header closeButton>
             <Modal.Title>Confirm Action</Modal.Title>
           </Modal.Header>
-          {jobDone ? (
+          {loading ? (
+            <Spinner animation='border' />
+          ) : jobDone ? (
             <Modal.Body>
               {message && <Alert variant='success'>{message.message}</Alert>}
             </Modal.Body>
@@ -45,7 +47,6 @@ export default function AccountDeletionModal({ show, handle, data, setData }) {
                 : 'Are you sure you want to delete this account?'}
             </Modal.Body>
           )}
-          {loading ? <Spinner animation='border' /> : null}
 
           <Modal.Footer>
             {jobDone ? (

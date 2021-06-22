@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Button, Form, Alert } from 'react-bootstrap';
+import { Modal, Button, Form, Alert, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
 import './accountsModal.css';
@@ -10,11 +10,28 @@ export default function AccountCreationModal({ show, handler }) {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState(null);
   const [validation, setValidation] = useState();
-  const [jobDone, setJobDone] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [validated, setValidated] = useState(false);
+
   async function handleSubmit(e) {
     setDisableButton(true);
     e.preventDefault();
+
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    setValidated(true);
+
+    if (!validateEmail(email)) {
+      setDisableButton(false);
+      return setValidation(
+        'Email is Invalid. Please make sure your email is valid.'
+      );
+    }
 
     if (confirmPassword !== password) {
       setDisableButton(false);
@@ -27,9 +44,11 @@ export default function AccountCreationModal({ show, handler }) {
         'Password is short. Please make it atleast 8 characters.'
       );
     }
+    setValidated(false);
     try {
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(password, salt, (err, hash) => {
+          setLoading(true);
           axios
             .post('/.netlify/functions/createUser', {
               email,
@@ -38,11 +57,11 @@ export default function AccountCreationModal({ show, handler }) {
               verified: true,
             })
             .then((res) => {
-              setJobDone(true);
+              setLoading(false);
               setMessage(res.data.message);
             })
             .catch((res) => {
-              setJobDone(true);
+              setLoading(false);
               setMessage(res.data.message);
             });
         });
@@ -50,118 +69,149 @@ export default function AccountCreationModal({ show, handler }) {
     } catch (e) {
       console.log(e);
     }
-
     setValidation();
     setName({ first: '', last: '' });
     setEmail('');
     setPassword('');
     setConfirmPassword('');
-    setMessage('');
     setDisableButton(false);
+    setValidated(true);
   }
 
+  function validateEmail(email) {
+    let test = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    return test.test(email);
+  }
   return (
-    <Modal show={show} onHide={handler} centered size='lg'>
+    <Modal
+      show={show}
+      onHide={() => {
+        handler();
+        setMessage();
+      }}
+      centered
+      size='md'
+    >
       <Modal.Header closeButton>
         <Modal.Title>Create New Account</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit}>
+        {loading ? (
           <div className='center'>
-            <Form.Control
-              type='text'
-              aria-label='First Name'
-              placeholder='First Name'
-              required
-              className='field'
-              value={name.first}
-              onChange={(e) => {
-                setName({ ...name, first: e.target.value });
-              }}
-            />
+            <Spinner animation='border' variant='primary' />
           </div>
-          <div className='center'>
-            <Form.Control
-              type='text'
-              aria-label='Last Name'
-              placeholder='Last Name'
-              required
-              className='field'
-              value={name.last}
-              onChange={(e) => {
-                setName({ ...name, last: e.target.value });
+        ) : (
+          <Form onSubmit={handleSubmit} noValidate validated={validated}>
+            <div className='center'>
+              <Form.Group>
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type='email'
+                  aria-label='Email'
+                  required
+                  className='field'
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                  style={{ width: '100%' }}
+                />
+              </Form.Group>
+            </div>
+
+            <div
+              as='Row'
+              style={{
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
               }}
-            />
-          </div>
-          <div className='center'>
-            <Form.Control
-              type='email'
-              aria-label='Email'
-              placeholder='Email'
-              required
-              className='field'
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-            />
-          </div>
-          <div className='center'>
-            <Form.Control
-              type='password'
-              aria-label='Password'
-              placeholder='Password'
-              required
-              className='field'
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-          </div>
-          <div className='center'>
-            <Form.Control
-              type='password'
-              aria-label='Confirm Password'
-              placeholder='Confirm Password'
-              required
-              className='field'
-              value={confirmPassword}
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-              }}
-            />
-          </div>
-          <div className='center' style={{ marginBottom: 15 }}>
-            {' '}
-            <Button
-              type='submit'
-              variant='success'
-              onClick={handleSubmit}
-              disabled={disableButton}
             >
-              Submit
-            </Button>
-          </div>
-        </Form>
+              <Form.Group as='Col'>
+                <Form.Label>First Name</Form.Label>
+                <Form.Control
+                  type='text'
+                  aria-label='First Name'
+                  required
+                  className='field'
+                  value={name.first}
+                  onChange={(e) => {
+                    setName({ ...name, first: e.target.value });
+                  }}
+                  style={{ width: '100%' }}
+                />
+              </Form.Group>
+              <Form.Group as='Col'>
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control
+                  type='text'
+                  aria-label='Last Name'
+                  required
+                  className='field'
+                  value={name.last}
+                  onChange={(e) => {
+                    setName({ ...name, last: e.target.value });
+                  }}
+                  style={{ width: '100%' }}
+                />
+              </Form.Group>
+            </div>
+            <div
+              className='center'
+              as='Row'
+              style={{ justifyContent: 'space-evenly' }}
+            >
+              <Form.Group as='Col'>
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type='password'
+                  aria-label='Password'
+                  required
+                  className='field'
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                  style={{ width: '100%' }}
+                  minLength={8}
+                />
+              </Form.Group>
+              <Form.Group as='Col'>
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control
+                  type='password'
+                  aria-label='Confirm Password'
+                  required
+                  className='field'
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                  }}
+                  style={{ width: '100%' }}
+                  minLength={8}
+                />
+              </Form.Group>
+            </div>
+            <div className='center' style={{ marginBottom: 15 }}>
+              {' '}
+              <Button
+                type='submit'
+                variant='success'
+                onClick={handleSubmit}
+                disabled={disableButton}
+              >
+                Submit
+              </Button>
+            </div>
+          </Form>
+        )}
       </Modal.Body>
       <Modal.Footer className='center'>
         {message && (
           <Alert style={{ color: 'black' }} variant='info'>
             {message}
           </Alert>
-        )}
-        {jobDone && (
-          <Button
-            variant='secondary'
-            onClick={() => {
-              setMessage('');
-              handler();
-              setJobDone(false);
-            }}
-          >
-            Close
-          </Button>
         )}
 
         {validation && <Alert variant='danger'>{validation}</Alert>}

@@ -27,6 +27,7 @@ import Events from './views/Events';
 import Others from './views/Others';
 import NavBarMain from './components/NavBarMain';
 import FooterMain from './components/FooterMain';
+import NoRouteFound from './views/NoRouteFound';
 
 function App() {
   return (
@@ -100,6 +101,10 @@ function App() {
                 <Route path='/login'>
                   <Login />
                 </Route>
+                <Route path='/404'>
+                  <NoRouteFound />
+                </Route>
+                <Redirect to='/404' />
               </Switch>
             </AuthProvider>
           </Router>
