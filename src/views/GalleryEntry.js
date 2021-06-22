@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 import {
   Jumbotron,
   Col,
@@ -19,7 +19,7 @@ export default function GalleryEntry() {
   const [images, setImages] = useState();
   const [loading, setLoading] = useState(false);
   const [carouselImages, setCarouselImages] = useState();
-
+  const history = useHistory();
   useEffect(() => {
     async function getGalleries() {
       setLoading(true);
@@ -38,6 +38,7 @@ export default function GalleryEntry() {
 
         return;
       }
+      history.push('/404');
 
       return;
     }

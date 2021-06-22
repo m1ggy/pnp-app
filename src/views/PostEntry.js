@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Redirect, useHistory } from 'react-router-dom';
 import {
   Jumbotron,
   Col,
@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react';
 import DOMPurify from 'dompurify';
 
 export default function PostEntry() {
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [post, setPost] = useState([]);
   const { id } = useParams();
@@ -40,11 +41,12 @@ export default function PostEntry() {
       await db.get().then((q) => {
         if (q.exists) {
           temp.push(q.data());
+          pageView(id);
+          setPost(temp);
+          return;
         }
 
-        pageView(id);
-
-        setPost(temp);
+        return history.push('/404');
       });
       setLoading(false);
     }
@@ -60,7 +62,14 @@ export default function PostEntry() {
     if (post) {
       if (post.length === 0) {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: '250px',
+            }}
+          >
             <p>Cannot find post.</p>
           </div>
         );
@@ -138,18 +147,24 @@ export default function PostEntry() {
           </Row>
           <Row>
             <Col lg={2}></Col>
-            <Col>
+            <Col className='w-100'>
               <Row className='w-100'>
                 <Col lg={1}></Col>
-                <Col
-                  lg={10}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  {loading ? <Spinner animation='border' /> : <RenderPost />}
+                <Col lg={10}>
+                  {loading ? (
+                    <div
+                      style={{
+                        height: '250px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Spinner animation='border' />
+                    </div>
+                  ) : (
+                    <RenderPost />
+                  )}
                 </Col>
                 <Col lg={1}></Col>
               </Row>

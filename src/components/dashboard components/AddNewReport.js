@@ -35,11 +35,21 @@ export default function AddNewReport() {
   const [description, setDescription] = useState(descriptionInitialState);
   const [message, setMessage] = useState();
   const [dateOccurred, setDateOccurred] = useState(new Date());
+  const [validated, setValidated] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
 
     setMessage();
+    e.preventDefault();
+
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    setValidated(true);
 
     if (description.status === '') {
       return setMessage('Please select a status');
@@ -67,6 +77,7 @@ export default function AddNewReport() {
     });
     setDescription(descriptionInitialState);
     setProfile(profileInitialState);
+    setValidated(false);
   }
 
   return (
@@ -78,7 +89,7 @@ export default function AddNewReport() {
       </Row>
       <Row>
         <Jumbotron className='w-100'>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} noValidate validated={validated}>
             <Row>
               <Col>
                 <Form.Group>
