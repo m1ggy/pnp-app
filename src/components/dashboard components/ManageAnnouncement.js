@@ -6,7 +6,6 @@ import {
   Button,
   ButtonGroup,
   Spinner,
-  Container,
   Modal,
 } from 'react-bootstrap';
 

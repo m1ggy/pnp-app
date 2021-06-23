@@ -23,7 +23,7 @@ export default function ReportsMain() {
       }
       setPageNumbers(temp);
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function paginate(num) {
     setCurrentPage(num);

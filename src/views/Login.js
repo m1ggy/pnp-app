@@ -5,7 +5,7 @@ import { Alert, Card, Form, Container, Button, Spinner } from 'react-bootstrap';
 import { useHistory, NavLink } from 'react-router-dom';
 import { IoReturnDownBackSharp } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
-import { setMessage, setUser } from '../redux/usersSlice';
+import { setUser } from '../redux/usersSlice';
 import { firestore } from '../firebase/firebase';
 import bcrypt from 'bcryptjs';
 import { getDataWhereQuery } from '../utils/firebaseUtils';
@@ -104,6 +104,7 @@ function Login() {
                   onClick={handleSubmit}
                   variant='primary'
                   disabled={disable}
+                  type='submit'
                 >
                   {disable ? <Spinner animation='border' /> : 'Login'}
                 </Button>

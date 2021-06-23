@@ -12,7 +12,6 @@ import { getDataFromCollection } from '../utils/firebaseUtils';
 import MapLegend, { colors } from './MapLegend';
 
 export default function Map() {
-  const [reports, setReports] = useState();
   const [map, setMap] = useState();
   const [count, setCount] = useState();
   ////get all reports
@@ -30,15 +29,12 @@ export default function Map() {
           });
 
           const frequency = count.reduce(
-            (prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev),
+            (prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev), // eslint-disable-line no-sequences
             {}
           );
           setCount(frequency);
-          //   setCount('test');
         }
       }
-
-      setReports(res);
     });
   }, []);
 

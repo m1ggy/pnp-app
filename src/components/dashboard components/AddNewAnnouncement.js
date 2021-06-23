@@ -71,9 +71,6 @@ export default function AddNewAnnouncement() {
     setDisable(false);
   }
 
-  function onChangeContent(value) {
-    setContent(value);
-  }
   return (
     <Col>
       <Row>

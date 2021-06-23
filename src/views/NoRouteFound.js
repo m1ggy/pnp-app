@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Button } from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 import NoRouteImage from '../images/NoRouteImage.png';
 console.log(NoRouteImage);
 export default function NoRouteFound() {

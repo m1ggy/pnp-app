@@ -1,4 +1,4 @@
-import { useParams, Link, Redirect, useHistory } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 import {
   Jumbotron,
   Col,
