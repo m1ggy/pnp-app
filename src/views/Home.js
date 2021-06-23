@@ -4,10 +4,10 @@ import {
   Row,
   Col,
   Spinner,
-  Image,
   Button,
   Pagination,
   Card,
+  Image,
 } from 'react-bootstrap';
 import { firestore } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
@@ -19,6 +19,8 @@ import '../styles/home.css';
 import DOMPurify from 'dompurify';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import LazyLoad from 'react-lazyload';
+import SpinnerPlaceholder from '../components/SpinnerPlaceholder';
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -139,13 +141,9 @@ function Home() {
         >
           <Col lg={4} className='w-100 h-75'>
             {post.url ? (
-              <Image
-                src={post.url}
-                style={{
-                  height: '100%',
-                  width: '100%',
-                }}
-              />
+              <LazyLoad placeholder={<SpinnerPlaceholder />}>
+                <Image src={post.url} width='100%' alt={post.title} />
+              </LazyLoad>
             ) : (
               <p>NO IMAGE</p>
             )}
@@ -334,7 +332,7 @@ function Home() {
         </Row>
         <Row></Row>
         <Row>
-          <Col lg={1}></Col>
+          <Col lg={2}></Col>
           <Col ref={scrollRef}>
             <Jumbotron
               className='w-100 m-auto'

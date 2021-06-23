@@ -4,6 +4,8 @@ import { firestore } from '../firebase/firebase';
 import { Link, useRouteMatch } from 'react-router-dom';
 import '../styles/gallery.css';
 import { pageView } from '../utils/firebaseUtils';
+import LazyLoad from 'react-lazyload';
+import SpinnerPlaceholder from '../components/SpinnerPlaceholder';
 
 function GalleryMain() {
   const [gallery, setGallery] = useState();
@@ -59,23 +61,33 @@ function GalleryMain() {
           }}
         >
           <Link to={`${url}/${gallery.id}`}>
-            <Image
+            {/* <Image
               src={gallery.data.imagesURL[0]}
               id='imageHover'
-              style={{
-                boxShadow:
-                  'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
-                padding: 0,
-                margin: 0,
-              }}
-            />
-            <div id='galleryDesc'>
-              <h3 style={{ color: 'white' }}>{gallery.data.title}</h3>
-              <p style={{ color: 'white' }}>{gallery.data.subtitle}</p>
-              <p style={{ color: 'white', fontSize: 13 }} muted>
-                {gallery.data.dateUploaded}
-              </p>
-            </div>
+              
+            /> */}
+            <LazyLoad placeholder={<SpinnerPlaceholder />}>
+              <Image
+                alt={gallery.data.title}
+                effect='blur'
+                src={gallery.data.imagesURL[0]}
+                style={{
+                  boxShadow:
+                    'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
+                  padding: 0,
+                  margin: 0,
+                }}
+                width='100%'
+                id='imageHover'
+              />
+              <div id='galleryDesc'>
+                <h3 style={{ color: 'white' }}>{gallery.data.title}</h3>
+                <p style={{ color: 'white' }}>{gallery.data.subtitle}</p>
+                <p style={{ color: 'white', fontSize: 13 }} muted>
+                  {gallery.data.dateUploaded}
+                </p>
+              </div>
+            </LazyLoad>
           </Link>
         </Col>
       );

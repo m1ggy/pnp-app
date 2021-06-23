@@ -79,7 +79,7 @@ function NewsAndEvents() {
             </Row>
           </Col>
 
-          <Col className='w-100 m-auto'>
+          <Col className='w-100 m-5'>
             <Link to={`/news-and-events/${type.value}`}> View All</Link>
           </Col>
         </Row>

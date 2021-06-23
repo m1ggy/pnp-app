@@ -50,7 +50,7 @@ export default function GalleryEntry() {
   return (
     <React.Fragment>
       <Col>
-        <Row style={{ marginTop: 150, marginBottom: 50 }}>
+        <Row style={{ marginTop: 150, marginBottom: 50 }} className='w-100'>
           <Jumbotron className='w-100'>
             {images && (
               <React.Fragment>

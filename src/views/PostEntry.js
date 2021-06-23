@@ -145,31 +145,33 @@ export default function PostEntry() {
               )}
             </Jumbotron>
           </Row>
-          <Row>
-            <Col lg={2}></Col>
-            <Col className='w-100'>
-              <Row className='w-100'>
-                <Col lg={1}></Col>
-                <Col lg={10}>
-                  {loading ? (
-                    <div
-                      style={{
-                        height: '250px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Spinner animation='border' />
-                    </div>
-                  ) : (
-                    <RenderPost />
-                  )}
-                </Col>
-                <Col lg={1}></Col>
-              </Row>
-            </Col>
-            <Col lg={2}></Col>
+          <Row className='w-100'>
+            <Jumbotron className='w-100'>
+              <Col lg={2}></Col>
+              <Col className='w-100'>
+                <Row className='w-100'>
+                  <Col lg={1}></Col>
+                  <Col lg={10}>
+                    {loading ? (
+                      <div
+                        style={{
+                          height: '250px',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Spinner animation='border' />
+                      </div>
+                    ) : (
+                      <RenderPost />
+                    )}
+                  </Col>
+                  <Col lg={1}></Col>
+                </Row>
+              </Col>
+              <Col lg={2}></Col>
+            </Jumbotron>
           </Row>
         </Row>
       </Col>

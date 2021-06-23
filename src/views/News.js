@@ -87,7 +87,7 @@ export default function News() {
     return currentPosts.map((post, index) => {
       return (
         <Row className='w-100 p-3 border' style={{ height: '25%' }} key={index}>
-          <Col lg={3} className='border'>
+          <Col lg={3}>
             <div
               style={{
                 display: 'flex',
