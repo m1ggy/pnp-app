@@ -4,7 +4,8 @@ import { firestore } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
 import '../styles/posts.css';
 import { pageView } from '../utils/firebaseUtils';
-
+import LazyLoad from 'react-lazyload';
+import SpinnerPlaceholder from '../components/SpinnerPlaceholder';
 function NewsAndEvents() {
   const db = firestore.collection('posts');
   const [posts, setPosts] = useState();
@@ -109,14 +110,17 @@ function NewsAndEvents() {
       return index === 0 || index === 1 || index === 2 ? (
         <Col md={6} lg={4} xs={12} key={post.id}>
           <Link to={`/news-and-events/${post.id}`}>
-            <Image
-              src={post.url}
-              style={{
-                width: '100%',
-                boxShadow:
-                  'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
-              }}
-            />
+            <LazyLoad placeholder={<SpinnerPlaceholder />}>
+              <Image
+                src={post.url}
+                style={{
+                  width: '100%',
+                  boxShadow:
+                    'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
+                }}
+              />
+            </LazyLoad>
+
             <div
               id='postDesc'
               style={{
@@ -152,7 +156,19 @@ function NewsAndEvents() {
             <Row className='w-100'>
               <Col></Col>
               <Col lg={10}>
-                {loading ? <Spinner animation='border' /> : <RenderTypes />}
+                {loading ? (
+                  <div
+                    style={{
+                      minHeight: '350px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Spinner animation='border' />
+                  </div>
+                ) : (
+                  <RenderTypes />
+                )}
               </Col>
               <Col></Col>
             </Row>
