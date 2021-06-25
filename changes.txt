@@ -1,0 +1,11 @@
+chart 
+-per year
+-specific crime
+
+general statistics for crime 
+more controls for chart
+
+
+community map
+-select municipality
+-select crime type

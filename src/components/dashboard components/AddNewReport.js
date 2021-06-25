@@ -3,6 +3,7 @@ import { Col, Row, Jumbotron, Form, Button, Alert } from 'react-bootstrap';
 import Select from 'react-select';
 import '../../styles/addnewreport.css';
 import {
+  crimeTypes,
   municipalities,
   sexes,
   statuses,
@@ -164,16 +165,14 @@ export default function AddNewReport() {
             </Row>
             <Row>
               <Col>
-                <Form.Label>Enter Violation</Form.Label>
                 <Form.Group>
-                  <Form.Control
-                    type='text'
-                    className='input'
-                    value={description.violation}
+                  <Form.Label>Enter Violation</Form.Label>
+                  <Select
+                    options={crimeTypes}
                     onChange={(e) => {
                       setDescription({
                         ...description,
-                        violation: e.target.value,
+                        violation: e,
                       });
                     }}
                     required

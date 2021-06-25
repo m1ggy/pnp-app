@@ -145,3 +145,38 @@ export const municipalities = [
     value: 'SAN PEDRO CITY',
   },
 ];
+
+export const crimeTypes = [
+  {
+    label: 'Rape',
+    value: 'rape',
+  },
+  {
+    label: 'Kidnapping',
+    value: 'kidnapping',
+  },
+  {
+    label: 'Theft',
+    value: 'theft',
+  },
+  {
+    label: 'Murder',
+    value: 'murder',
+  },
+  {
+    label: 'Physical Injury',
+    value: 'physicalinjury',
+  },
+  {
+    label: 'Homicide',
+    value: 'homicide',
+  },
+  {
+    label: 'Carnapping',
+    value: 'carnapping',
+  },
+  {
+    label: 'Others',
+    value: 'Others',
+  },
+];
