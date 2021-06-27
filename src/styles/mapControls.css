@@ -1,0 +1,9 @@
+.MapButton {
+  width: 100%;
+  min-height: 15px;
+  margin: 10px;
+  transition: all 0.2s ease-in-out;
+}
+.MapButton:hover {
+  transform: scale(0.98);
+}

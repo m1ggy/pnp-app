@@ -35,6 +35,7 @@ function Maps() {
   const [dominantPercentage, setDominantPercentage] = useState({});
   const zoomLevel = 10;
   const [count, setCount] = useState();
+
   ////get all reports
   useEffect(() => {
     getDataFromCollection('reports', (res) => {
@@ -59,24 +60,43 @@ function Maps() {
     });
   }, []);
 
+  //useEffect for when the user changes the municipality or selects entire laguna
   useEffect(() => {
-    function getData(id) {
+    function getData(id, entire) {
       setLoading(true);
-      getDataWhereQuery(
-        'reports',
-        'description.municipality.value',
-        '==',
-        id,
-        (res) => {
+
+      //if user chooses laguna
+      if (entire === true) {
+        getDataFromCollection('reports', (res) => {
           setData(res);
           setLoading(false);
-        }
-      );
+        });
+      } else {
+        //else
+        getDataWhereQuery(
+          'reports',
+          'description.municipality.value',
+          '==',
+          id,
+          (res) => {
+            setData(res);
+            setLoading(false);
+          }
+        );
+      }
     }
+
+    ///check if selectedPane is true
     if (selectedPane) {
-      getData(selectedPane.value);
+      ///if user selects entire laguna
+      if (selectedPane.value === 'laguna') {
+        getData('', true);
+      } else {
+        getData(selectedPane.value, false);
+      }
     }
   }, [selectedPane]);
+
   function onEachProvince(province, layer) {
     const keys = Object.keys(count);
     keys.forEach((key) => {
@@ -151,15 +171,27 @@ function Maps() {
 
         tempPercentage.sort((a, b) => b - a);
 
+        let newTemp = [];
+        let num;
+        let tempArr = [...temp];
         for (let i = 0; i < temp.length; i++) {
-          let num = tempPercentage.find(
-            (percent) => percent === temp[i].percent
-          );
+          ////attach sorted percentages to main data. kinda demonic
+          num = tempArr.find((report, index) => {
+            if (report == null) return null;
+            else if (report.percent === tempPercentage[i]) {
+              tempArr[index] = null;
+              return report;
+            }
+            return null;
+          });
 
-          temp[i].percent = num;
+          newTemp.push(num);
+          num = null;
         }
-        setDominantPercentage(temp[0]);
-        setFiltered(temp);
+        console.log(newTemp);
+
+        setDominantPercentage(newTemp[0]);
+        setFiltered(newTemp);
         return;
       } else {
         let temp = [];
@@ -345,6 +377,7 @@ function Maps() {
                       style={{ margin: '25px' }}
                       crime={crime}
                       setCrime={setCrime}
+                      selector={setSelectedPane}
                     />
                   )}
                 </Col>
