@@ -99,10 +99,10 @@ function Maps() {
     layer.on('click', (e) => {
       setSelectedPane(currentMunicipality);
 
-      map.flyToBounds(e.target._bounds, {
+      map.fitBounds(e.target._bounds, {
         animate: true,
         duration: 1,
-        easeLinearity: 1,
+        easeLinearity: 0.5,
       });
     });
     layer.on('mouseover', () => {
@@ -216,14 +216,14 @@ function Maps() {
                       </div>
                     )}
                   </Row>
-                  <Row
-                    className='w-100 h-100'
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <div style={{ textAlign: 'center' }}>
+                  <Row className='w-100 h-100'>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItem: 'center',
+                      }}
+                    >
                       {loading ? (
                         <SpinnerPlaceholder />
                       ) : filtered ? (
@@ -308,8 +308,10 @@ function Maps() {
                           margin: 'auto',
                           zIndex: 1,
                         }}
+                        touchZoom={false}
                         doubleClickZoom={false}
                         whenCreated={setMap}
+                        placeholder={<SpinnerPlaceholder />}
                       >
                         <CommunityMapLegend map={map} />
 
