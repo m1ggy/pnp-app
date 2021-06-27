@@ -1,13 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Col, Row, Button } from 'react-bootstrap';
 import Select from 'react-select';
 import { crimeTypes } from '../dashboard utils/constants';
+
 export default function MapControls({ setCrime, crime, map, ...props }) {
   let newCrimeTypes = crimeTypes;
 
+  let all = useMemo(() => createAllSelector(), []);
+
+  function createAllSelector() {
+    return { label: 'All', value: 'all' };
+  }
+
   useEffect(() => {
-    newCrimeTypes.push({ label: 'All', value: 'all' });
-  }, [newCrimeTypes]);
+    newCrimeTypes.push(all);
+    console.log(all);
+  }, [newCrimeTypes, all]);
+
+  useEffect(() => {
+    setCrime(all);
+    //eslint-disable-next-line
+  }, []);
 
   return (
     <Row {...props} className='w-100'>
@@ -19,7 +32,9 @@ export default function MapControls({ setCrime, crime, map, ...props }) {
               map.flyTo([14.277, 121.35], 10, {
                 animate: true,
                 duration: 1,
+                easeLinearity: 1,
               });
+              setCrime(all);
             }}
             style={{ width: '100%' }}
           >
@@ -32,7 +47,6 @@ export default function MapControls({ setCrime, crime, map, ...props }) {
             <Select
               options={newCrimeTypes}
               style={{ zIndex: '999' }}
-              defaultValue={{ label: 'All', value: 'all' }}
               value={crime}
               onChange={(e) => {
                 setCrime(e);

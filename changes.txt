@@ -5,7 +5,11 @@ chart
 general statistics for crime 
 more controls for chart
 
-
 community map
 -select municipality
 -select crime type
+
+
+todo:
+import data and format it to be compatible with system
+
