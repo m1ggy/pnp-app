@@ -216,14 +216,15 @@ function Maps() {
                       </div>
                     )}
                   </Row>
-                  <Row className='w-100 h-100'>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItem: 'center',
-                      }}
-                    >
+                  <Row
+                    className='w-100 h-100'
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <div>
                       {loading ? (
                         <SpinnerPlaceholder />
                       ) : filtered ? (
@@ -236,7 +237,10 @@ function Maps() {
                           </p>
                         ) : (
                           <div
-                            style={{ textAlign: 'center', marginTop: '10px' }}
+                            style={{
+                              textAlign: 'center',
+                              marginTop: '10px',
+                            }}
                           >
                             {dominantPercentage && (
                               <div>
