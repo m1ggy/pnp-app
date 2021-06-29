@@ -5,7 +5,7 @@ export default function SpinnerPlaceholder() {
     <div
       style={{
         height: '100%',
-        minHeight: '250px',
+        minHeight: '100px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

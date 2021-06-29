@@ -2,7 +2,7 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Col, Container } from 'react-bootstrap';
 
-export default function RenderChart({ data, header, options }) {
+const RenderChart = ({ data, header, options }) => {
   if (data) {
     if (data.datasets) if (data.datasets[0].label == null) return <div></div>;
     if (data.length === 0 && typeof header === 'undefined') {
@@ -38,5 +38,7 @@ export default function RenderChart({ data, header, options }) {
     );
   }
 
-  return <div></div>;
-}
+  return null;
+};
+
+export default React.memo(RenderChart);

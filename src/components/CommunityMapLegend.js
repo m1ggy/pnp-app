@@ -22,6 +22,6 @@ export default function CommunityMapLegend({ map }) {
 
       legend.addTo(map);
     }
-  }, [map]); //here add map
+  }, [map]);
   return null;
 }

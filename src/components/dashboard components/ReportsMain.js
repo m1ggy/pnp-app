@@ -12,6 +12,7 @@ export default function ReportsMain() {
     getDataFromCollection('reports', (res) => {
       paginateNumbers(res);
       setData(res);
+      console.log(res);
     });
 
     function paginateNumbers(arr) {

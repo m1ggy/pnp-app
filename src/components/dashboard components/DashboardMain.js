@@ -144,12 +144,18 @@ export default function DashboardMain() {
           dataset.data.reduce((pre, cur) => (cur === date ? ++pre : pre), 0)
         );
       });
+      const color = makeRandomColor();
 
       tempData.push({
         label: dataset.id.label,
         data: logs,
         fill: false,
-        backgroundColor: makeRandomColor(),
+        backgroundColor: color,
+        borderColor: color,
+        tension: 0.3,
+        pointStyle: 'rectRot',
+        radius: 10,
+        hoverRadius: 15,
       });
       logs = [];
     });
@@ -177,11 +183,6 @@ export default function DashboardMain() {
             formattedDatasets.datasets[0].data.length - 2
           ];
 
-        console.log(
-          formattedDatasets.datasets[0].data[
-            formattedDatasets.datasets[0].data.length - 1
-          ]
-        );
         percent =
           (increase / formattedDatasets.datasets[0].data.length - 2) * 100;
 

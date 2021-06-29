@@ -111,7 +111,7 @@ function Maps() {
     const currentMunicipality = municipalities.find(
       (item) => item.value === province.properties.MUNICIPALI
     );
-    const municipality = `<h2>${currentMunicipality.label}</h2>`;
+    const municipality = `<h5>${currentMunicipality.label}</h5>`;
     layer.bindPopup(municipality, {
       closeButton: false,
       offset: L.point(0, 5),
@@ -129,11 +129,13 @@ function Maps() {
       layer.setStyle({
         color: 'blue',
       });
+      layer.openPopup();
     });
     layer.on('mouseout', () => {
       layer.setStyle({
         color: `green`,
       });
+      // layer.closePopup();
     });
   }
 

@@ -170,7 +170,7 @@ export default function ManageGallery() {
     if (gallery.length === 0) {
       return (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {/* <p>You have no published galleries.</p> */}
+          <p>You have no published galleries.</p>
         </div>
       );
     }

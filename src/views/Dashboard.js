@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
-import { Button, Alert, Navbar, Form, Row, Col, Modal } from 'react-bootstrap';
+import { Button, Alert, Navbar, Form, Row, Col } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import Sidebar from '../components/Sidebar';
 import DashboardMain from '../components/dashboard components/DashboardMain';
@@ -19,6 +19,8 @@ import AddNewAnnouncement from '../components/dashboard components/AddNewAnnounc
 import ReportsMain from '../components/dashboard components/ReportsMain';
 import AddNewReport from '../components/dashboard components/AddNewReport';
 import Map from '../components/Map';
+import LogoutModal from '../components/LogoutModal';
+
 export default function Dashboard() {
   const { logout } = useAuth();
   const [error, setError] = useState();
@@ -26,10 +28,21 @@ export default function Dashboard() {
   const { path } = useRouteMatch();
   const [showModal, setShowModal] = useState(false);
   const user = useSelector((state) => state.userReducer.user);
+  // const renders = useRef(0);
 
-  async function handleLogout() {
-    setError('');
+  const toggleModal = useCallback(() => {
+    setShowModal((n) => (n = !n));
+  }, [setShowModal]);
 
+  const setErrors = useCallback(
+    (string) => {
+      setError((a) => (a = string));
+    },
+    [setError]
+  );
+
+  const handleLogout = useCallback(() => {
+    setErrors('');
     logout()
       .then(() => {
         history.push({
@@ -37,10 +50,10 @@ export default function Dashboard() {
         });
       })
       .catch(() => {
-        setError('Failed to Log out');
+        setErrors('Failed to Log out');
       });
-    setShowModal(false);
-  }
+    toggleModal();
+  }, [toggleModal, logout, history, setErrors]);
 
   ///routes for dashboard
   const routes = () => [
@@ -120,6 +133,7 @@ export default function Dashboard() {
   ];
   return (
     <div>
+      {/* {renders.current++} */}
       <Navbar className='bg-primary mb-3'>
         <Navbar.Brand style={{ color: 'white' }}>Admin Dashboard</Navbar.Brand>
         <Navbar.Collapse className='justify-content-end'>
@@ -134,7 +148,7 @@ export default function Dashboard() {
         <Form inline className='ml-3'>
           <Button
             onClick={() => {
-              setShowModal(true);
+              toggleModal();
             }}
             variant='danger'
             size='sm'
@@ -156,32 +170,11 @@ export default function Dashboard() {
       </Row>
 
       {error && <Alert variant='danger'>{error}</Alert>}
-      <Modal
-        show={showModal}
-        onHide={() => {
-          setShowModal(false);
-        }}
-        backdrop='static'
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm Action</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Do you want to log out?</Modal.Body>
-        <Modal.Footer>
-          <Button variant='danger' onClick={handleLogout}>
-            Log out
-          </Button>
-          <Button
-            variant='primary'
-            onClick={() => {
-              setShowModal(false);
-            }}
-          >
-            Cancel
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <LogoutModal
+        toggleModal={toggleModal}
+        showModal={showModal}
+        handleLogout={handleLogout}
+      />
     </div>
   );
 }

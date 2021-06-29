@@ -1,15 +1,22 @@
+MAJOR CHANGES
+
+
 chart 
 -per year
 -specific crime
-
 general statistics for crime 
 more controls for chart
 
-community map
--select municipality
--select crime type
+features 
+`Convert dataset from days to months when date range > 6 months
+`add a select for different crime types
 
 
 todo:
 import data and format it to be compatible with system
 
+DONE
+community map
+-select municipality
+-select crime type
+`add an 'of all time' in date range

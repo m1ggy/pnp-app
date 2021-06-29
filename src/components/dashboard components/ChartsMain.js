@@ -1,24 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Jumbotron, Row, Col, Container, Button, Form } from 'react-bootstrap';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Jumbotron, Row, Col, Container, Form } from 'react-bootstrap';
 import { formatDate, formatReportDataset } from '../../dashboard utils/utils';
-import { municipalities } from '../../dashboard utils/constants';
+import { municipalities, crimeTypes } from '../../dashboard utils/constants';
 import RenderChart from '../dashboard components/RenderChart';
 import Select from 'react-select';
 import { getDataWhereQuery } from '../../utils/firebaseUtils';
 
 export default function ChartsMain() {
+  const dateDefaults = useMemo(() => dateFactory(), []);
   const [reportChartValue, setReportChartValue] = useState({});
   const [reports, setReports] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
-  const [disableSubmit, setDisableSubmit] = useState(true);
-
-  const reportDateRef = useRef();
-  const [dateRange] = useState([
-    { label: '1 Week Ago', value: 6 },
-    { label: '1 Month Ago', value: 30.4167 },
-    { label: '6 Months Ago', value: 182.5 },
-    { label: '1 Year Ago', value: 365 },
-  ]);
+  const [crime, setCrime] = useState({ label: 'All', value: 'all' });
+  const [date, setDate] = useState('');
+  const [dateRange, setDateRange] = useState(dateDefaults);
 
   const options = {
     scales: {
@@ -32,7 +27,16 @@ export default function ChartsMain() {
     },
   };
 
-  async function getReports(id) {
+  function dateFactory() {
+    return [
+      { label: '1 Week Ago', value: 6 },
+      { label: '1 Month Ago', value: 30.4167 },
+      { label: '6 Months Ago', value: 182.5 },
+      { label: '1 Year Ago', value: 365 },
+    ];
+  }
+
+  function getReports(id) {
     getDataWhereQuery(
       'reports',
       'description.municipality.value',
@@ -44,16 +48,69 @@ export default function ChartsMain() {
     );
   }
 
-  function reportSubmit(e) {
-    e.preventDefault();
-    getReports(selectedCity.value);
-  }
+  useEffect(() => {
+    if (date == null) return null;
+    if (reports == null) return null;
+    if (selectedCity == null) return null;
+    if (crime == null) return null;
+
+    let newReports = [...reports];
+
+    if (crime.value === 'all')
+      return setReportChartValue(
+        formatReportDataset(reports, formatDate(date.value), crime, date)
+      );
+
+    let filtered = newReports.filter(
+      (report) => report.description.violation.value === crime.value
+    );
+
+    setReportChartValue(
+      formatReportDataset(filtered, formatDate(date.value), crime, date)
+    );
+  }, [reports, date, selectedCity, crime]);
 
   useEffect(() => {
-    setReportChartValue(
-      formatReportDataset(reports, reportDateRef.current, selectedCity.label)
-    );
-  }, [reports]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (selectedCity) {
+      getReports(selectedCity.value);
+    }
+  }, [selectedCity]);
+
+  useEffect(() => {
+    crimeTypes.push({ label: 'All', value: 'all' });
+  }, []);
+
+  useEffect(() => {
+    if (reports == null) return null;
+
+    let arrayOfDates = [];
+
+    reports.forEach((report) => arrayOfDates.push(report.dateOccurred));
+
+    if (
+      arrayOfDates.length > 0 &&
+      JSON.stringify(dateRange) === JSON.stringify(dateDefaults)
+    ) {
+      let mostRecentDate = arrayOfDates.reduce((a, b) => (b > a ? a : b));
+
+      var now = new Date();
+      var start = mostRecentDate.toDate();
+      var diff =
+        now -
+        start +
+        (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+      var oneDay = 1000 * 60 * 60 * 24;
+      var day = Math.floor(diff / oneDay);
+
+      setDateRange([
+        ...dateRange,
+        { label: 'All Time ', value: day + 1 },
+        { label: 'All Time (per Hour)', value: day + 1 },
+      ]);
+      return;
+    }
+    return () => null;
+  }, [reports, dateDefaults, dateRange]);
 
   return (
     <Col>
@@ -65,62 +122,65 @@ export default function ChartsMain() {
       <Row className='w-100'>
         <Jumbotron
           className='w-100'
-          style={{ display: 'flex', justifyContent: 'center' }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            minHeight: '100vh',
+          }}
         >
           <Col>
             <Row className='w-100 mt-5'>
               <Container>
                 <h1> Crime Report Chart</h1>
-                <Form onSubmit={reportSubmit}>
-                  <Row>
-                    <Col>
-                      <Form.Group>
-                        {' '}
-                        <h3>Date Range</h3>
-                        <Select
-                          options={dateRange}
-                          onChange={(value) => {
-                            reportDateRef.current = formatDate(value.value);
-                          }}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col>
-                      <Form.Group>
-                        <h3>Municipality / City</h3>
 
-                        <Select
-                          options={municipalities}
-                          onChange={(entry) => {
-                            setSelectedCity(entry);
-                            if (reportDateRef.current) setDisableSubmit(false);
-                          }}
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <div
-                      className='m-auto'
-                      style={{ display: 'flex', justifyContent: 'center' }}
-                    >
-                      <Button
-                        type='submit'
-                        variant='primary'
-                        className='mt-3 mb-5'
-                        disabled={disableSubmit}
-                      >
-                        View
-                      </Button>
-                    </div>
-                  </Row>
+                <Row>
+                  <Col>
+                    <Form.Group>
+                      <h3>Municipality / City</h3>
 
-                  <Row>
-                    {reportChartValue && (
-                      <RenderChart data={reportChartValue} options={options} />
-                    )}
-                  </Row>
-                </Form>
+                      <Select
+                        options={municipalities}
+                        onChange={(entry) => {
+                          setSelectedCity(entry);
+                        }}
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group>
+                      {' '}
+                      <h3>Date Range</h3>
+                      <Select
+                        options={dateRange}
+                        isOptionSelected={(option, selectValue) =>
+                          selectValue.some((i) => i === option)
+                        }
+                        onChange={(value) => {
+                          setDate(value);
+                        }}
+                        value={date}
+                      />
+                    </Form.Group>
+                  </Col>
+
+                  <Col>
+                    <Form.Group>
+                      <h3>Crime Type</h3>
+                      <Select
+                        options={crimeTypes}
+                        value={crime}
+                        onChange={(e) => {
+                          setCrime(e);
+                        }}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  {reportChartValue && (
+                    <RenderChart data={reportChartValue} options={options} />
+                  )}
+                </Row>
               </Container>
             </Row>
           </Col>
