@@ -97,6 +97,11 @@ function Maps() {
     }
   }, [selectedPane]);
 
+  //// by default select 'laguna' as selected
+  useEffect(() => {
+    setSelectedPane({ label: 'Laguna', value: 'laguna' });
+  }, []);
+
   function onEachProvince(province, layer) {
     const keys = Object.keys(count);
     keys.forEach((key) => {
@@ -170,12 +175,14 @@ function Maps() {
           temp.push({ type, percent: percentage });
           tempPercentage.push(percentage);
         });
-
+        /// sort the percentage descending
         tempPercentage.sort((a, b) => b - a);
 
+        /// temp vars
         let newTemp = [];
         let num;
         let tempArr = [...temp];
+
         for (let i = 0; i < temp.length; i++) {
           ////attach sorted percentages to main data. kinda demonic
           num = tempArr.find((report, index) => {
@@ -190,7 +197,6 @@ function Maps() {
           newTemp.push(num);
           num = null;
         }
-        console.log(newTemp);
 
         setDominantPercentage(newTemp[0]);
         setFiltered(newTemp);
@@ -208,7 +214,7 @@ function Maps() {
           null
         );
 
-        ////generates the percentage of crime of the selected crime type. demonic code
+        ////generates the percentage of crime of the selected crime type.
         for (let i = 0; i < crimeTypeArray.length; i++) {
           let num = tempData.reduce(
             (accu, curr) =>
@@ -243,13 +249,6 @@ function Maps() {
             <Col className='w-100'>
               <Row>
                 <Col className='w-100' xs={12} md={12} lg={3}>
-                  <Row>
-                    {selectedPane && (
-                      <div>
-                        <h3>Statistics for {selectedPane.label}</h3>
-                      </div>
-                    )}
-                  </Row>
                   <Row
                     className='w-100 h-100'
                     style={{
@@ -276,6 +275,11 @@ function Maps() {
                               marginTop: '10px',
                             }}
                           >
+                            {selectedPane && (
+                              <div>
+                                <h3>Statistics for {selectedPane.label}</h3>
+                              </div>
+                            )}
                             {dominantPercentage && (
                               <div>
                                 <h1 style={{ color: 'red' }}>

@@ -46,24 +46,30 @@ export function formatReportDataset(reports, dates, label, date) {
   let chartDates = [];
   let formattedDataset;
 
+  ///check if date exists
   if (date) {
+    ///check if the value is greater than 6 months and the label is not `All Time (per Hour)`
     if (date.value > 180 && date.label !== 'All Time (per Hour)') {
+      ///initialize variables for ease of use
       let arrayOfMonths = [];
       let now = new Date();
       let newDate = new Date();
+      ///get the start date
       newDate.setDate(newDate.getDate() - date.value);
 
+      //generate dates for array using start date
       for (newDate; newDate <= now; newDate.setMonth(newDate.getMonth() + 1)) {
         arrayOfMonths.push(new Date(newDate));
       }
 
       let monthsOfReports = [];
-
+      /// convert firebase timestamps into javascript date objects
       reports.forEach((report) => {
         monthsOfReports.push(report.dateOccurred.toDate());
       });
       let chartMonths = [];
 
+      ////aggregate the number of frequency of each month
       if (monthsOfReports)
         arrayOfMonths.forEach((month) => {
           chartMonths.push(
@@ -79,12 +85,13 @@ export function formatReportDataset(reports, dates, label, date) {
           );
         });
 
+      ///convert date object to locale string
       chartMonths.forEach((month) => {
         month.toLocaleString('default', { month: 'long' });
       });
 
       let monthLabels = [];
-
+      ///generate new array for chart labels
       arrayOfMonths.forEach((date) => {
         monthLabels.push(
           `${date.toLocaleString('default', {
@@ -92,6 +99,8 @@ export function formatReportDataset(reports, dates, label, date) {
           })} ${date.toLocaleDateString('default', { year: 'numeric' })}`
         );
       });
+
+      ///return dataset
       return (formattedDataset = {
         labels: monthLabels,
         datasets: [
