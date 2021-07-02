@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RichTextEditor from 'react-rte';
 
 export default function EditRTE({ post, sendData }) {
@@ -10,6 +10,10 @@ export default function EditRTE({ post, sendData }) {
     setContent(value);
     sendData(value);
   }
+
+  useEffect(() => {
+    console.log(content.toString('html'));
+  }, [content]);
 
   return (
     <React.Fragment>

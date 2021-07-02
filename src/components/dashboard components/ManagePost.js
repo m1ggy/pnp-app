@@ -14,10 +14,12 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { firestore, storage } from '../../firebase/firebase';
 import EditRTE from './EditRTE';
+import { useHistory } from 'react-router-dom';
 
 export default function ManagePost() {
+  const history = useHistory();
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState();
@@ -79,8 +81,7 @@ export default function ManagePost() {
                 size='sm'
                 className='m-3 w-75'
                 onClick={() => {
-                  setEditModal(true);
-                  setSelectedItem(post);
+                  history.push(`/dashboard/posts/edit/${post.id}`);
                 }}
               >
                 Edit
@@ -118,6 +119,7 @@ export default function ManagePost() {
 
     await db
       .where('published', '==', true)
+      .orderBy('timestamp', 'desc')
       .get()
       .then((querySnapshot) => {
         if (querySnapshot.empty) {
@@ -127,21 +129,15 @@ export default function ManagePost() {
 
         querySnapshot.forEach((doc) => {
           if (doc.exists) {
-            console.log(doc.data());
             postsArray.push(doc.data());
-          } else {
-            console.log('empty');
           }
         });
-      })
-      .catch((e) => {
-        console.log('Errors: ' + e);
       });
 
     let filtered = postsArray.filter((post) => {
       return post.author === currentUser.email;
     });
-    console.log(filtered);
+
     setPosts(filtered);
 
     setLoading(false);
@@ -150,67 +146,74 @@ export default function ManagePost() {
   async function editPost(e) {
     e.preventDefault();
 
-    await db
-      .doc(selectedItem.id)
-      .set(
-        {
-          title: titleRef.current,
-          subtitle: subtitleRef.current,
-        },
-        { merge: true }
-      )
-      .then(() => {
-        setMessage({ type: 'primary', msg: 'Successfully updated post.' });
-      });
-
-    if (typeof getContent.current != 'undefined') {
+    ///check if content is empty
+    if (getContent.current == null) {
+      setMessage({ type: 'danger', msg: 'Content cannot be empty.' });
+    } else if (getContent.current.toString('html') === '<p><br></p>') {
+      setMessage({ type: 'danger', msg: 'Content cannot be empty.' });
+    } else {
       await db
         .doc(selectedItem.id)
         .set(
           {
-            content: getContent.current.toString('html'),
+            title: titleRef.current,
+            subtitle: subtitleRef.current,
           },
           { merge: true }
         )
         .then(() => {
           setMessage({ type: 'primary', msg: 'Successfully updated post.' });
         });
-    }
 
-    if (imageRef.current != null) {
-      await storageRef
-        .child(selectedItem.id)
-        .delete()
-        .then(() => {
-          const upload = storageRef
-            .child(`${selectedItem.id}`)
-            .put(imageRef.current);
+      if (typeof getContent.current != 'undefined') {
+        await db
+          .doc(selectedItem.id)
+          .set(
+            {
+              content: getContent.current.toString('html'),
+            },
+            { merge: true }
+          )
+          .then(() => {
+            setMessage({ type: 'primary', msg: 'Successfully updated post.' });
+          });
+      }
 
-          upload
-            .then(() => {
-              storageRef
-                .child(selectedItem.id)
-                .getDownloadURL()
-                .then((url) => {
-                  db.doc(selectedItem.id)
-                    .set(
-                      {
-                        url,
-                      },
-                      { merge: true }
-                    )
-                    .then(() => {
-                      setMessage({
-                        type: 'primary',
-                        msg: 'Successfully updated post.',
+      if (imageRef.current != null) {
+        await storageRef
+          .child(selectedItem.id)
+          .delete()
+          .then(() => {
+            const upload = storageRef
+              .child(`${selectedItem.id}`)
+              .put(imageRef.current);
+
+            upload
+              .then(() => {
+                storageRef
+                  .child(selectedItem.id)
+                  .getDownloadURL()
+                  .then((url) => {
+                    db.doc(selectedItem.id)
+                      .set(
+                        {
+                          url,
+                        },
+                        { merge: true }
+                      )
+                      .then(() => {
+                        setMessage({
+                          type: 'primary',
+                          msg: 'Successfully updated post.',
+                        });
                       });
-                    });
-                });
-            })
-            .catch((e) => {
-              setMessage({ type: 'danger', msg: `Error: ${e}` });
-            });
-        });
+                  });
+              })
+              .catch((e) => {
+                setMessage({ type: 'danger', msg: `Error: ${e}` });
+              });
+          });
+      }
     }
 
     setEditModal(false);
@@ -285,8 +288,12 @@ export default function ManagePost() {
             </Form.Group>
 
             <Form.Group>
+              <Form.Label>
+                <span style={{ color: 'red' }}>NOTE</span>: If you don't want to
+                change the image, ignore this.
+              </Form.Label>
               <Form.File
-                label="Enter Banner Image NOTE: If you don't want to change the image, ignore this."
+                label='Enter Banner Image'
                 accept='image/*'
                 style={{ width: 300 }}
                 onChange={handleImage}

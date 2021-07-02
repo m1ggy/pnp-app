@@ -15,14 +15,14 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import userReducer from './usersSlice';
-
+import toastReducer from './toastSlice';
 const persistConfig = {
   key: 'root',
   version: 1,
   storage,
 };
 
-const combinedReducer = combineReducers({ userReducer });
+const combinedReducer = combineReducers({ userReducer, toastReducer });
 
 const persistedReducer = persistReducer(persistConfig, combinedReducer);
 

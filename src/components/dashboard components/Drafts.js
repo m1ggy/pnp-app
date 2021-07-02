@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Jumbotron,
   Col,
@@ -8,17 +8,16 @@ import {
   Button,
   Modal,
   ButtonGroup,
-  Form,
   Image,
 } from 'react-bootstrap';
 import { firestore, storage } from '../../firebase/firebase';
 import { useAuth } from '../../contexts/AuthContext';
-import Select from 'react-select';
 import '../../styles/drafts.css';
-import RichTextEditor from 'react-rte';
-import EditRTE from './EditRTE';
+
+import { useHistory } from 'react-router-dom';
 
 export default function Drafts() {
+  const history = useHistory();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState();
   const [selectedItem, setSelectedItem] = useState();
@@ -26,25 +25,11 @@ export default function Drafts() {
   const [message, setMessage] = useState();
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [publishModal, setPublishModal] = useState(false);
-  const [editModal, setEditModal] = useState(false);
-  //eslint-disable-next-line
-  const [content, setContent] = useState(RichTextEditor.createEmptyValue());
-  const getContent = useRef('');
-  const { currentUser } = useAuth();
 
-  const types = [
-    { value: 'news', label: 'News' },
-    { value: 'events', label: 'Events' },
-    { value: 'others', label: 'Others' },
-  ];
+  const { currentUser } = useAuth();
 
   const db = firestore.collection('posts');
   const storageRef = storage.ref('images');
-
-  const titleRef = useRef();
-  const subtitleRef = useRef();
-  const imageRef = useRef();
-  const typeRef = useRef();
 
   function RenderPosts() {
     if (posts === null || typeof posts === undefined) return null;
@@ -101,15 +86,11 @@ export default function Drafts() {
                 Publish
               </Button>
               <Button
-                variant='info'
+                variant='primary'
                 size='sm'
                 className='m-3 w-75'
                 onClick={() => {
-                  setEditModal(true);
-                  setSelectedItem(post);
-                  setContent(
-                    RichTextEditor.createValueFromString(post.content, 'html')
-                  );
+                  history.push(`/dashboard/posts/edit/${post.id}`);
                 }}
               >
                 Edit
@@ -162,10 +143,6 @@ export default function Drafts() {
     setPosts(filtered);
 
     setLoading(false);
-  }
-
-  function setContentToRef(value) {
-    getContent.current = value;
   }
 
   const handleCloseModal = () => {
@@ -226,201 +203,6 @@ export default function Drafts() {
 
     setSelectedItem();
     setShowMessageModal(true);
-  }
-
-  async function editPost(e) {
-    e.preventDefault();
-
-    await db
-      .doc(selectedItem.id)
-      .set(
-        {
-          title: titleRef.current,
-          subtitle: subtitleRef.current,
-          content: getContent.current.toString('html'),
-        },
-        { merge: true }
-      )
-      .then(() => {
-        setMessage({ type: 'primary', msg: 'Successfully updated post.' });
-      });
-
-    if (typeRef.current != null) {
-      await db
-        .doc(selectedItem.id)
-        .set(
-          {
-            type: typeRef.current,
-          },
-          { merge: true }
-        )
-        .then(() => {
-          setMessage({ type: 'primary', msg: 'Successfully updated post.' });
-        });
-    }
-
-    if (imageRef.current != null) {
-      await storageRef
-        .child(selectedItem.id)
-        .delete()
-        .then(() => {
-          const upload = storageRef
-            .child(`${selectedItem.id}`)
-            .put(imageRef.current);
-
-          upload
-            .then(() => {
-              storageRef
-                .child(selectedItem.id)
-                .getDownloadURL()
-                .then((url) => {
-                  db.doc(selectedItem.id)
-                    .set(
-                      {
-                        url,
-                      },
-                      { merge: true }
-                    )
-                    .then(() => {
-                      setMessage({
-                        type: 'primary',
-                        msg: 'Successfully updated post.',
-                      });
-                    });
-                });
-            })
-            .catch((e) => {
-              setMessage({ type: 'danger', msg: `Error: ${e}` });
-            });
-        });
-    }
-
-    setEditModal(false);
-    setShowMessageModal(true);
-    titleRef.current = undefined;
-    subtitleRef.current = undefined;
-    getContent.current = undefined;
-    imageRef.current = undefined;
-    typeRef.current = undefined;
-    e.target.reset();
-  }
-
-  function handleImage(e) {
-    if (e.target.files[0]) {
-      imageRef.current = e.target.files[0];
-    }
-  }
-
-  function EditModal() {
-    if (selectedItem === null || typeof selectedItem === 'undefined') {
-      return null;
-    }
-
-    titleRef.current = selectedItem.title;
-    subtitleRef.current = selectedItem.subtitle;
-
-    return (
-      <Modal
-        show={editModal}
-        onHide={() => {
-          setEditModal(false);
-        }}
-        centered
-        dialogClassName='edit-modal'
-      >
-        <Modal.Header>
-          <h3>Edit Post</h3>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={editPost}>
-            <Form.Group>
-              <Form.Label>
-                <b>Enter Title</b>
-              </Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Title'
-                required
-                style={{ width: '50%' }}
-                className='border'
-                defaultValue={titleRef.current}
-                onChange={(event) => {
-                  titleRef.current = event.target.value;
-                }}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>
-                <b>Enter Subtitle</b>
-              </Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Subtitle'
-                required
-                style={{ width: '75%' }}
-                className='border'
-                defaultValue={subtitleRef.current}
-                onChange={(event) => {
-                  subtitleRef.current = event.target.value;
-                }}
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.File
-                label="Enter Banner Image NOTE: If you don't want to change the image, ignore this."
-                accept='image/*'
-                style={{ width: 300 }}
-                onChange={handleImage}
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>
-                <b>Enter Content </b>
-              </Form.Label>
-              <EditRTE post={selectedItem} sendData={setContentToRef} />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Select File Category</Form.Label>
-              <Select
-                options={types}
-                onChange={(e) => {
-                  typeRef.current = e;
-                }}
-                styles={{ zIndex: 100 }}
-              />
-            </Form.Group>
-
-            <Container className='mt-5'>
-              <Button
-                variant='primary'
-                type='submit'
-                className='mt-5 w-25 m-auto'
-                size='md'
-              >
-                Submit
-              </Button>
-            </Container>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <ButtonGroup>
-            <Button
-              variant='danger'
-              size='sm'
-              className='w-75 m-3'
-              onClick={() => {
-                setEditModal(false);
-              }}
-            >
-              Cancel
-            </Button>
-          </ButtonGroup>
-        </Modal.Footer>
-      </Modal>
-    );
   }
 
   function DeleteModal() {
@@ -565,7 +347,6 @@ export default function Drafts() {
             <DeleteModal />
             <MessageModal />
             <PublishModal />
-            <EditModal />
           </Jumbotron>
         </Row>
       </Col>

@@ -1,18 +1,19 @@
-import React, { useRef, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import {
-  Jumbotron,
-  Col,
   Row,
-  Form,
+  Col,
   Container,
   Button,
+  Form,
+  Jumbotron,
   Spinner,
 } from 'react-bootstrap';
-import { firestore, storage, firebase } from '../../firebase/firebase';
-import { useAuth } from '../../contexts/AuthContext';
-import uniqid from 'uniqid';
-import Select from 'react-select';
 import RichTextEditor from 'react-rte';
+import { getDataFromDocument } from '../../utils/firebaseUtils';
+import { storage, firestore } from '../../firebase/firebase';
+import Select from 'react-select';
+import { types } from '../../dashboard utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setToastShow,
@@ -21,39 +22,37 @@ import {
   setToastType,
 } from '../../redux/toastSlice';
 
-export default function AddNewPost() {
-  const titleRef = useRef();
-  const subtitleRef = useRef();
-  const publishRef = useRef();
+export default function EditPost() {
+  const storageRef = storage.ref('images');
+  const db = firestore.collection('posts');
 
-  const [image, setImage] = useState();
-  const [type, setType] = useState();
-  const [content, setContent] = useState(RichTextEditor.createEmptyValue());
   const [disabled, setdisabled] = useState(false);
-  const { currentUser } = useAuth();
-
   const [loading, setLoading] = useState(false);
+  const [type, setType] = useState();
+  const { id } = useParams();
 
+  const [content, setContent] = useState(RichTextEditor.createEmptyValue());
+  const [title, setTitle] = useState();
+  const [subtitle, setSubtitle] = useState();
+  const [image, setImage] = useState();
   const dispatch = useDispatch();
   const toastState = useSelector((state) => state.toastReducer);
 
-  const types = [
-    { value: 'news', label: 'News' },
-    { value: 'events', label: 'Events' },
-    { value: 'others', label: 'Others' },
-  ];
-
-  const db = firestore.collection('posts');
-  const storageRef = storage.ref();
+  useEffect(() => {
+    getDataFromDocument('posts', id, (res) => {
+      setTitle(res.title);
+      setSubtitle(res.subtitle);
+      setContent(RichTextEditor.createValueFromString(res.content, 'html'));
+      setType(res.type);
+    });
+  }, [id]);
 
   function handleImage(e) {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
     }
   }
-  function onChangeContent(value) {
-    setContent(value);
-  }
+
   function dispatchToast(content, show, header, type) {
     dispatch(setToastContent(content));
     dispatch(setToastHeader(header));
@@ -61,49 +60,7 @@ export default function AddNewPost() {
     dispatch(setToastType(type));
   }
 
-  function addData(url, tempID) {
-    const date = new Date();
-    const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-
-    db.doc(tempID)
-      .set(
-        {
-          title: titleRef.current.value,
-          subtitle: subtitleRef.current.value,
-          content: content.toString('html'),
-          id: tempID,
-          published: publishRef.current.checked,
-          author: currentUser.email,
-          date: date.toDateString(),
-          time: date.toTimeString(),
-          timestamp,
-          url: url,
-          type,
-        },
-        { merge: true }
-      )
-      .then(() => {
-        dispatchToast(
-          'Successfully added post.',
-          toastState.show,
-          'Success',
-          'success'
-        );
-      });
-
-    if (publishRef.current.checked) {
-      db.doc(tempID).set(
-        {
-          publishDate: date.toDateString(),
-        },
-        { merge: true }
-      );
-    }
-    setdisabled(false);
-    setContent(RichTextEditor.createEmptyValue());
-  }
-
-  async function pushData(e) {
+  async function editPost(e) {
     e.preventDefault();
 
     if (type == null) {
@@ -121,41 +78,89 @@ export default function AddNewPost() {
         'danger'
       );
     }
+
     setLoading(true);
     setdisabled(true);
 
-    ///create unique id for matching the image in storage
-    const tempID = uniqid();
+    await db.doc(id).set(
+      {
+        title: title,
+        subtitle: subtitle,
+        content: content.toString('html'),
+      },
+      { merge: true }
+    );
 
-    const imageStorageRef = storageRef.child(`images/${tempID}`);
-    ///upload image
-    await imageStorageRef.put(image).then(() => {
-      imageStorageRef
-        .getDownloadURL()
-        .then((url) => {
-          addData(url, tempID);
-          e.target.reset();
-        })
-        .catch(() => {
+    if (type != null) {
+      await db
+        .doc(id)
+        .set(
+          {
+            type: type,
+          },
+          { merge: true }
+        )
+        .then(() => {
           dispatchToast(
-            'Failed to upload post.',
+            'Successfully updated post.',
             toastState.show,
-            'Something went wrong..',
-            'danger'
+            'Success',
+            'success'
           );
-          setdisabled(false);
         });
-    });
+    }
 
-    setType(null);
+    if (image != null) {
+      await storageRef
+        .child(id)
+        .delete()
+        .then(() => {
+          const upload = storageRef.child(`${id}`).put(image);
+
+          upload
+            .then(() => {
+              storageRef
+                .child(id)
+                .getDownloadURL()
+                .then((url) => {
+                  db.doc(id)
+                    .set(
+                      {
+                        url,
+                      },
+                      { merge: true }
+                    )
+                    .then(() => {
+                      dispatchToast(
+                        'Successfully updated post.',
+                        toastState.show,
+                        'Upload Successful.',
+                        'success'
+                      );
+                    });
+                });
+            })
+            .catch(() => {
+              dispatchToast(
+                'Failed to upload post.',
+                toastState.show,
+                'Something went wrong..',
+                'danger'
+              );
+            });
+        });
+    }
+
     setLoading(false);
+    setdisabled(false);
   }
+
   return (
     <React.Fragment>
       <Col>
         <Row>
           <Jumbotron className='w-100'>
-            <h1>Add New Post</h1>
+            <h1>Edit Post</h1>
           </Jumbotron>
         </Row>
 
@@ -163,7 +168,7 @@ export default function AddNewPost() {
           <Col>
             <Jumbotron className='w-100'>
               <Container>
-                <Form onSubmit={pushData}>
+                <Form onSubmit={editPost}>
                   <Form.Group>
                     <Form.Label>
                       <b>Enter Title</b>
@@ -173,8 +178,9 @@ export default function AddNewPost() {
                       placeholder='Title'
                       required
                       style={{ width: '50%' }}
-                      ref={titleRef}
                       className='border'
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
                     />
                   </Form.Group>
 
@@ -187,7 +193,8 @@ export default function AddNewPost() {
                       placeholder='Subtitle'
                       required
                       style={{ width: '75%' }}
-                      ref={subtitleRef}
+                      value={subtitle}
+                      onChange={(e) => setSubtitle(e.target.value)}
                       className='border'
                     />
                   </Form.Group>
@@ -196,32 +203,28 @@ export default function AddNewPost() {
                     <Form.Label>
                       <b>Enter Content </b>
                     </Form.Label>
-                    <RichTextEditor
-                      value={content}
-                      onChange={onChangeContent}
-                    />
+                    <RichTextEditor value={content} onChange={setContent} />
                   </Form.Group>
 
                   <Form.Group>
+                    <Form.Label style={{ fontSize: '10', fontWeight: 'bold' }}>
+                      Enter Banner Image
+                    </Form.Label>
                     <Form.File
-                      label='Enter Banner Image'
-                      required
                       accept='image/*'
                       style={{ width: 300 }}
                       onChange={handleImage}
                     />
+                    <Form.Label style={{ fontSize: '10', fontWeight: 'bold' }}>
+                      <span style={{ color: 'red' }}>Note</span>: If you dont
+                      want to replace the current banner, leave this empty.
+                    </Form.Label>
                   </Form.Group>
 
-                  <Form.Check
-                    type='switch'
-                    id='custom-switch'
-                    label='Publish?'
-                    ref={publishRef}
-                    className='mt-5 mb-3'
-                  />
-
                   <Form.Group>
-                    <Form.Label>Select Post Category</Form.Label>
+                    <Form.Label>
+                      <b>Select Post Category</b>
+                    </Form.Label>
                     <Select
                       options={types}
                       onChange={setType}
@@ -254,7 +257,6 @@ export default function AddNewPost() {
                     </Button>
                   </div>
                 </Form>
-                <div className='mt-5'></div>
               </Container>
             </Jumbotron>
           </Col>

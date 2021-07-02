@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
-import { Button, Alert, Navbar, Form, Row, Col } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { Button, Alert, Navbar, Form, Row, Col, Toast } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToastShow, selectToast } from '../redux/toastSlice';
 import Sidebar from '../components/Sidebar';
 import DashboardMain from '../components/dashboard components/DashboardMain';
 import AddNewPost from '../components/dashboard components/AddNewPost';
@@ -20,6 +21,7 @@ import ReportsMain from '../components/dashboard components/ReportsMain';
 import AddNewReport from '../components/dashboard components/AddNewReport';
 import Map from '../components/Map';
 import LogoutModal from '../components/LogoutModal';
+import EditPost from '../components/dashboard components/EditPost';
 
 export default function Dashboard() {
   const { logout } = useAuth();
@@ -28,7 +30,13 @@ export default function Dashboard() {
   const { path } = useRouteMatch();
   const [showModal, setShowModal] = useState(false);
   const user = useSelector((state) => state.userReducer.user);
-  // const renders = useRef(0);
+  const toastState = useSelector((state) => state.toastReducer);
+  const dispatch = useDispatch();
+  const toastShow = useSelector(selectToast);
+  useEffect(() => {
+    console.log(toastState.show);
+    console.log(toastShow);
+  }, [toastState, toastShow]);
 
   const toggleModal = useCallback(() => {
     setShowModal((n) => (n = !n));
@@ -129,13 +137,45 @@ export default function Dashboard() {
       key={`${path}/gallery/add-new-gallery`}
       render={() => <AddNewGallery />}
     />,
+    <Route
+      path={`${path}/posts/edit/:id`}
+      key={`${path}/posts/edit/:id`}
+      render={() => <EditPost />}
+      exact
+    />,
     <Route path={`${path}`} key={`${path}`} render={() => <DashboardMain />} />,
   ];
   return (
     <div>
-      {/* {renders.current++} */}
+      {toastState && (
+        <Toast
+          style={{
+            position: 'fixed',
+            bottom: '12px',
+            right: '12px',
+            margin: '20px',
+            zIndex: 9999,
+            minWidth: '450px',
+          }}
+          show={toastState.show}
+          autohide={true}
+          delay={5000}
+          onClose={() => dispatch(setToastShow(!toastState.show))}
+        >
+          <Toast.Header
+            className={`bg-${toastState.type}`}
+            style={{ color: 'white' }}
+          >
+            <strong className='mr-auto'>{toastState.header}</strong>
+            <small>Just now</small>
+          </Toast.Header>
+          <Toast.Body>{toastState.content}</Toast.Body>
+        </Toast>
+      )}
+
       <Navbar className='bg-primary mb-3'>
         <Navbar.Brand style={{ color: 'white' }}>Admin Dashboard</Navbar.Brand>
+
         <Navbar.Collapse className='justify-content-end'>
           <Navbar.Text>
             {user && (

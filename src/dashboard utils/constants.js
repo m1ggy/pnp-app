@@ -180,3 +180,8 @@ export const crimeTypes = [
     value: 'Others',
   },
 ];
+export const types = [
+  { value: 'news', label: 'News' },
+  { value: 'events', label: 'Events' },
+  { value: 'others', label: 'Others' },
+];

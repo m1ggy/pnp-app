@@ -23,6 +23,7 @@ export default function DashboardMain() {
   const [top, setTop] = useState([]);
   const [downloadTop, setDownloadTop] = useState([]);
   const [galleryTop, setGalleryTop] = useState([]);
+
   const [dateRange] = useState([
     { label: '1 Week Ago', value: 6 },
     { label: '1 Month Ago', value: 30.4167 },

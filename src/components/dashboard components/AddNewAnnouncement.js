@@ -1,48 +1,71 @@
 import React, { useState } from 'react';
-import {
-  Jumbotron,
-  Row,
-  Col,
-  Form,
-  Button,
-  Container,
-  Alert,
-} from 'react-bootstrap';
+import { Jumbotron, Row, Col, Form, Button, Container } from 'react-bootstrap';
 import uniqid from 'uniqid';
 import { firestore, firebase } from '../../firebase/firebase';
 import { useAuth } from '../../contexts/AuthContext';
-
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setToastShow,
+  setToastContent,
+  setToastHeader,
+  setToastType,
+} from '../../redux/toastSlice';
 export default function AddNewAnnouncement() {
-  const [message, setMessage] = useState();
   const [disable, setDisable] = useState(false);
   const db = firestore.collection('announcements');
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
   const { currentUser } = useAuth();
 
+  const dispatch = useDispatch();
+  const toastState = useSelector((state) => state.toastReducer);
+
+  function dispatchToast(content, show, header, type) {
+    dispatch(setToastContent(content));
+    dispatch(setToastHeader(header));
+    dispatch(setToastShow(!show));
+    dispatch(setToastType(type));
+  }
+
   async function pushData(e) {
-    setDisable(true);
     e.preventDefault();
-    setMessage();
 
     const date = new Date();
     const tempID = uniqid();
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
-    if (title === '') {
-      return setMessage({ msg: 'please fill the title field', type: 'danger' });
+    if (!title.replace(/\s/g, '').length) {
+      return dispatchToast(
+        'Please provide a title',
+        toastState.show,
+        'Oops..',
+        'warning'
+      );
+    } else if (title === null) {
+      return dispatchToast(
+        'Please fill the title field',
+        toastState.show,
+        'Oops..',
+        'warning'
+      );
     }
 
-    if (title === null) {
-      return setMessage({ msg: 'please fill the title field', type: 'danger' });
+    if (content === null) {
+      return dispatchToast(
+        'Please fill the content field',
+        toastState.show,
+        'Oops..',
+        'warning'
+      );
+    } else if (!content.replace(/\s/g, '').length) {
+      return dispatchToast(
+        'Please fill the content field',
+        toastState.show,
+        'Oops..',
+        'warning'
+      );
     }
-
-    if (content === '') {
-      return setMessage({
-        msg: 'please fill the content field',
-        type: 'danger',
-      });
-    }
+    setDisable(true);
 
     await db
       .doc(tempID)
@@ -59,10 +82,20 @@ export default function AddNewAnnouncement() {
         { merge: true }
       )
       .then(() => {
-        setMessage({ type: 'success', msg: 'Announcement has been added!' });
+        dispatchToast(
+          'Announcement has been added.',
+          toastState.show,
+          'Success',
+          'success'
+        );
       })
       .catch((e) => {
-        setMessage({ type: 'danger', msg: `Error: ${e}` });
+        dispatchToast(
+          'Failed to add announcement.',
+          toastState.show,
+          'Error',
+          'danger'
+        );
       });
 
     setTitle('');
@@ -123,15 +156,6 @@ export default function AddNewAnnouncement() {
                 </Button>
               </div>
             </Form>
-            {message && (
-              <Alert
-                variant={message.type}
-                className='mt-5'
-                style={{ textAlign: 'center' }}
-              >
-                {message.msg}
-              </Alert>
-            )}
           </Container>
         </Jumbotron>
       </Row>
