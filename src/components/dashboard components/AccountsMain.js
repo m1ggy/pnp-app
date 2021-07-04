@@ -39,10 +39,6 @@ export default function AccountsMain() {
     getData();
   }, []);
 
-  useEffect(() => {
-    console.log(selectedItems);
-  }, [selectedItems]);
-
   function handleShow() {
     setShow(!show);
     getData();
@@ -65,7 +61,7 @@ export default function AccountsMain() {
         setSelectedItems([]);
       }
     }
-    console.log(temp);
+
     setSelector(e.target.checked);
   }
 
@@ -85,7 +81,6 @@ export default function AccountsMain() {
     }
 
     setCheckArray(temp);
-    console.log(temp);
   }
 
   const handleShowDelete = () => {
@@ -116,13 +111,15 @@ export default function AccountsMain() {
               >
                 New Account
               </Button>
-              <Button
-                variant='danger'
-                style={{ marginBottom: 15, marginLeft: 15 }}
-                onClick={handleShowDelete}
-              >
-                Delete Account
-              </Button>
+              {selectedItems.length > 0 && (
+                <Button
+                  variant='danger'
+                  style={{ marginBottom: 15, marginLeft: 15 }}
+                  onClick={handleShowDelete}
+                >
+                  Delete Account
+                </Button>
+              )}
             </Row>
             <Row
               style={{

@@ -1,22 +1,32 @@
 import React, { useState } from 'react';
-import { Modal, Button, Spinner, Alert } from 'react-bootstrap';
+import { Modal, Button, Spinner } from 'react-bootstrap';
 import axios from 'axios';
+import SpinnerPlaceholder from '../SpinnerPlaceholder';
 export default function AccountDeletionModal({ show, handle, data, setData }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState();
   const [jobDone, setJobDone] = useState(false);
   function handleDeletion() {
-    console.log(data);
     setLoading(true);
     axios.post('/.netlify/functions/deleteUser', { data }).then((res) => {
       setMessage(res.data);
       setJobDone(true);
+      setLoading(false);
     });
-    setLoading(false);
   }
   return (
     <Modal show={show} onHide={handle}>
-      {data.length === 0 ? (
+      {loading ? (
+        <div>
+          <Modal.Header>
+            <Modal.Title>Deleting ...</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <SpinnerPlaceholder />
+          </Modal.Body>
+        </div>
+      ) : data.length === 0 ? (
         <div>
           <Modal.Header closeButton>
             <Modal.Title>Select an account first</Modal.Title>
@@ -37,9 +47,7 @@ export default function AccountDeletionModal({ show, handle, data, setData }) {
           {loading ? (
             <Spinner animation='border' />
           ) : jobDone ? (
-            <Modal.Body>
-              {message && <Alert variant='success'>{message.message}</Alert>}
-            </Modal.Body>
+            <Modal.Body>{message && <p>{message.message}!</p>}</Modal.Body>
           ) : (
             <Modal.Body>
               {data.length > 1
@@ -55,7 +63,6 @@ export default function AccountDeletionModal({ show, handle, data, setData }) {
                 onClick={() => {
                   handle();
                   setJobDone(false);
-                  setLoading(false);
                   setMessage();
                   setData([]);
                 }}
@@ -64,9 +71,10 @@ export default function AccountDeletionModal({ show, handle, data, setData }) {
               </Button>
             ) : (
               <Button
-                variant='secondary'
+                variant='danger'
                 onClick={handleDeletion}
                 disabled={loading}
+                type='submit'
               >
                 Confirm
               </Button>

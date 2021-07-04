@@ -9,6 +9,14 @@ import {
   getDataFromDocument,
   getDataWhereQuery,
 } from '../../utils/firebaseUtils';
+
+function makeRandomColor() {
+  var o = Math.round,
+    r = Math.random,
+    s = 255;
+  return 'rgb(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s);
+}
+
 export default function DashboardMain() {
   const [postChart, setPostChart] = useState([]);
 
@@ -84,7 +92,6 @@ export default function DashboardMain() {
           data.forEach((post) => {
             temp.push({ value: post.id, label: post.title });
           });
-          console.log(temp);
 
           getAllData(temp, formatDatasets, setGalleryChart, setGalleryTop);
         }
@@ -244,12 +251,6 @@ export default function DashboardMain() {
     setData(formattedDatasets);
   }
 
-  function makeRandomColor() {
-    var o = Math.round,
-      r = Math.random,
-      s = 255;
-    return 'rgb(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s);
-  }
   return (
     <Col>
       <Row className='w-100'>

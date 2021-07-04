@@ -4,7 +4,6 @@ import { Table } from 'react-bootstrap';
 export default function RenderReports({ data, currentPage, postsPerPage }) {
   let temp = null;
   if (data) {
-    console.log(data);
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     temp = data.slice(indexOfFirstPost, indexOfLastPost);
@@ -38,7 +37,6 @@ export default function RenderReports({ data, currentPage, postsPerPage }) {
           temp.map((report) => {
             return (
               <tr key={report.id}>
-                {console.log(report)}
                 <td>
                   {report.dateOccurred.toDate().toLocaleTimeString('en-US')}{' '}
                   {report.dateOccurred.toDate().toDateString()}

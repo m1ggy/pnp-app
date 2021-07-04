@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
 import { Button, Alert, Navbar, Form, Row, Col, Toast } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { setToastShow, selectToast } from '../redux/toastSlice';
+import { setToastShow } from '../redux/toastSlice';
 import Sidebar from '../components/Sidebar';
 import DashboardMain from '../components/dashboard components/DashboardMain';
 import AddNewPost from '../components/dashboard components/AddNewPost';
@@ -32,11 +32,6 @@ export default function Dashboard() {
   const user = useSelector((state) => state.userReducer.user);
   const toastState = useSelector((state) => state.toastReducer);
   const dispatch = useDispatch();
-  const toastShow = useSelector(selectToast);
-  useEffect(() => {
-    console.log(toastState.show);
-    console.log(toastShow);
-  }, [toastState, toastShow]);
 
   const toggleModal = useCallback(() => {
     setShowModal((n) => (n = !n));
@@ -155,7 +150,7 @@ export default function Dashboard() {
             right: '12px',
             margin: '20px',
             zIndex: 9999,
-            minWidth: '450px',
+            minWidth: '250px',
           }}
           show={toastState.show}
           autohide={true}
@@ -169,7 +164,9 @@ export default function Dashboard() {
             <strong className='mr-auto'>{toastState.header}</strong>
             <small>Just now</small>
           </Toast.Header>
-          <Toast.Body>{toastState.content}</Toast.Body>
+          <Toast.Body style={{ backgroundColor: 'white' }}>
+            {toastState.content}
+          </Toast.Body>
         </Toast>
       )}
 

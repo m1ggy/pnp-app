@@ -1,5 +1,6 @@
 const { keys } = require('../keys');
 let admin = require('firebase-admin');
+let xlsx = require('xlsx');
 
 if (admin.apps.length === 0) {
   admin.initializeApp({
@@ -7,19 +8,20 @@ if (admin.apps.length === 0) {
   });
 }
 
-// function formatDataset(data, type) {
-
-// }
+function formatDataset(files) {
+  if (files) {
+    return { message: 'Received file' };
+  }
+}
 
 exports.handler = function (event, context, callback) {
-  const body = JSON.parse(event.body);
-  const { data } = body;
-
   if (event.httpMethod === 'POST') {
-    console.log(data);
+    const body = JSON.parse(event.body);
+    const { data } = body;
+    const res = formatDataset(data);
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify({ message: `Received data: ${data}` }),
+      body: JSON.stringify(res),
     });
   }
   if (event.httpMethod === 'GET') {

@@ -3,6 +3,14 @@ import { Modal, Button, Form, Alert, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
 import './accountsModal.css';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setToastShow,
+  setToastContent,
+  setToastHeader,
+  setToastType,
+} from '../../redux/toastSlice';
+
 export default function AccountCreationModal({ show, handler }) {
   const [name, setName] = useState({ first: '', last: '' });
   const [password, setPassword] = useState('');
@@ -13,6 +21,16 @@ export default function AccountCreationModal({ show, handler }) {
   const [disableButton, setDisableButton] = useState(false);
   const [loading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false);
+
+  ///redux stuff
+  const dispatch = useDispatch();
+  const toastState = useSelector((state) => state.toastReducer);
+  function dispatchToast(content, show, header, type) {
+    dispatch(setToastContent(content));
+    dispatch(setToastHeader(header));
+    dispatch(setToastShow(!show));
+    dispatch(setToastType(type));
+  }
 
   async function handleSubmit(e) {
     setDisableButton(true);
@@ -58,11 +76,21 @@ export default function AccountCreationModal({ show, handler }) {
             })
             .then((res) => {
               setLoading(false);
-              setMessage(res.data.message);
+              dispatchToast(
+                res.data.message,
+                toastState.show,
+                'Success',
+                'success'
+              );
             })
             .catch((res) => {
               setLoading(false);
-              setMessage(res.data.message);
+              dispatchToast(
+                res.data.message,
+                toastState.show,
+                'Failed',
+                'danger'
+              );
             });
         });
       });

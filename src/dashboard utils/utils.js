@@ -1,5 +1,110 @@
-import { firestore } from '../firebase/firebase';
+import { firestore, storage } from '../firebase/firebase';
+import axios from 'axios';
+import XLSX from 'xlsx';
+import uniqid from 'uniqid';
 const analytics = firestore.collection('analytics');
+const storageRef = storage.ref();
+
+export function convertDataType(files, setLogs, callback) {
+  let newJSON;
+  const id = uniqid();
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    var data = new Uint8Array(e.target.result);
+    var workbook = XLSX.read(data, { type: 'array' });
+    newJSON = XLSX.utils.sheet_to_json(workbook.Sheets.Sheet1);
+    if (setLogs) {
+      setLogs((logs) => (logs = [...logs, log('🔃 Converting')]));
+    }
+    const converted = JSON.stringify(newJSON);
+    const newBlob = new Blob([converted], {
+      type: 'application/json',
+    });
+
+    callback(newBlob, id);
+  };
+  reader.readAsArrayBuffer(files[0]);
+}
+
+export function log(content) {
+  const time = new Date();
+  return (
+    <p>
+      <span style={{ fontSize: 10, color: 'green' }}>
+        {time.toLocaleTimeString()}:
+      </span>{' '}
+      {content}
+    </p>
+  );
+}
+
+export function uploadDataset(file, setLogs, id) {
+  let fileUrl;
+
+  const uploadTask = storageRef.child(`datasets/${id}.json`);
+
+  uploadTask.put(file).on(
+    'state-changed',
+    (snapshot) => {
+      if (setLogs) {
+        setLogs(
+          (logs) =>
+            (logs = [
+              ...logs,
+              log(`📡 ${(
+                (100.0 * snapshot.bytesTransferred) /
+                snapshot.totalBytes
+              ).toFixed(2)}%
+             done.`),
+            ])
+        );
+      }
+    },
+    (e) => {
+      if (setLogs) {
+        setLogs((logs) => (logs = [...logs, log(`❌ Error: ${e}`)]));
+      }
+    },
+    () => {
+      if (setLogs) {
+        uploadTask
+          .getDownloadURL()
+          .then((url) => {
+            fileUrl = url;
+            setLogs(
+              (logs) =>
+                (logs = [
+                  ...logs,
+                  log(
+                    <>
+                      <span>🏁 Upload Finished. URL is :</span>
+                      <a href={fileUrl}>{fileUrl}</a>
+                    </>
+                  ),
+                ])
+            );
+          })
+          .catch((e) => {
+            setLogs(
+              (logs) =>
+                (logs = [...logs, log(`❌ Cannot fetch file URL: ${e}`)])
+            );
+          });
+      }
+    }
+  );
+
+  return { fileUrl, id };
+}
+
+export function getDataType(files) {
+  const arrayOfFiles = [...files];
+  const temp = [];
+
+  arrayOfFiles.forEach((file) => temp.push(file.name.split('.').pop()));
+
+  return temp;
+}
 
 export function formatData(id, dates, title, callback) {
   let arr = [];
