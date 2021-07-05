@@ -33,6 +33,7 @@ export default function ReportsMain() {
   const [openImport, setOpenImport] = useState(false);
   const [file, setFile] = useState();
   const [logs, setLogs] = useState([]);
+  const [logging, setLogging] = useState(false);
   const [convertedJSON, setConvertedJSON] = useState();
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -78,6 +79,7 @@ export default function ReportsMain() {
         'warning'
       );
     setLoading(true);
+    setLogging(true);
     /// get the file extensions of the file/files
     const filelist = getDataType(file);
 
@@ -97,10 +99,10 @@ export default function ReportsMain() {
       const newjson = data;
 
       const newFile = new File([newjson], `${id}.json`);
-      console.log(newFile);
       setConvertedJSON(newFile);
       uploadDataset(newFile, setLogs, id);
       setLoading(false);
+      setLogging(false);
     });
   }
 
@@ -199,7 +201,17 @@ export default function ReportsMain() {
                       }}
                     >
                       <br></br>
-                      <h4>Logs</h4>
+                      <Row className='m-1'>
+                        <h4>Logs</h4>
+                        {logging && (
+                          <SpinnerPlaceholder
+                            size={'sm'}
+                            centered={true}
+                            style={{ margin: '5px' }}
+                          />
+                        )}
+                      </Row>
+
                       <div
                         style={{
                           height: '250px',

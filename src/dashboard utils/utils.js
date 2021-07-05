@@ -31,7 +31,7 @@ export function log(content) {
   return (
     <p>
       <span style={{ fontSize: 10, color: 'green' }}>
-        {time.toLocaleTimeString()}:
+        [{time.toLocaleTimeString()}]:
       </span>{' '}
       {content}
     </p>
@@ -83,6 +83,21 @@ export function uploadDataset(file, setLogs, id) {
                   ),
                 ])
             );
+            setLogs(
+              (logs) =>
+                (logs = [
+                  ...logs,
+                  log(`📩 Sending JSON file to server for formatting ...`),
+                ])
+            );
+            axios
+              .post('/.netlify/functions/importDataset', { fileUrl, id })
+              .then((res) => {
+                console.log(res);
+                setLogs(
+                  (logs) => (logs = [...logs, log(`${res.data.message}`)])
+                );
+              });
           })
           .catch((e) => {
             setLogs(
@@ -93,6 +108,8 @@ export function uploadDataset(file, setLogs, id) {
       }
     }
   );
+
+  ///send json link to lambda function
 
   return { fileUrl, id };
 }
