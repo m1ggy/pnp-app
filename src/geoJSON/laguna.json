@@ -201,7 +201,7 @@
       "properties": {
         "OBJECTID": 190,
         "FIRST_RURB": "RP043405",
-        "MUNICIPALI": "CITY OF CALAMBA",
+        "MUNICIPALI": "CALAMBA CITY",
         "REGION": "IV-A",
         "ZIPCODE": 4027,
         "PROVINCE": "LAGUNA",
@@ -965,7 +965,7 @@
       "properties": {
         "OBJECTID": 231,
         "FIRST_RURB": "RP043403",
-        "MUNICIPALI": "CITY OF BINAN",
+        "MUNICIPALI": "BINAN CITY",
         "REGION": "IV-A",
         "ZIPCODE": 4024,
         "PROVINCE": "LAGUNA",
@@ -1300,7 +1300,7 @@
       "properties": {
         "OBJECTID": 245,
         "FIRST_RURB": "RP043428",
-        "MUNICIPALI": "CITY OF SANTA ROSA",
+        "MUNICIPALI": "SANTA ROSA CITY",
         "REGION": "IV-A",
         "ZIPCODE": 4026,
         "PROVINCE": "LAGUNA",
@@ -7078,7 +7078,7 @@
       "properties": {
         "OBJECTID": 1417,
         "FIRST_RURB": "RP043404",
-        "MUNICIPALI": "CABUYAO CITY",
+        "MUNICIPALI": "CITY OF CABUYAO",
         "REGION": "IV-A",
         "ZIPCODE": 4025,
         "PROVINCE": "LAGUNA",

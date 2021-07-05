@@ -33,11 +33,12 @@ export default function ReportsMain() {
   const [openImport, setOpenImport] = useState(false);
   const [file, setFile] = useState();
   const [logs, setLogs] = useState([]);
-  const [logging, setLogging] = useState(false);
+  let indexOfLastPage;
   const [convertedJSON, setConvertedJSON] = useState();
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const toastState = useSelector((state) => state.toastReducer);
+  const userState = useSelector((state) => state.userReducer.user);
 
   function dispatchToast(content, show, header, type) {
     dispatch(setToastContent(content));
@@ -46,21 +47,22 @@ export default function ReportsMain() {
     dispatch(setToastType(type));
   }
 
+  function paginateNumbers(arr) {
+    let temp = [];
+    let totalPosts = arr.length;
+
+    for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
+      temp.push(i);
+    }
+
+    setPageNumbers(temp);
+  }
+
   useEffect(() => {
     getDataFromCollection('reports', (res) => {
       paginateNumbers(res);
       setData(res);
     });
-
-    function paginateNumbers(arr) {
-      let temp = [];
-      let totalPosts = arr.length;
-
-      for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
-        temp.push(i);
-      }
-      setPageNumbers(temp);
-    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function paginate(num) {
@@ -79,13 +81,13 @@ export default function ReportsMain() {
         'warning'
       );
     setLoading(true);
-    setLogging(true);
+
     /// get the file extensions of the file/files
     const filelist = getDataType(file);
 
     ///return if file extension is not supported
     filelist.forEach((file) => {
-      if (file !== ('xlsx' || 'json' || 'csv' || 'xls')) {
+      if (file !== ('xlsx' || 'json' || 'xls')) {
         return dispatchToast(
           'Please select files with the extension of JSON, XLXS or XLS',
           toastState.show,
@@ -100,9 +102,7 @@ export default function ReportsMain() {
 
       const newFile = new File([newjson], `${id}.json`);
       setConvertedJSON(newFile);
-      uploadDataset(newFile, setLogs, id);
-      setLoading(false);
-      setLogging(false);
+      uploadDataset(newFile, setLogs, id, userState.email, setLoading);
     });
   }
 
@@ -203,7 +203,7 @@ export default function ReportsMain() {
                       <br></br>
                       <Row className='m-1'>
                         <h4>Logs</h4>
-                        {logging && (
+                        {loading && (
                           <SpinnerPlaceholder
                             size={'sm'}
                             centered={true}
@@ -259,6 +259,11 @@ export default function ReportsMain() {
                     </Pagination.Item>
                   );
                 })}
+                <Pagination.Next
+                  onClick={() => {
+                    paginate(indexOfLastPage + 1);
+                  }}
+                />
               </Pagination>
             )}
           </div>

@@ -8,7 +8,7 @@ const statuses = [
     label: 'Detained',
   },
   {
-    value: 'atLarge',
+    value: 'at large',
     label: 'At Large',
   },
 ];
@@ -130,15 +130,15 @@ const municipalities = [
   },
   {
     label: 'Cabuyao City',
-    value: 'CABUYAO CITY',
+    value: 'CITY OF CABUYAO',
   },
   {
     label: 'City of Sta. Rosa',
-    value: 'CITY OF SANTA ROSA',
+    value: 'SANTA ROSA CITY',
   },
   {
     label: 'City of Binan',
-    value: 'CITY OF BINAN',
+    value: 'BINAN CITY',
   },
   {
     label: 'San Pedro City',
@@ -146,49 +146,16 @@ const municipalities = [
   },
 ];
 
-const crimeTypes = [
-  {
-    label: 'Rape',
-    value: 'rape',
-  },
-  {
-    label: 'Kidnapping',
-    value: 'kidnapping',
-  },
-  {
-    label: 'Theft',
-    value: 'theft',
-  },
-  {
-    label: 'Murder',
-    value: 'murder',
-  },
-  {
-    label: 'Physical Injury',
-    value: 'physicalinjury',
-  },
-  {
-    label: 'Homicide',
-    value: 'homicide',
-  },
-  {
-    label: 'Carnapping',
-    value: 'carnapping',
-  },
-  {
-    label: 'Others',
-    value: 'Others',
-  },
-];
-
 const headerValues = [
   'age',
   'sex',
-  'actionTaken',
-  'dateOccurred',
+  'action',
+  'date',
+  'time',
   'status',
   'remarks',
   'violation',
+  'address',
 ];
 
-module.exports = { headerValues };
+module.exports = { headerValues, municipalities, sexes, statuses };

@@ -8,6 +8,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "firebase-admin": "^9.8.0",
+    "firestore-export-import": "^0.15.0",
     "xlsx": "^0.17.0"
   }
 }

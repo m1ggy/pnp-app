@@ -126,19 +126,19 @@ export const municipalities = [
   },
   {
     label: 'City of Calamba',
-    value: 'CITY OF CALAMBA',
+    value: 'CALAMBA CITY',
   },
   {
     label: 'Cabuyao City',
-    value: 'CABUYAO CITY',
+    value: 'CITY of CABUYAO',
   },
   {
     label: 'City of Sta. Rosa',
-    value: 'CITY OF SANTA ROSA',
+    value: 'SANTA ROSA CITY',
   },
   {
     label: 'City of Binan',
-    value: 'CITY OF BINAN',
+    value: ' BINAN CITY',
   },
   {
     label: 'San Pedro City',

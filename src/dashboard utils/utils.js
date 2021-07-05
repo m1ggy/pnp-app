@@ -30,7 +30,13 @@ export function log(content) {
   const time = new Date();
   return (
     <p>
-      <span style={{ fontSize: 10, color: 'green' }}>
+      <span
+        style={{
+          fontSize: 10,
+          color: 'green',
+          fontFamily: 'monospace',
+        }}
+      >
         [{time.toLocaleTimeString()}]:
       </span>{' '}
       {content}
@@ -38,11 +44,14 @@ export function log(content) {
   );
 }
 
-export function uploadDataset(file, setLogs, id) {
+export function uploadDataset(file, setLogs, id, author, setLoading) {
   let fileUrl;
 
-  const uploadTask = storageRef.child(`datasets/${id}.json`);
-
+  const uploadTask = storageRef.child(`datasets/${file.name}`);
+  setLogs(
+    (logs) =>
+      (logs = [...logs, log(<span>📡 Starting upload of {file.name} </span>)])
+  );
   uploadTask.put(file).on(
     'state-changed',
     (snapshot) => {
@@ -91,11 +100,31 @@ export function uploadDataset(file, setLogs, id) {
                 ])
             );
             axios
-              .post('/.netlify/functions/importDataset', { fileUrl, id })
+              .post('/.netlify/functions/importDataset', {
+                fileUrl,
+                id,
+                author,
+              })
               .then((res) => {
-                console.log(res);
+                setLoading(false);
                 setLogs(
-                  (logs) => (logs = [...logs, log(`${res.data.message}`)])
+                  (logs) =>
+                    (logs = [
+                      ...logs,
+                      log(
+                        <>
+                          <span>{res.data.message}</span>
+                          <br></br>
+                          <span style={{ color: 'green' }}>
+                            Successful: {res.data.count.success}
+                          </span>
+                          <br></br>
+                          <span style={{ color: 'red' }}>
+                            Failed: {res.data.count.failed}
+                          </span>
+                        </>
+                      ),
+                    ])
                 );
               });
           })
