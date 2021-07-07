@@ -11,13 +11,9 @@ This Application is a research project for my internship as a Project Intern in 
 I used the following:
 
 - React(JavaScript Library)
-- React Bootstrap (Popular Frontend Framework React Wrapper)
+- React Bootstrap 
 - Firebase (Database, Storage and Authentication)
-- React-Leaflet (A react wrapper for Leaflet)
-- Netlify Functions (Lambda Functions in Netlify (Google functions is not free :())
+- React-Leaflet
+- Netlify Functions 
 - Netlify (CI/CD)
-- Bcrypt (Hashing passwords)
-- React Redux Toolkit (Easy version of React Redux)
-- React ChartJS (A react wrapper for ChartJS)
-- Axios (Http calls for the netlify functions)
-- And many more ...
+
