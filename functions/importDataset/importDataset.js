@@ -95,8 +95,10 @@ async function formatDataset(url, id, author, callback) {
         first: null,
         last: null,
         sex: {
-          value: report.sex.toLowerCase(),
-          label: report.sex,
+          value:
+            typeof report.sex === 'string' ? report.sex.toLowerCase() : null,
+          label:
+            typeof report.sex === 'string' ? report.sex.toLowerCase() : null,
         },
       };
       report.author = author;
@@ -124,6 +126,7 @@ async function formatDataset(url, id, author, callback) {
       await db.doc(report.id).set(report, { ignoreUndefinedProperties: true });
       count.success = count.success + 1;
     } catch (e) {
+      console.log(e);
       count.failed = count.failed + 1;
     }
   });

@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Col,
-  Row,
-  Jumbotron,
-  Pagination,
-  Button,
-  Collapse,
-  Form,
-} from 'react-bootstrap';
+import { Col, Row, Jumbotron, Button, Collapse, Form } from 'react-bootstrap';
 import {
   convertDataType,
   getDataType,
@@ -24,16 +16,15 @@ import {
   setToastType,
 } from '../../redux/toastSlice';
 import SpinnerPlaceholder from '../SpinnerPlaceholder';
+import Pagination from '../Pagination';
 
 export default function ReportsMain() {
   const [data, setData] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
-  const [pageNumbers, setPageNumbers] = useState();
   const [openImport, setOpenImport] = useState(false);
   const [file, setFile] = useState();
   const [logs, setLogs] = useState([]);
-  let indexOfLastPage;
   const [convertedJSON, setConvertedJSON] = useState();
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -47,27 +38,11 @@ export default function ReportsMain() {
     dispatch(setToastType(type));
   }
 
-  function paginateNumbers(arr) {
-    let temp = [];
-    let totalPosts = arr.length;
-
-    for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
-      temp.push(i);
-    }
-
-    setPageNumbers(temp);
-  }
-
   useEffect(() => {
     getDataFromCollection('reports', (res) => {
-      paginateNumbers(res);
       setData(res);
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  function paginate(num) {
-    setCurrentPage(num);
-  }
 
   function handleImportSubmit(e) {
     e.preventDefault();
@@ -235,36 +210,22 @@ export default function ReportsMain() {
           </Col>
 
           {data && <h6>{data.length} reports</h6>}
+
           <RenderReports
             data={data}
             currentPage={currentPage}
             postsPerPage={postsPerPage}
           />
+          {<h6>Page {currentPage}</h6>}
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            {pageNumbers && (
+            {data && (
               <Pagination
-                size='md'
-                style={{ marginTop: 20 }}
-                variant='secondary'
-              >
-                {pageNumbers.map((num, index) => {
-                  return (
-                    <Pagination.Item
-                      onClick={() => {
-                        paginate(num);
-                      }}
-                      key={index}
-                    >
-                      {num}
-                    </Pagination.Item>
-                  );
-                })}
-                <Pagination.Next
-                  onClick={() => {
-                    paginate(indexOfLastPage + 1);
-                  }}
-                />
-              </Pagination>
+                className='pagination'
+                currentPage={currentPage}
+                totalCount={data.length}
+                pageSize={10}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
             )}
           </div>
         </Jumbotron>

@@ -114,7 +114,7 @@ const municipalities = [
   },
   {
     label: 'San Pablo City',
-    value: 'SAN PABLO CITY',
+    value: 'SAN PABLO',
   },
   {
     label: 'Alaminos',
@@ -126,23 +126,23 @@ const municipalities = [
   },
   {
     label: 'City of Calamba',
-    value: 'CITY OF CALAMBA',
+    value: 'CALAMBA',
   },
   {
     label: 'Cabuyao City',
-    value: 'CITY OF CABUYAO',
+    value: 'CABUYAO',
   },
   {
     label: 'City of Sta. Rosa',
-    value: 'SANTA ROSA CITY',
+    value: 'SANTA ROSA',
   },
   {
     label: 'City of Binan',
-    value: 'BINAN CITY',
+    value: 'BINAN',
   },
   {
     label: 'San Pedro City',
-    value: 'SAN PEDRO CITY',
+    value: 'SAN PEDRO',
   },
 ];
 

@@ -115,13 +115,17 @@ export function uploadDataset(file, setLogs, id, author, setLoading) {
                         <>
                           <span>{res.data.message}</span>
                           <br></br>
-                          <span style={{ color: 'green' }}>
-                            Successful: {res.data.count.success}
-                          </span>
-                          <br></br>
-                          <span style={{ color: 'red' }}>
-                            Failed: {res.data.count.failed}
-                          </span>
+                          {res.data.count && (
+                            <>
+                              <span style={{ color: 'green' }}>
+                                Successful: {res.data.count.success}
+                              </span>
+                              <br></br>
+                              <span style={{ color: 'red' }}>
+                                Failed: {res.data.count.failed}
+                              </span>
+                            </>
+                          )}
                         </>
                       ),
                     ])

@@ -24,7 +24,6 @@ function Maps() {
     pageView('webapp');
   }, []);
 
-  /////TODO: Add statistics for entire map on load
   const [map, setMap] = useState();
   const [selectedPane, setSelectedPane] = useState();
   const [data, setData] = useState();
@@ -47,13 +46,15 @@ function Maps() {
               (element) =>
                 element.value === report.description.municipality.value
             );
-            count.push(matched.value);
+            if (matched != null) count.push(matched.value);
+            else count.push({ label: 'N/A', value: 'N/A' });
           });
 
           const frequency = count.reduce(
             (prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev), // eslint-disable-line no-sequences
             {}
           );
+
           setCount(frequency);
         }
       }
@@ -113,10 +114,31 @@ function Maps() {
         });
       }
     });
-    const currentMunicipality = municipalities.find(
-      (item) => item.value === province.properties.MUNICIPALI
-    );
-    const municipality = `<h5>${currentMunicipality.label}</h5>`;
+    let currentMunicipality;
+    municipalities.forEach((item) => {
+      if (
+        item.value
+          .toLowerCase()
+          .includes(province.properties.MUNICIPALI.toLowerCase())
+      ) {
+        return (currentMunicipality = item);
+      }
+    });
+
+    var municipality = document.createElement('div');
+
+    if (currentMunicipality != null) {
+      municipality.innerHTML = `<h5>${currentMunicipality.label}</h5>`;
+    }
+    // if (currentMunicipality != null) {
+    //   if (currentMunicipality.label != null) {
+    //     return (municipality.innerHTML = `<h5>${currentMunicipality.label}</h5>`);
+    //   }
+    //   municipality.innerHTML = `<h5>N/A</h5>`;
+    // } else {
+    //   municipality.innerHTML = `<h5>N/A</h5>`;
+    // }
+
     layer.bindPopup(municipality, {
       closeButton: false,
       offset: L.point(0, 5),

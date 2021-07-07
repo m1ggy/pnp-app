@@ -20,7 +20,7 @@ export default function RenderReports({ data, currentPage, postsPerPage }) {
   }
 
   return (
-    <Table bordered hover style={{ width: '100%' }}>
+    <Table bordered hover style={{ width: '100%', minWidth: '850px' }}>
       <thead>
         <tr>
           <th>Incident Happened on</th>

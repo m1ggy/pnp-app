@@ -21,17 +21,21 @@ export default function Map() {
       if (res) {
         if (res.length > 0) {
           res.forEach((report) => {
-            const matched = municipalities.find(
-              (element) =>
-                element.value === report.description.municipality.value
-            );
-            count.push(matched.value);
+            const matched = municipalities.find((element) => {
+              if (report.description == null) return null;
+              if (report.description.municipality == null) return null;
+              if (report.description.municipality.value == null) return null;
+              return element.value === report.description.municipality.value;
+            });
+            if (matched != null) count.push(matched.value);
+            else count.push(undefined);
           });
 
           const frequency = count.reduce(
             (prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev), // eslint-disable-line no-sequences
             {}
           );
+
           setCount(frequency);
         }
       }
@@ -42,7 +46,7 @@ export default function Map() {
     let municipality;
 
     const keys = Object.keys(count);
-
+    console.log(keys);
     keys.forEach((key) => {
       if (province.properties.MUNICIPALI === key) {
         layer.setStyle({
@@ -54,7 +58,11 @@ export default function Map() {
     });
 
     municipalities.forEach((place) => {
-      if (place.value === province.properties.MUNICIPALI) {
+      if (
+        place.value
+          .toLowerCase()
+          .includes(province.properties.MUNICIPALI.toLowerCase())
+      ) {
         if (count)
           if (count.hasOwnProperty(`${place.value}`)) {
             return (municipality = popupHTMLbody(
@@ -87,7 +95,7 @@ export default function Map() {
 
     return `<div>
                 <h6>${place.label}</h6>
-                Reports:${data}
+                Reports: ${data}
             </div>`;
   }
 
