@@ -37,6 +37,8 @@ export default function Map() {
           );
 
           setCount(frequency);
+        } else {
+          setCount([]);
         }
       }
     });

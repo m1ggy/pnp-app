@@ -165,7 +165,7 @@ export const crimeTypes = [
   },
   {
     label: 'Physical Injury',
-    value: 'physicalinjury',
+    value: 'physical injury',
   },
   {
     label: 'Homicide',

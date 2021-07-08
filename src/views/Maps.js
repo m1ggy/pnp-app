@@ -56,6 +56,8 @@ function Maps() {
           );
 
           setCount(frequency);
+        } else {
+          setCount([]);
         }
       }
     });

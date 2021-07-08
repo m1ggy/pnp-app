@@ -8,9 +8,21 @@ if (admin.apps.length === 0) {
   admin.initializeApp({
     credential: admin.credential.cert(keys),
   });
+  admin.firestore().settings({ ignoreUndefinedProperties: true });
 }
 
+let count = {
+  success: 0,
+  failed: 0,
+};
+
+const db = admin.firestore().collection('reports');
+
 async function formatDataset(url, id, author, callback) {
+  count = {
+    success: 0,
+    failed: 0,
+  };
   var response = await axios.get(url);
   const { data } = response;
   if (data == null || data.length === 0) {
@@ -115,20 +127,15 @@ async function formatDataset(url, id, author, callback) {
     });
   }
 
-  const db = admin.firestore().collection('reports');
-
-  let count = {
-    success: 0,
-    failed: 0,
-  };
-  formattedData.forEach(async (report) => {
-    try {
-      await db.doc(report.id).set(report, { ignoreUndefinedProperties: true });
-      count.success = count.success + 1;
-    } catch (e) {
-      console.log(e);
-      count.failed = count.failed + 1;
-    }
+  formattedData.forEach((report) => {
+    db.doc(report.id)
+      .set(report)
+      .then(() => {
+        count.success++;
+      })
+      .catch(() => {
+        count.failed++;
+      });
   });
 
   callback({
