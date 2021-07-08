@@ -114,7 +114,7 @@ export const municipalities = [
   },
   {
     label: 'San Pablo City',
-    value: 'SAN PABLO CITY',
+    value: 'SAN PABLO',
   },
   {
     label: 'Alaminos',

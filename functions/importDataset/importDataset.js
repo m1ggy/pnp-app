@@ -82,7 +82,10 @@ async function formatDataset(url, id, author, callback) {
 
       municipalities.forEach((m) => {
         if (report.address != null) {
-          if (report.address.toLowerCase().includes(m.value.toLowerCase())) {
+          let lowercase = report.address.toLowerCase();
+          let temp = lowercase.replaceAll('\u00f1', 'n');
+
+          if (temp.includes(m.value.toLowerCase())) {
             municipality = m;
           }
         }
@@ -127,8 +130,9 @@ async function formatDataset(url, id, author, callback) {
     });
   }
 
-  formattedData.forEach((report) => {
-    db.doc(report.id)
+  formattedData.forEach(async (report) => {
+    await db
+      .doc(report.id)
       .set(report)
       .then(() => {
         count.success++;

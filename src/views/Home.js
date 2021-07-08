@@ -5,7 +5,6 @@ import {
   Col,
   Spinner,
   Button,
-  Pagination,
   Card,
   Image,
 } from 'react-bootstrap';
@@ -21,6 +20,7 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import LazyLoad from 'react-lazyload';
 import SpinnerPlaceholder from '../components/SpinnerPlaceholder';
+import Pagination from '../components/Pagination';
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -29,7 +29,6 @@ function Home() {
   const [announcement, setAnnouncement] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
-  const [pageNumbers, setPageNumbers] = useState();
   const scrollRef = useRef(null);
 
   const responsive = {
@@ -73,7 +72,6 @@ function Home() {
         });
 
       setPosts(tempArray);
-      paginateNumbers(tempArray);
 
       let annArray = [];
 
@@ -97,21 +95,7 @@ function Home() {
     }
 
     getData();
-
-    function paginateNumbers(arr) {
-      let temp = [];
-      let totalPosts = arr.length;
-
-      for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
-        temp.push(i);
-      }
-      setPageNumbers(temp);
-    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  function paginate(num) {
-    setCurrentPage(num);
-  }
 
   function RenderPosts() {
     if (posts === null || typeof posts === undefined) return null;
@@ -358,22 +342,13 @@ function Home() {
                     marginTop: 20,
                   }}
                 >
-                  {pageNumbers && (
-                    <Pagination size='md'>
-                      {pageNumbers.map((num, index) => {
-                        return (
-                          <Pagination.Item
-                            onClick={() => {
-                              paginate(num);
-                              scrollRef.current.scrollIntoView();
-                            }}
-                            key={index}
-                          >
-                            {num}
-                          </Pagination.Item>
-                        );
-                      })}
-                    </Pagination>
+                  {posts.length > 0 && (
+                    <Pagination
+                      currentPage={currentPage}
+                      totalCount={posts.length}
+                      pageSize={5}
+                      onPageChange={(page) => setCurrentPage(page)}
+                    />
                   )}
                 </div>
               </Col>

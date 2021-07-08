@@ -1,16 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { Col, Image, Jumbotron, Row, Spinner } from 'react-bootstrap';
+import React, { useEffect, useState, useRef } from 'react';
+import { Col, Image, Jumbotron, Row, Button, Spinner } from 'react-bootstrap';
 import { firestore } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
 import '../styles/posts.css';
 import { pageView } from '../utils/firebaseUtils';
-import LazyLoad from 'react-lazyload';
 import SpinnerPlaceholder from '../components/SpinnerPlaceholder';
+
+function handleImageLoading(setLoading, ref, data) {
+  ref.current = data;
+
+  if (ref.current === data) {
+    setLoading(false);
+  }
+}
+
 function NewsAndEvents() {
   const db = firestore.collection('posts');
   const [posts, setPosts] = useState();
   const [loading, setLoading] = useState();
-
+  const imageRef = useRef();
+  const [showSpinner, setShowSpinner] = useState(true);
   const types = [
     { label: 'News', value: 'news' },
     { label: 'Events', value: 'events' },
@@ -81,7 +90,9 @@ function NewsAndEvents() {
           </Col>
 
           <Col className='w-100 m-5'>
-            <Link to={`/news-and-events/${type.value}`}> View All</Link>
+            <Link to={`/news-and-events/${type.value}`}>
+              <Button>View All</Button>
+            </Link>
           </Col>
         </Row>
       );
@@ -110,16 +121,20 @@ function NewsAndEvents() {
       return index === 0 || index === 1 || index === 2 ? (
         <Col md={6} lg={4} xs={12} key={post.id}>
           <Link to={`/news-and-events/${post.id}`}>
-            <LazyLoad placeholder={<SpinnerPlaceholder />}>
-              <Image
-                src={post.url}
-                style={{
-                  width: '100%',
-                  boxShadow:
-                    'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
-                }}
-              />
-            </LazyLoad>
+            {showSpinner && <SpinnerPlaceholder centered={true} size='lg' />}
+            <Image
+              src={post.url}
+              style={{
+                width: '100%',
+                boxShadow:
+                  'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
+                visibility: showSpinner ? 'hidden' : 'visible',
+              }}
+              loading={'lazy'}
+              onLoad={() => {
+                handleImageLoading(setShowSpinner, imageRef, post.imagesURL);
+              }}
+            />
 
             <div
               id='postDesc'

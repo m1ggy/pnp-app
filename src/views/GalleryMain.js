@@ -1,15 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Jumbotron, Row, Col, Spinner, Image } from 'react-bootstrap';
 import { firestore } from '../firebase/firebase';
 import { Link, useRouteMatch } from 'react-router-dom';
 import '../styles/gallery.css';
 import { pageView } from '../utils/firebaseUtils';
-import LazyLoad from 'react-lazyload';
 import SpinnerPlaceholder from '../components/SpinnerPlaceholder';
+
+function handleImageLoading(setLoading, ref, data) {
+  ref.current++;
+
+  if (ref.current >= data.length) {
+    setLoading(false);
+  }
+}
 
 function GalleryMain() {
   const [gallery, setGallery] = useState();
   const [loading, setLoading] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(true);
+  const imgLoading = useRef(0);
   const db = firestore.collection('galleries');
 
   const { url } = useRouteMatch();
@@ -23,6 +32,7 @@ function GalleryMain() {
         .orderBy('timestamp', 'desc')
         .get()
         .then((snapshot) => {
+          setLoading(false);
           if (snapshot.empty) return;
 
           snapshot.forEach((doc) => {
@@ -33,7 +43,6 @@ function GalleryMain() {
     }
     pageView('webapp');
     getGalleries();
-    setLoading(false);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function RenderGalleries() {
@@ -60,34 +69,37 @@ function GalleryMain() {
             marginTop: '20px',
           }}
         >
+          {showSpinner && <SpinnerPlaceholder centered={true} size='lg' />}
           <Link to={`${url}/${gallery.id}`}>
-            {/* <Image
+            <Image
+              alt={gallery.data.title}
+              effect='blur'
               src={gallery.data.imagesURL[0]}
+              style={{
+                boxShadow:
+                  'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
+                padding: 0,
+                margin: 0,
+                visibility: showSpinner ? 'hidden' : 'visible',
+              }}
+              width='100%'
               id='imageHover'
-              
-            /> */}
-            <LazyLoad placeholder={<SpinnerPlaceholder />}>
-              <Image
-                alt={gallery.data.title}
-                effect='blur'
-                src={gallery.data.imagesURL[0]}
-                style={{
-                  boxShadow:
-                    'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
-                  padding: 0,
-                  margin: 0,
-                }}
-                width='100%'
-                id='imageHover'
-              />
-              <div id='galleryDesc'>
-                <h3 style={{ color: 'white' }}>{gallery.data.title}</h3>
-                <p style={{ color: 'white' }}>{gallery.data.subtitle}</p>
-                <p style={{ color: 'white', fontSize: 13 }} muted>
-                  {gallery.data.dateUploaded}
-                </p>
-              </div>
-            </LazyLoad>
+              loading={'lazy'}
+              onLoad={() => {
+                handleImageLoading(
+                  setShowSpinner,
+                  imgLoading,
+                  gallery.data.imagesURL
+                );
+              }}
+            />
+            <div id='galleryDesc'>
+              <h3 style={{ color: 'white' }}>{gallery.data.title}</h3>
+              <p style={{ color: 'white' }}>{gallery.data.subtitle}</p>
+              <p style={{ color: 'white', fontSize: 13 }} muted>
+                {gallery.data.dateUploaded}
+              </p>
+            </div>
           </Link>
         </Col>
       );

@@ -4,7 +4,9 @@
 }
 
 #imageHover:hover {
-  filter: blur(10px);
+  z-index: 99;
+  /* filter: blur(1px); */
+  transform: scale(1.2);
 }
 
 #imageHover {
@@ -14,6 +16,7 @@
   position: relative;
   z-index: 1;
   align-self: center;
+  transition: ease-in-out 0.2s;
 }
 
 #galleryDesc {

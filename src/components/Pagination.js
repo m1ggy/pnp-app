@@ -17,6 +17,7 @@ const Pagination = (props) => {
     siblingCount,
     pageSize,
   });
+  const totalPageCount = Math.ceil(totalCount / pageSize);
 
   // If there are less than 2 times in pagination range we shall not render the component
   if (currentPage === 0 || paginationRange.length < 2) {
@@ -34,7 +35,9 @@ const Pagination = (props) => {
   return (
     <PaginationBS size='sm'>
       {/* Left navigation arrow */}
-      <PaginationBS.Item onClick={onPrevious}>Prev</PaginationBS.Item>
+      {currentPage !== 1 && (
+        <PaginationBS.Item onClick={onPrevious}>Prev</PaginationBS.Item>
+      )}
       {paginationRange.map((pageNumber) => {
         // If the pageItem is a DOT, render the DOTS unicode character
         if (pageNumber === DOTS) {
@@ -56,9 +59,11 @@ const Pagination = (props) => {
         );
       })}
       {/*  Right Navigation arrow */}
-      <PaginationBS.Item className={'page-item'} onClick={onNext}>
-        Next
-      </PaginationBS.Item>
+      {currentPage !== totalPageCount && (
+        <PaginationBS.Item className={'page-item'} onClick={onNext}>
+          Next
+        </PaginationBS.Item>
+      )}
     </PaginationBS>
   );
 };
