@@ -4,16 +4,24 @@ import { formatDate, formatReportDataset } from '../../dashboard utils/utils';
 import { municipalities, crimeTypes } from '../../dashboard utils/constants';
 import RenderChart from '../dashboard components/RenderChart';
 import Select from 'react-select';
-import { getDataWhereQuery } from '../../utils/firebaseUtils';
+import {
+  getDataFromCollection,
+  getDataWhereQuery,
+} from '../../utils/firebaseUtils';
+import SpinnerPlaceholder from '../SpinnerPlaceholder';
 
 export default function ChartsMain() {
   const dateDefaults = useMemo(() => dateFactory(), []);
   const [reportChartValue, setReportChartValue] = useState({});
   const [reports, setReports] = useState([]);
-  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedCity, setSelectedCity] = useState({
+    label: 'Laguna',
+    value: 'laguna',
+  });
   const [crime, setCrime] = useState({ label: 'All', value: 'all' });
   const [date, setDate] = useState('');
   const [dateRange, setDateRange] = useState(dateDefaults);
+  const [loading, setLoading] = useState(false);
 
   const options = {
     scales: {
@@ -37,15 +45,21 @@ export default function ChartsMain() {
   }
 
   function getReports(id) {
-    getDataWhereQuery(
-      'reports',
-      'description.municipality.value',
-      '==',
-      id,
-      (res) => {
+    if (id === 'laguna') {
+      getDataFromCollection('reports', (res) => {
         setReports(res);
-      }
-    );
+      });
+    } else {
+      getDataWhereQuery(
+        'reports',
+        'description.municipality.value',
+        '==',
+        id,
+        (res) => {
+          setReports(res);
+        }
+      );
+    }
   }
 
   useEffect(() => {
@@ -53,20 +67,33 @@ export default function ChartsMain() {
     if (reports == null) return null;
     if (selectedCity == null) return null;
     if (crime == null) return null;
-
+    setLoading(true);
     let newReports = [...reports];
 
-    if (crime.value === 'all')
+    if (crime.value === 'all') {
       return setReportChartValue(
-        formatReportDataset(reports, formatDate(date.value), crime, date)
+        formatReportDataset(
+          reports,
+          formatDate(date.value),
+          crime,
+          date,
+          setLoading
+        )
       );
+    }
 
     let filtered = newReports.filter(
       (report) => report.description.violation.value === crime.value
     );
 
     setReportChartValue(
-      formatReportDataset(filtered, formatDate(date.value), crime, date)
+      formatReportDataset(
+        filtered,
+        formatDate(date.value),
+        crime,
+        date,
+        setLoading
+      )
     );
   }, [reports, date, selectedCity, crime]);
 
@@ -78,6 +105,7 @@ export default function ChartsMain() {
 
   useEffect(() => {
     crimeTypes.push({ label: 'All', value: 'all' });
+    municipalities.push({ label: 'Laguna', value: 'laguna' });
   }, []);
 
   useEffect(() => {
@@ -176,9 +204,15 @@ export default function ChartsMain() {
                     </Form.Group>
                   </Col>
                 </Row>
-                <Row>
-                  {reportChartValue && (
-                    <RenderChart data={reportChartValue} options={options} />
+                <Row className='w-100'>
+                  {loading ? (
+                    <Col>
+                      <SpinnerPlaceholder centered size='lg' />
+                    </Col>
+                  ) : (
+                    reportChartValue && (
+                      <RenderChart data={reportChartValue} options={options} />
+                    )
                   )}
                 </Row>
               </Container>

@@ -196,7 +196,7 @@ export function formatDate(range) {
   return dateString;
 }
 
-export function formatReportDataset(reports, dates, label, date) {
+export function formatReportDataset(reports, dates, label, date, setLoading) {
   let reportDates = [];
   let chartDates = [];
   let formattedDataset;
@@ -254,7 +254,7 @@ export function formatReportDataset(reports, dates, label, date) {
           })} ${date.toLocaleDateString('default', { year: 'numeric' })}`
         );
       });
-
+      setLoading(false);
       ///return dataset
       return (formattedDataset = {
         labels: monthLabels,
@@ -325,7 +325,7 @@ export function formatReportDataset(reports, dates, label, date) {
           }),
         ];
       });
-
+      setLoading(false);
       return (formattedDataset = {
         labels: timeLabel,
         datasets: [
@@ -372,6 +372,6 @@ export function formatReportDataset(reports, dates, label, date) {
       },
     ],
   };
-
+  setLoading(false);
   return formattedDataset;
 }

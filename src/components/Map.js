@@ -48,7 +48,7 @@ export default function Map() {
     let municipality;
 
     const keys = Object.keys(count);
-    console.log(keys);
+
     keys.forEach((key) => {
       if (province.properties.MUNICIPALI === key) {
         layer.setStyle({
