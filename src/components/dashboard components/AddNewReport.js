@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Row, Jumbotron, Form, Button, Alert } from 'react-bootstrap';
+import { Col, Row, Jumbotron, Form, Button } from 'react-bootstrap';
 import Select from 'react-select';
 import '../../styles/addnewreport.css';
 import {
@@ -9,12 +9,20 @@ import {
   statuses,
 } from '../../dashboard utils/constants';
 import { setDataDoc } from '../../utils/firebaseUtils';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import uniqid from 'uniqid';
 import DateTimePicker from 'react-datetime-picker';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
+
+import {
+  setToastShow,
+  setToastContent,
+  setToastHeader,
+  setToastType,
+} from '../../redux/toastSlice';
+
 export default function AddNewReport() {
   const descriptionInitialState = {
     status: '',
@@ -34,14 +42,13 @@ export default function AddNewReport() {
   const [profile, setProfile] = useState(profileInitialState);
   const author = useSelector((state) => state.userReducer.user);
   const [description, setDescription] = useState(descriptionInitialState);
-  const [message, setMessage] = useState();
   const [dateOccurred, setDateOccurred] = useState(new Date());
   const [validated, setValidated] = useState(false);
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  const dispatch = useDispatch();
+  const toastState = useSelector((state) => state.toastReducer);
 
-    setMessage();
+  function handleSubmit(e) {
     e.preventDefault();
 
     const form = e.currentTarget;
@@ -53,13 +60,54 @@ export default function AddNewReport() {
     setValidated(true);
 
     if (description.status === '') {
-      return setMessage('Please select a status');
+      return dispatchToast(
+        'Please select a Status.',
+        toastState.show,
+        'Select a status.',
+        'warning'
+      );
     } else if (profile.sex === '') {
-      return setMessage('Please select a sex');
+      return dispatchToast(
+        'Please select Sex.',
+        toastState.show,
+        'Select sex.',
+        'warning'
+      );
     } else if (description.status === '' && profile.sex === '') {
-      return setMessage('Please select a status and sex');
+      return dispatchToast(
+        'Please select a Status and Sex.',
+        toastState.show,
+        'Select a status and sex.',
+        'warning'
+      );
     } else if (description.municipality === '') {
-      return setMessage('Please select a municipality');
+      return dispatchToast(
+        'Please select a Municipality.',
+        toastState.show,
+        'Select a municipality.',
+        'warning'
+      );
+    } else if (description.address === '') {
+      return dispatchToast(
+        'Please enter an Address.',
+        toastState.show,
+        'enter an address.',
+        'warning'
+      );
+    } else if (
+      profile.first.length === 0 ||
+      profile.last.length === 0 ||
+      profile.age.length === 0 ||
+      description.violation.length === 0 ||
+      description.actionTaken.length === 0 ||
+      description.remarks.length === 0
+    ) {
+      return dispatchToast(
+        'Please fill out all fields.',
+        toastState.show,
+        'Oops.... ',
+        'warning'
+      );
     }
 
     const id = uniqid();
@@ -74,11 +122,22 @@ export default function AddNewReport() {
     };
 
     setDataDoc(id, data, 'reports', (res) => {
-      setMessage(res.message);
+      dispatchToast(
+        'added report to database. ',
+        toastState.show,
+        'Successfully added report.',
+        'success'
+      );
     });
     setDescription(descriptionInitialState);
     setProfile(profileInitialState);
     setValidated(false);
+  }
+  function dispatchToast(content, show, header, type) {
+    dispatch(setToastContent(content));
+    dispatch(setToastHeader(header));
+    dispatch(setToastShow(!show));
+    dispatch(setToastType(type));
   }
 
   return (
@@ -274,26 +333,6 @@ export default function AddNewReport() {
               </Button>
             </Row>
           </Form>
-          <Row>
-            <Col>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  marginTop: 20,
-                }}
-              >
-                {message && (
-                  <Alert
-                    variant='info'
-                    style={{ width: '50%', textAlign: 'center' }}
-                  >
-                    {message}
-                  </Alert>
-                )}
-              </div>
-            </Col>
-          </Row>
         </Jumbotron>
       </Row>
     </Col>

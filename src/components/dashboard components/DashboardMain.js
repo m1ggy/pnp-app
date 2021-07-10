@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { Jumbotron, Col, Row, Spinner, ListGroup } from 'react-bootstrap';
 import { firestore } from '../../firebase/firebase';
 import { formatDate } from '../../dashboard utils/utils';
@@ -39,18 +39,22 @@ export default function DashboardMain() {
     { label: '1 Year Ago', value: 365 },
   ]);
 
-  const options = {
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
+  const options = useMemo(() => {
+    optionsFactory();
+  }, []);
+  function optionsFactory() {
+    return {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
           },
-        },
-      ],
-    },
-  };
-
+        ],
+      },
+    };
+  }
   const { currentUser } = useAuth();
 
   useEffect(() => {
