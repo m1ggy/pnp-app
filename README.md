@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## About this Application
 
-This Application is a research project for my internship as a Project Intern in Laguna State Polytechnic University. It is a platform for the Philippine National Police(PNP). It is currently still in development but is deployed in this [link](https://eloquent-wiles-962846.netlify.app/)
+This Application is a research project for my internship as a Project Intern in Laguna State Polytechnic University. It is a platform for the Philippine National Police(PNP). It is currently still in development but is deployed in this [link](https://lspucrimereport.netlify.app/)
 
 ## Frameworks and Libraries Used
 
