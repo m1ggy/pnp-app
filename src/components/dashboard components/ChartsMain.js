@@ -22,7 +22,7 @@ export default function ChartsMain() {
   const [reportChartValue, setReportChartValue] = useState();
   const [reports, setReports] = useState([]);
   const [selectedCity, setSelectedCity] = useState({
-    label: 'Laguna',
+    label: 'Entire Laguna',
     value: 'laguna',
   });
   const [crime, setCrime] = useState({ label: 'All', value: 'all' });
@@ -144,7 +144,7 @@ export default function ChartsMain() {
 
   useEffect(() => {
     crimeTypes.push({ label: 'All', value: 'all' });
-    municipalities.push({ label: 'Laguna', value: 'laguna' });
+    municipalities.push({ label: 'Entire Laguna', value: 'laguna' });
   }, []);
 
   useEffect(() => {

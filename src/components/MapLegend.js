@@ -29,20 +29,20 @@ function MapLegend({ map }) {
 
 export const colors = (d) => {
   return d > 100
-    ? '#99000d'
+    ? '#990000'
     : d > 50
-    ? '#cb181d'
+    ? '#d7301f'
     : d > 20
-    ? '#ef3b2c'
+    ? '#ef6548'
     : d > 15
-    ? '#fb6a4a'
+    ? '#fc8d59'
     : d > 10
-    ? '#fc9272'
+    ? '#fdbb84'
     : d > 5
-    ? '#fcbba1'
+    ? '#fdd49e'
     : d > 1
-    ? '#fee0d2'
-    : '#fff5f0';
+    ? '#fef0d9'
+    : '#fff';
 };
 
 export default MapLegend;

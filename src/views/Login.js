@@ -128,7 +128,7 @@ function Login() {
         </Card.Footer>
       </Card>
       <div className='text-center mt-2'>
-        <a href='$'>Report a Bug.</a>
+        <a href='https://github.com/m1ggy/pnp-app/issues/new'>Report a Bug.</a>
       </div>
     </div>
   );

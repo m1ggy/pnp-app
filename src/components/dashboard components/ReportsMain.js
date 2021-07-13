@@ -55,23 +55,28 @@ export default function ReportsMain() {
         'Failed',
         'warning'
       );
-    setLoading(true);
 
     /// get the file extensions of the file/files
     const filelist = getDataType(file);
-
+    let invalidFile;
     ///return if file extension is not supported
     filelist.forEach((file) => {
-      if (file !== ('xlsx' || 'json' || 'xls')) {
-        return dispatchToast(
+      if (file !== ('xlsx' || 'xls')) {
+        dispatchToast(
           'Please select files with the extension of JSON, XLXS or XLS',
           toastState.show,
           'Failed',
-          'warning'
+          'danger'
         );
+        return (invalidFile = true);
       }
     });
 
+    if (invalidFile) {
+      setFile();
+      return;
+    }
+    setLoading(true);
     convertDataType(file, setLogs, (data, id) => {
       const newjson = data;
 
@@ -79,6 +84,7 @@ export default function ReportsMain() {
       setConvertedJSON(newFile);
       uploadDataset(newFile, setLogs, id, userState.email, setLoading);
     });
+    setFile();
   }
 
   useEffect(() => {
@@ -128,15 +134,18 @@ export default function ReportsMain() {
                         accept='.json, .xlsx, .xls'
                       />
                       <Form.Label>
+                        <span style={{ color: 'green', fontWeight: 'bold' }}>
+                          Notes
+                        </span>
                         <span style={{ color: 'red', fontWeight: 'bold' }}>
-                          Notes<br></br>
+                          <br></br>
                           If the file is in XLSX or XLS extension, please make
                           sure the data is in the first sheet only.<br></br>
                           Accepted formats are the following:
                         </span>
                         <br></br>
                         <span style={{ color: 'green', fontWeight: 'bold' }}>
-                          ➡ JSON<br></br>➡ XLSX<br></br>➡ XLS<br></br>
+                          ➡ XLSX<br></br>➡ XLS<br></br>
                         </span>
                       </Form.Label>
 
@@ -155,7 +164,7 @@ export default function ReportsMain() {
                           variant='success'
                           disabled={loading}
                         >
-                          {loading ? <SpinnerPlaceholder /> : 'Submit'}
+                          Submit
                         </Button>
                       </div>
                     </Form.Group>

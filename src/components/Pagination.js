@@ -1,28 +1,10 @@
 import React from 'react';
 
-import { usePagination, DOTS } from './usePagination';
 import { Pagination as PaginationBS } from 'react-bootstrap';
 const Pagination = (props) => {
-  const {
-    onPageChange,
-    totalCount,
-    siblingCount = 4,
-    currentPage,
-    pageSize,
-  } = props;
+  const { onPageChange, totalCount, currentPage, pageSize } = props;
 
-  const paginationRange = usePagination({
-    currentPage,
-    totalCount,
-    siblingCount,
-    pageSize,
-  });
   const totalPageCount = Math.ceil(totalCount / pageSize);
-
-  // If there are less than 2 times in pagination range we shall not render the component
-  if (currentPage === 0 || paginationRange.length < 2) {
-    return null;
-  }
 
   const onNext = () => {
     onPageChange(currentPage + 1);
@@ -38,26 +20,23 @@ const Pagination = (props) => {
       {currentPage !== 1 && (
         <PaginationBS.Item onClick={onPrevious}>Prev</PaginationBS.Item>
       )}
-      {paginationRange.map((pageNumber) => {
-        // If the pageItem is a DOT, render the DOTS unicode character
-        if (pageNumber === DOTS) {
-          return (
-            <PaginationBS.Item className='pagination-item dots' disabled={true}>
-              &#8230;
-            </PaginationBS.Item>
-          );
-        }
-
-        // Render our Page Pills
-        return (
-          <PaginationBS.Item
-            className={'page-item'}
-            onClick={() => onPageChange(pageNumber)}
-          >
-            {pageNumber}
+      {
+        <div
+          style={{
+            minWidth: '50px',
+            minHeight: '15px',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}
+        >
+          <PaginationBS.Item style={{ marginLeft: '5px', marginRight: '5px' }}>
+            <span style={{ fontWeight: 'bold' }}>
+              {currentPage} of {totalPageCount}
+            </span>
           </PaginationBS.Item>
-        );
-      })}
+        </div>
+      }
       {/*  Right Navigation arrow */}
       {currentPage !== totalPageCount && (
         <PaginationBS.Item className={'page-item'} onClick={onNext}>
