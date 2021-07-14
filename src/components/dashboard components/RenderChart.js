@@ -29,8 +29,12 @@ const RenderChart = ({ data, header, options }) => {
             </div>
             <Bar
               data={data}
-              options={options}
               style={{ width: 350, height: 350 }}
+              options={{
+                tension: 0.3,
+                pointBorderWidth: 1,
+                pointRadius: 3,
+              }}
             />
           </Col>
         </Container>

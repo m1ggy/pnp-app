@@ -197,6 +197,7 @@ export function formatDate(range) {
 }
 
 export function randomNumber(max) {
+  if (max === 0) return 0;
   return Math.floor(Math.random() * max + 1);
 }
 export function formatReportDataset(reports, dates, label, date) {
@@ -278,21 +279,13 @@ export function formatReportDataset(reports, dates, label, date) {
                 fill: false,
                 borderColor: 'rgb(21,140,186)',
                 backgroundColor: 'rgb(21,140,186)',
-                tension: 0.3,
-                pointStyle: 'rectRot',
-                radius: 10,
-                hoverRadius: 15,
                 data: chartMonths,
               },
               {
-                label: 'Prediciton',
+                label: 'Prediction',
                 fill: false,
                 borderColor: 'red',
                 backgroundColor: 'red',
-                tension: 0.3,
-                pointStyle: 'rectRot',
-                radius: 10,
-                hoverRadius: 15,
                 data: random,
               },
             ],
@@ -366,21 +359,13 @@ export function formatReportDataset(reports, dates, label, date) {
                 fill: false,
                 borderColor: 'rgb(21,140,186)',
                 backgroundColor: 'rgb(21,140,186)',
-                tension: 0.3,
-                pointStyle: 'rectRot',
-                radius: 10,
-                hoverRadius: 15,
                 data: chartTime,
               },
               {
-                label: 'Prediciton',
+                label: 'Prediction',
                 fill: false,
                 borderColor: 'red',
                 backgroundColor: 'red',
-                tension: 0.3,
-                pointStyle: 'rectRot',
-                radius: 10,
-                hoverRadius: 15,
                 data: random,
               },
             ],
@@ -413,21 +398,14 @@ export function formatReportDataset(reports, dates, label, date) {
             fill: false,
             borderColor: 'rgb(21,140,186)',
             backgroundColor: 'rgb(21,140,186)',
-            tension: 0.3,
-            pointStyle: 'rectRot',
-            radius: 10,
-            hoverRadius: 15,
+
             data: chartDates,
           },
           {
-            label: 'Prediciton',
+            label: 'Prediction',
             fill: false,
             borderColor: 'red',
             backgroundColor: 'red',
-            tension: 0.3,
-            pointStyle: 'rectRot',
-            radius: 10,
-            hoverRadius: 15,
             data: random,
           },
         ],
