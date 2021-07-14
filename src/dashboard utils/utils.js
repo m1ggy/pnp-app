@@ -196,10 +196,14 @@ export function formatDate(range) {
   return dateString;
 }
 
+export function randomNumber(max) {
+  return Math.floor(Math.random() * max + 1);
+}
 export function formatReportDataset(reports, dates, label, date) {
   let reportDates = [];
   let chartDates = [];
   let formattedDataset;
+  let random = [];
 
   ///check if date exists
   if (date) {
@@ -260,6 +264,10 @@ export function formatReportDataset(reports, dates, label, date) {
           );
         });
 
+        chartMonths.forEach((data) => {
+          random.push(randomNumber(data));
+        });
+
         ///return dataset
         resolve(
           (formattedDataset = {
@@ -275,6 +283,17 @@ export function formatReportDataset(reports, dates, label, date) {
                 radius: 10,
                 hoverRadius: 15,
                 data: chartMonths,
+              },
+              {
+                label: 'Prediciton',
+                fill: false,
+                borderColor: 'red',
+                backgroundColor: 'red',
+                tension: 0.3,
+                pointStyle: 'rectRot',
+                radius: 10,
+                hoverRadius: 15,
+                data: random,
               },
             ],
           })
@@ -335,6 +354,9 @@ export function formatReportDataset(reports, dates, label, date) {
           ];
         });
 
+        chartTime.forEach((data) => {
+          random.push(randomNumber(data));
+        });
         resolve(
           (formattedDataset = {
             labels: timeLabel,
@@ -349,6 +371,17 @@ export function formatReportDataset(reports, dates, label, date) {
                 radius: 10,
                 hoverRadius: 15,
                 data: chartTime,
+              },
+              {
+                label: 'Prediciton',
+                fill: false,
+                borderColor: 'red',
+                backgroundColor: 'red',
+                tension: 0.3,
+                pointStyle: 'rectRot',
+                radius: 10,
+                hoverRadius: 15,
+                data: random,
               },
             ],
           })
@@ -368,6 +401,10 @@ export function formatReportDataset(reports, dates, label, date) {
           );
         });
 
+      chartDates.forEach((data) => {
+        random.push(randomNumber(data));
+      });
+
       formattedDataset = {
         labels: dates,
         datasets: [
@@ -381,6 +418,17 @@ export function formatReportDataset(reports, dates, label, date) {
             radius: 10,
             hoverRadius: 15,
             data: chartDates,
+          },
+          {
+            label: 'Prediciton',
+            fill: false,
+            borderColor: 'red',
+            backgroundColor: 'red',
+            tension: 0.3,
+            pointStyle: 'rectRot',
+            radius: 10,
+            hoverRadius: 15,
+            data: random,
           },
         ],
       };

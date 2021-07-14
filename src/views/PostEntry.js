@@ -146,7 +146,10 @@ export default function PostEntry() {
             </Jumbotron>
           </Row>
           <Row className='w-100'>
-            <Jumbotron className='w-100'>
+            <Jumbotron
+              className='w-100'
+              style={{ display: 'flex', justifyContent: 'center' }}
+            >
               <Col lg={2}></Col>
               <Col className='w-100'>
                 <Row className='w-100'>

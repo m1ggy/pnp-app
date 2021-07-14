@@ -135,10 +135,10 @@ async function formatDataset(url, id, author, callback) {
       .doc(report.id)
       .set(report)
       .then(() => {
-        count.success++;
+        count.success = count.success + 1;
       })
       .catch(() => {
-        count.failed++;
+        count.failed = count.failed + 1;
       });
   });
 
