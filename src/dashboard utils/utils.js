@@ -198,7 +198,7 @@ export function formatDate(range) {
 
 export function randomNumber(max) {
   if (max === 0) return 0;
-  return Math.floor(Math.random() * max + 1);
+  return Math.floor(Math.random() * max + 2);
 }
 export function formatReportDataset(reports, dates, label, date) {
   let reportDates = [];
@@ -280,6 +280,7 @@ export function formatReportDataset(reports, dates, label, date) {
                 borderColor: 'rgb(21,140,186)',
                 backgroundColor: 'rgb(21,140,186)',
                 data: chartMonths,
+                stack: 'combined',
               },
               {
                 label: 'Prediction',
@@ -287,6 +288,8 @@ export function formatReportDataset(reports, dates, label, date) {
                 borderColor: 'red',
                 backgroundColor: 'red',
                 data: random,
+                type: 'line',
+                stack: 'combined',
               },
             ],
           })
@@ -360,6 +363,7 @@ export function formatReportDataset(reports, dates, label, date) {
                 borderColor: 'rgb(21,140,186)',
                 backgroundColor: 'rgb(21,140,186)',
                 data: chartTime,
+                stack: 'combined',
               },
               {
                 label: 'Prediction',
@@ -367,6 +371,8 @@ export function formatReportDataset(reports, dates, label, date) {
                 borderColor: 'red',
                 backgroundColor: 'red',
                 data: random,
+                type: 'line',
+                stack: 'combined',
               },
             ],
           })
@@ -398,8 +404,8 @@ export function formatReportDataset(reports, dates, label, date) {
             fill: false,
             borderColor: 'rgb(21,140,186)',
             backgroundColor: 'rgb(21,140,186)',
-
             data: chartDates,
+            stack: 'combined',
           },
           {
             label: 'Prediction',
@@ -407,6 +413,8 @@ export function formatReportDataset(reports, dates, label, date) {
             borderColor: 'red',
             backgroundColor: 'red',
             data: random,
+            type: 'line',
+            stack: 'combined',
           },
         ],
       };
