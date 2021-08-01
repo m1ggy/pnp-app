@@ -11,15 +11,10 @@ if (admin.apps.length === 0) {
   admin.firestore().settings({ ignoreUndefinedProperties: true });
 }
 
-let count = {
-  success: 0,
-  failed: 0,
-};
-
 const db = admin.firestore().collection('reports');
 
 async function formatDataset(url, id, author, callback) {
-  count = {
+  let count = {
     success: 0,
     failed: 0,
   };
@@ -83,7 +78,8 @@ async function formatDataset(url, id, author, callback) {
       municipalities.forEach((m) => {
         if (report.address != null) {
           let lowercase = report.address.toLowerCase();
-          let temp = lowercase.replaceAll('\u00f1', 'n');
+
+          let temp = lowercase.replace('\u00f1', 'n');
 
           if (temp.includes(m.value.toLowerCase())) {
             municipality = m;
@@ -131,15 +127,12 @@ async function formatDataset(url, id, author, callback) {
   }
 
   formattedData.forEach(async (report) => {
-    await db
-      .doc(report.id)
-      .set(report)
-      .then(() => {
-        count.success = count.success + 1;
-      })
-      .catch(() => {
-        count.failed = count.failed + 1;
-      });
+    try {
+      await db.doc(report.id).set(report);
+      count.success += 1;
+    } catch {
+      count.failed += 1;
+    }
   });
 
   callback({
