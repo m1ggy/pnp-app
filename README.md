@@ -23,6 +23,7 @@ I used the following:
 
 - Clone this repository using `git clone https://github.com/m1ggy/pnp-app.git` or download the ZIP file with this <a href="https://github.com/m1ggy/pnp-app/archive/refs/heads/pnp-app.zip/" target="_blank">link</a>
 - Unzip the project(if downloaded using the link) and go to the project directory.
+- Run `npm install` to install dependencies.
 - Run `npm start` in the project directory.
 - If done correctly, the project will run on `localhost:3000`
 - Congrats! the application is now running.
